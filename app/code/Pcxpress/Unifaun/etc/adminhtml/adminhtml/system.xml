@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <section id="carriers">
+        <group id="unifaun" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1" translate="label" module="unifaun">
+            <label>Pcxpress Unifaun</label>
+            <field id="sectionheading_general" translate="label">
+                <label>General</label>
+                <frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+            </field>
+            <field id="active" translate="label">
+                <label>Enabled</label>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="title" translate="label">
+                <label>Title</label>
+            </field>
+            <field id="logo" translate="label">
+                <label>Logo (for label prints)</label>
+                <backend_model>adminhtml/system_config_backend_image</backend_model>
+                <upload_dir config="system/filesystem/media" scope_info="1">unifaun/label/logo</upload_dir>
+                <base_url type="media" scope_info="1">unifaun/label/logo</base_url>
+            </field>
+            <field id="username" translate="label">
+                <label>Username</label>
+            </field>
+            <field id="groupname" translate="label">
+                <label>Group Name</label>
+            </field>
+            <field id="password" translate="label">
+                <label>Password</label>
+            </field>
+            <field id="pacsoft_id" translate="label">
+                <label>Pacsoft ID</label>
+            </field>
+            <field id="pacsoft_password" translate="label">
+                <label>Pacsoft Secret</label>
+            </field>
+            <field id="sectionheading_consignor" translate="label">
+                <label>Consignor Contact Details</label>
+                <frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+            </field>
+            <field id="consignor_name" translate="label">
+                <label>Name</label>
+            </field>
+            <field id="consignor_address" translate="label">
+                <label>Address</label>
+            </field>
+            <field id="consignor_postcode" translate="label">
+                <label>Zip code</label>
+            </field>
+            <field id="consignor_city" translate="label">
+                <label>City</label>
+            </field>
+            <field id="consignor_state" translate="label">
+                <label>State/Region</label>
+            </field>
+            <field id="consignor_countrycode" translate="label">
+                <label>Country Code</label>
+            </field>
+            <field id="contact_person" translate="label">
+                <label>Contact Person</label>
+            </field>
+            <field id="phone" translate="label">
+                <label>Phone</label>
+            </field>
+            <field id="email" translate="label">
+                <label>Email</label>
+            </field>
+            <field id="sectionheading_units" translate="label">
+                <label>Measurement Units</label>
+                <frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+            </field>
+            <field id="length" translate="label">
+                <label>Length</label>
+                <source_model>unifaun/sourceModel_length</source_model>
+            </field>
+            <field id="weight" translate="label">
+                <label>Weight</label>
+                <source_model>unifaun/sourceModel_weight</source_model>
+            </field>
+            <field id="sectionheading_attributes" translate="label">
+                <label>Consignment Attributes</label>
+                <frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+            </field>
+            <field id="width" translate="label">
+                <label>Width</label>
+                <source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+            </field>
+            <field id="height" translate="label">
+                <label>Height</label>
+                <source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+            </field>
+            <field id="depth" translate="label">
+                <label>Depth</label>
+                <source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+            </field>
+            <field id="default_goods_type">
+                <label>Goods Type(Default)</label>
+                <comment>In case of some carriers (i.e. UPS,Fedex) this value needs to be passed when creating a consignment in Pcxpress Unifaun.</comment>
+            </field>
+            <field id="shipping_group" translate="label">
+                <label>Shipping Group</label>
+                <source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+            </field>
+            <field id="shipping_group_value_default">
+                <label>Shipping Group Value(Default)</label>
+            </field>
+            <field id="shipping_group_sorting">
+                <label>Shipping Group Sorting</label>
+                <source_model>unifaun/sourceModel_shippingGroupSorting</source_model>
+            </field>
+            <field id="package_config" translate="label">
+                <label>Package configuration</label>
+                <source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+            </field>
+            <field id="shipping_max_unit_price" translate="label">
+                <label>Shipping Max Unit Price</label>
+            </field>
+            <field id="shipping_unit_price" translate="label">
+                <label>Shipping Unit Price</label>
+                <source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+            </field>
+            <field id="shipping_se_zone1_unit_price" translate="label">
+                <label>Sweden Zone 1: Shipping Unit Price</label>
+                <source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+            </field>
+            <field id="shipping_se_zone1_zip_codes" translate="label">
+                <label>Sweden Zone 1: Zip Codes</label>
+            </field>
+            <field id="enable_template_change" translate="label">
+                <label>Enable Template Switch</label>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="sectionheading_admin" translate="label">
+                <label>Administration</label>
+                <frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+            </field>
+            <field id="auto_booking" translate="label">
+                <label>Automatic Booking</label>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="advice_type" translate="label">
+                <label>Advice Type (default)</label>
+                <source_model>unifaun/sourceModel_adviceTypes</source_model>
+            </field>
+            <field id="cod_choices" translate="label">
+                <label>Payment Method (COD)</label>
+                <source_model>unifaun/sourceModel_paymentMethods</source_model>
+            </field>
+            <field id="cod_account_no" translate="label">
+                <label>Cod Account No.</label>
+            </field>
+            <field id="calculation_method" translate="label">
+                <label>Calculation Method</label>
+                <source_model>unifaun/sourceModel_calculationMethods</source_model>
+            </field>
+            <field id="calculation_attribute" translate="label">
+                <label>Calculation Attribute</label>
+                <source_model>unifaun/sourceModel_calculationAttributes</source_model>
+            </field>
+            <field id="calculate_zero_weight" translate="label,comment">
+                <label>Calculate Zero Weight</label>
+                <comment>Enable this to force caluclation in case of zero weight.</comment>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="label_type" translate="label">
+                <label>Label type</label>
+                <source_model>unifaun/sourceModel_labelTypes</source_model>
+            </field>
+            <field id="use_proforma" translate="label">
+                <label>Use Proforma Invoice</label>
+                <comment>Enable this to append a Proforma invoice (3 copies) when printing shipping labels of the orders for which billing address is out EU.</comment>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="send_goods_value">
+                <label>Send Goods Value</label>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="delivery_terms">
+                <label>Delivery Terms</label>
+            </field>
+            <field id="batch_email" translate="label">
+                <label>Batch Processing Email</label>
+                <comment>Send shipping email when batch processing</comment>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="sectionheading_development" translate="label">
+                <label>Development</label>
+                <frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+            </field>
+            <field id="development" translate="label">
+                <label>Use development server</label>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="debug" translate="label">
+                <label>Debug</label>
+                <comment>Logs requests to pcxpress. Make sure Magento's system logging is enabled.</comment>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+            </field>
+            <field id="sectionheading_label" translate="label">
+                <label>Label settings</label>
+                <frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+            </field>
+            <field id="label_width" translate="label">
+                <label>Width (cm)</label>
+            </field>
+            <field id="label_height" translate="label">
+                <label>Height (cm)</label>
+            </field>
+            <field id="label_font_size" translate="label">
+                <label>Font Size</label>
+            </field>
+            <field id="label_line_height" translate="label">
+                <label>Line Height</label>
+            </field>
+        </group>
+    </section>
+</config>

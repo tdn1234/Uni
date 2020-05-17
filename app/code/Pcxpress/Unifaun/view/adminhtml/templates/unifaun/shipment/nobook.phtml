@@ -1,0 +1,8 @@
+<?php
+    $shippingMethod = $this->getShippingMethod();
+?>
+<fieldset style="margin-top: 3px; background-color: #FCFAC9; border-color: #D7C699">
+    <legend>Shipping</legend>
+    <b><?php echo $this->__("There will be no booking for this shipment"); ?></b>
+</fieldset>
+<input type="hidden" id="unifaun_method_id" name="unifaun_method_id" value="<?php echo($shippingMethod->getShippingmethodId()); ?>" />

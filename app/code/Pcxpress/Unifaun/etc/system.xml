@@ -1,0 +1,518 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<carriers>
+			<groups>
+				<unifaun translate="label" module="unifaun">
+					<label>Pcxpress Unifaun</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>14</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<sectionheading_general translate="label">
+							<label>General</label>
+							<frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sectionheading_general>
+						<active translate="label">
+							<label>Enabled</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</active>
+						<title translate="label">
+							<label>Title</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</title>
+						<logo translate="label">
+							<label>Logo (for label prints)</label>
+							<frontend_type>image</frontend_type>
+							<backend_model>adminhtml/system_config_backend_image</backend_model>
+							<upload_dir config="system/filesystem/media" scope_info="1">unifaun/label/logo</upload_dir>
+							<base_url type="media" scope_info="1">unifaun/label/logo</base_url>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</logo>
+						<username translate="label">
+							<label>Username</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</username>
+						<groupname translate="label">
+							<label>Group Name</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</groupname>
+						<password translate="label">
+							<label>Password</label>
+							<frontend_type>password</frontend_type>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</password>
+						<pacsoft_id translate="label">
+							<label>Pacsoft ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pacsoft_id>
+						<pacsoft_password translate="label">
+							<label>Pacsoft Secret</label>
+							<frontend_type>password</frontend_type>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pacsoft_password>
+						<sectionheading_consignor translate="label">
+							<label>Consignor Contact Details</label>
+							<frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sectionheading_consignor>
+						<consignor_name translate="label">
+							<label>Name</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>11</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</consignor_name>
+						<consignor_address translate="label">
+							<label>Address</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</consignor_address>
+						<consignor_postcode translate="label">
+							<label>Zip code</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</consignor_postcode>
+						<consignor_city translate="label">
+							<label>City</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>14</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</consignor_city>
+						<consignor_state translate="label">
+							<label>State/Region</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</consignor_state>
+						<consignor_countrycode translate="label">
+							<label>Country Code</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>16</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</consignor_countrycode>
+						<contact_person translate="label">
+							<label>Contact Person</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>17</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</contact_person>
+						<phone translate="label">
+							<label>Phone</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>18</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</phone>
+						<email translate="label">
+							<label>Email</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>19</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</email>						
+						<sectionheading_units translate="label">
+							<label>Measurement Units</label>
+							<frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sectionheading_units>
+						<length translate="label">
+							<label>Length</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_length</source_model>
+							<sort_order>21</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</length>
+						<weight translate="label">
+							<label>Weight</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_weight</source_model>
+							<sort_order>22</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</weight>
+						<sectionheading_attributes translate="label">
+							<label>Consignment Attributes</label>
+							<frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+							<sort_order>23</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sectionheading_attributes>
+						<width translate="label">
+							<label>Width</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+							<sort_order>24</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</width>
+						<height translate="label">
+							<label>Height</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+							<sort_order>25</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</height>
+						<depth translate="label">
+							<label>Depth</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+							<sort_order>26</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</depth>
+						<default_goods_type>
+							<label>Goods Type(Default)</label>
+							<comment>In case of some carriers (i.e. UPS,Fedex) this value needs to be passed when creating a consignment in Pcxpress Unifaun.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>27</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</default_goods_type>
+						<shipping_group translate="label">
+							<label>Shipping Group</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+							<sort_order>28</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</shipping_group>
+						<shipping_group_value_default>
+							<label>Shipping Group Value(Default)</label>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<sort_order>29</sort_order>
+						</shipping_group_value_default>
+						<shipping_group_sorting>
+							<label>Shipping Group Sorting</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_shippingGroupSorting</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<sort_order>30</sort_order>
+						</shipping_group_sorting>
+						<package_config translate="label">
+							<label>Package configuration</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+							<sort_order>31</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</package_config>
+						<shipping_max_unit_price translate="label">
+							<label>Shipping Max Unit Price</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>32</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</shipping_max_unit_price>
+						<shipping_unit_price translate="label">
+							<label>Shipping Unit Price</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+							<sort_order>33</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</shipping_unit_price>
+						<shipping_se_zone1_unit_price translate="label">
+							<label>Sweden Zone 1: Shipping Unit Price</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_productShippingAttribute</source_model>
+							<sort_order>34</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</shipping_se_zone1_unit_price>
+						<shipping_se_zone1_zip_codes translate="label">
+							<label>Sweden Zone 1: Zip Codes</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>35</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</shipping_se_zone1_zip_codes>
+						<enable_template_change translate="label">
+							<label>Enable Template Switch</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>36</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</enable_template_change>
+						<sectionheading_admin translate="label">
+							<label>Administration</label>
+							<frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+							<sort_order>37</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sectionheading_admin>
+						<auto_booking translate="label">
+							<label>Automatic Booking</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>38</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</auto_booking>
+						<advice_type translate="label">
+							<label>Advice Type (default)</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_adviceTypes</source_model>
+							<sort_order>39</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</advice_type>
+						<cod_choices translate="label">
+							<label>Payment Method (COD)</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_paymentMethods</source_model>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cod_choices>
+						<cod_account_no translate="label">
+							<label>Cod Account No.</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>41</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cod_account_no>
+						<calculation_method translate="label">
+							<label>Calculation Method</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_calculationMethods</source_model>
+							<sort_order>42</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</calculation_method>
+						<calculation_attribute translate="label">
+							<label>Calculation Attribute</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_calculationAttributes</source_model>
+							<sort_order>43</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</calculation_attribute>
+						<calculate_zero_weight translate="label,comment">
+							<label>Calculate Zero Weight</label>
+							<comment>Enable this to force caluclation in case of zero weight.</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>44</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</calculate_zero_weight>
+						<label_type translate="label">
+							<label>Label type</label>
+							<frontend_type>select</frontend_type>
+							<source_model>unifaun/sourceModel_labelTypes</source_model>
+							<sort_order>45</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</label_type>
+						<use_proforma translate="label">
+							<label>Use Proforma Invoice</label>
+							<comment>Enable this to append a Proforma invoice (3 copies) when printing shipping labels of the orders for which billing address is out EU.</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>46</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</use_proforma>
+						<send_goods_value>
+							<label>Send Goods Value</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>47</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</send_goods_value>
+						<delivery_terms>
+							<label>Delivery Terms</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>48</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</delivery_terms>
+						<sort_order translate="label">
+							<label>Sort order</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>49</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sort_order>
+						<batch_email translate="label">
+							<label>Batch Processing Email</label>
+							<comment>Send shipping email when batch processing</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</batch_email>
+						<sectionheading_development translate="label">
+							<label>Development</label>
+							<frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+							<sort_order>51</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sectionheading_development>
+						
+						<development translate="label">
+							<label>Use development server</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>52</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</development>
+						
+						<debug translate="label">
+							<label>Debug</label>
+							<comment>Logs requests to pcxpress. Make sure Magento's system logging is enabled.</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>53</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</debug>
+						<sectionheading_label translate="label">
+							<label>Label settings</label>
+							<frontend_model>unifaun/adminhtml_system_config_sectionHeading</frontend_model>
+							<sort_order>54</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sectionheading_label>
+						<label_width translate="label">
+							<label>Width (cm)</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>55</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</label_width>
+						<label_height translate="label">
+							<label>Height (cm)</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>56</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</label_height>
+						<label_font_size translate="label">
+							<label>Font Size</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>57</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</label_font_size>
+						<label_line_height translate="label">
+							<label>Line Height</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>58</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</label_line_height>
+					</fields>
+					
+				</unifaun>
+			</groups>
+		</carriers>
+	</sections>
+</config>				

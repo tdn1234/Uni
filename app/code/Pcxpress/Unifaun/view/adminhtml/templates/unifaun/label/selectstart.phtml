@@ -1,0 +1,27 @@
+<?php 
+    $options = $this->getOptions();
+?>
+
+<div class="content-header">
+    <table cellspacing="0">
+        <tbody><tr>
+            <td style="width:50%;"><h3 class="icon-head head-adminhtml-labelQueue"><?php echo $this->__("Unifaun: Label"); ?></h3></td>
+            <td class="form-buttons"></td>
+        </tr>
+    </tbody></table>
+</div>
+
+<h3><?php echo $this->__("Select the label where you want to start printing:"); ?></h3>
+<div class="unifaun-labelQueue">
+    <div class="page">
+        <?php $n = 0; for ($col = 0; $col < $options->getLblCountY(); $col++): ?>
+        <div class="row">
+            <?php for ($row = 0; $row < $options->getLblCountX(); $row++): ?>
+                <a class="col" href="<?php echo Mage::helper("adminhtml")->getUrl("*/*/domassprint", $this->getUrlParams($n)); ?>">
+                    <?php echo $n+1; ?>
+                </a>
+            <?php $n++; endfor; ?>
+        </div>
+        <?php endfor; ?>
+    </div>
+</div>

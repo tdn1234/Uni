@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <unifaun>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>unifaun/carrier_shippingMethod</model>
+                <name>Pcxpress Unifaun</name>
+                <title>Pcxpress Unifaun</title>
+                <length>cm</length>
+                <weight>kg</weight>
+                <default_goods_type>YPK</default_goods_type>
+                <calculation_method>unifaun/carrier_calculationMethod_weight</calculation_method>
+                <calculate_zero_weight>0</calculate_zero_weight>
+                <width>width</width>
+                <height>height</height>
+                <depth>depth</depth>
+                <shipping_group>shipping_group</shipping_group>
+                <shipping_group_value_default>1</shipping_group_value_default>
+                <label_type>default</label_type>
+                <shipping_se_zone1_unit_price>10000-99999</shipping_se_zone1_unit_price>
+                <use_proforma>0</use_proforma>
+                <send_goods_value>0</send_goods_value>
+                <delivery_terms>022 DDU</delivery_terms>
+            </unifaun>
+        </carriers>
+    </default>
+</config>

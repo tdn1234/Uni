@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<unifaun translate="title" module="unifaun">
+			<title>Unifaun</title>
+			<children>
+				<unifaun_label translate="title" module="unifaun">
+					<title>Labels</title>
+					<action>unifaun/adminhtml_label</action>
+					<sort_order>1</sort_order>
+				</unifaun_label>
+				<unifaun_shippingmethod translate="title" module="unifaun">
+					<title>Shipping Methods</title>
+					<action>unifaun/adminhtml_shippingMethod</action>
+					<sort_order>2</sort_order>
+				</unifaun_shippingmethod>
+				<unifaun_unification_matrix translate="title" module="unifaun">
+					<title>Shipping Methods Unification Matrix</title>
+					<action>unifaun/adminhtml_unificationMatrix</action>
+					<sort_order>3</sort_order>
+				</unifaun_unification_matrix>								
+				<unifaun_pickuplocation translate="title" module="unifaun">
+					<title>Pickup Location</title>
+					<action>unifaun/adminhtml_pickupLocation</action>
+					<sort_order>4</sort_order>
+				</unifaun_pickuplocation>
+				<unifaun_consignments translate="title" module="unifaun">
+					<title>Consignments</title>
+					<action>unifaun/adminhtml_unifaunConsignment</action>
+					<sort_order>5</sort_order>
+				</unifaun_consignments>
+				<unifaun_configuration translate="title" module="unifaun">
+					<title>Configurations</title>
+					<action>adminhtml/system_config/edit/section/carriers</action>
+					<sort_order>6</sort_order>
+				</unifaun_configuration>
+			</children>
+			<sort_order>200</sort_order>
+		</unifaun>
+	</menu>  
+</config>
