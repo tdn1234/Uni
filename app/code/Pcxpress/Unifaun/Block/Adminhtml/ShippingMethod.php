@@ -6,21 +6,27 @@
  * @author     PCXpress AB Developer <info@pcxpress.se>
  * @license    http://pcxpress.se/magento/license.txt
  */
+
 namespace Pcxpress\Unifaun\Block\Adminhtml;
 
-class ShippingMethod extends \Magento\Backend\Block\Widget\Grid\Container
+class ShippingMethod extends \Magento\Backend\Block\Widget\Container
 {
-	/**
-	 * Constructor
-	 * @param null	
-	 * @return null
-	 */
-	public function __construct()
-	{
-		$this->_blockGroup = 'unifaun';
-		$this->_controller = 'adminhtml_shippingMethod';		
-		$this->_headerText = Mage::helper('core')->__('Shipping Methods');
-		$this->_addButtonLabel = Mage::helper('core')->__('Add Shipping Method');
-		parent::__construct(); 
-	}
+    /**
+     * Constructor
+     * @param null
+     * @return null
+     */
+
+    public function __construct(\Magento\Backend\Block\Widget\Context $context, array $data = [])
+    {
+        parent::__construct($context, $data);
+    }
+//	public function __construct()
+//	{
+//		$this->_blockGroup = 'unifaun';
+//		$this->_controller = 'adminhtml_shippingMethod';
+//		$this->_headerText = Mage::helper('core')->__('Shipping Methods');
+//		$this->_addButtonLabel = Mage::helper('core')->__('Add Shipping Method');
+//		parent::__construct();
+//	}
 }

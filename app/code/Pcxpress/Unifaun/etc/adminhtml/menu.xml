@@ -7,6 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Customer::customer" title="Customers" translate="title" module="Magento_Customer" sortOrder="30" resource="Magento_Customer::customer"/>
+        <add id="Pcxpress_Unifaun::parent" title="Unifaun" translate="title" module="Pcxpress_Unifaun" sortOrder="30" resource="Pcxpress_Unifaun::parent"/>
+        <add id="Pcxpress_Unifaun::labels" title="Labels" module="Pcxpress_Unifaun" sortOrder="10" action="unifaun/label" resource="Pcxpress_Unifaun::label" parent="Pcxpress_Unifaun::parent"/>
+        <add id="Pcxpress_Unifaun::shippingmethod" title="Shipping Methods" module="Pcxpress_Unifaun" sortOrder="10" action="unifaun/shippingmethod" resource="Pcxpress_Unifaun::shippingmethod" parent="Pcxpress_Unifaun::parent"/>
     </menu>
 </config>

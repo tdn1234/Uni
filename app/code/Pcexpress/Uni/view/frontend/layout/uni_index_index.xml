@@ -1,0 +1,16 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Titlename</title>
+    </head>
+    <body>
+        <referenceContainer name="sidebar.main">
+            <block class="Pcexpress\Uni\Block\Index\Sidebar" name="uni_index_sidebar" before="-"
+                   template="Pcexpress_Uni::uni_index_sidebar.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Pcexpress\Uni\Block\Index\Index" name="uni_index_index"
+                   template="Pcexpress_Uni::uni_index_index.phtml"/>
+        </referenceContainer>
+    </body>
+</page>
