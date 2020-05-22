@@ -4,7 +4,7 @@ namespace Pcxpress\Unifaun\Model\Config\Source;
 
 use Pcxpress\Unifaun\Helper\Data;
 
-class Width implements \Magento\Framework\Option\ArrayInterface
+class LabelType implements \Magento\Framework\Option\ArrayInterface
 {
     protected $helper;
 
@@ -15,6 +15,9 @@ class Width implements \Magento\Framework\Option\ArrayInterface
 
     public function toOptionArray()
     {
-        return $this->helper->getProductShippingArray();
+        $result = array();
+        $result[] = array("value" => "default", "label" => __("Default"));
+
+        return $result;
     }
 }

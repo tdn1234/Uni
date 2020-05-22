@@ -124,6 +124,229 @@
                         <label>Width</label>
                         <source_model>Pcxpress\Unifaun\Model\Config\Source\Width</source_model>
                     </field>
+                    <field id="height" translate="label" type="select" sortOrder="50" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Height</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\Width</source_model>
+                    </field>
+                    <field id="depth" translate="label" type="select" sortOrder="50" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Depth</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\Width</source_model>
+                    </field>
+                    <field id="default_goods_type" translate="label" type="text" sortOrder="50" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Goods Type(Default)</label>
+                        <comment>In case of some carriers (i.e. UPS,Fedex) this value needs to be passed when creating a
+                            consignment in Pcxpress Unifaun.
+                        </comment>
+                    </field>
+                    <field id="shipping_group" translate="label" type="select" sortOrder="50" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Shipping Group</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\Width</source_model>
+                    </field>
+                    <field id="shipping_group_value_default" translate="label" type="text" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Shipping Group Value(Default)</label>
+                    </field>
+                    <field id="shipping_group_sorting" translate="label" type="select" sortOrder="50" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Shipping Group Sorting</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\ShippingGroupSorting</source_model>
+                    </field>
+                    <field id="package_config" translate="label" type="select" sortOrder="50" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Package configuration</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\Width</source_model>
+                    </field>
+                    <field id="shipping_max_unit_price" translate="label" type="text" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Shipping Max Unit Price</label>
+                    </field>
+                    <field id="shipping_unit_price" translate="label" type="select" sortOrder="50" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Shipping Unit Price</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\Width</source_model>
+                    </field>
+                    <field id="shipping_se_zone1_unit_price" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Sweden Zone 1: Shipping Unit Price</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\Width</source_model>
+                    </field>
+                    <field id="shipping_se_zone1_zip_codes" translate="label" type="text" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Sweden Zone 1: Zip Codes</label>
+                    </field>
+                    <field id="enable_template_change" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Enable Template Switch</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="sectionheading_admin" translate="label" type="text" sortOrder="4" showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Administration</label>
+                    <field id="auto_booking" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Automatic Booking</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="advice_type" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Advice Type (default)</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\AdviceTypes</source_model>
+                    </field>
+                    <field id="cod_choices" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Payment Method (COD)</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\PaymentMethods</source_model>
+                    </field>
+                    <field id="cod_account_no" translate="label" type="text" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Cod Account No.</label>
+                    </field>
+                    <field id="calculation_method" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Calculation Method</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\CalculationMethods</source_model>
+                    </field>
+                    <field id="calculation_attribute" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Calculation Attribute</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\CalculationAttributes</source_model>
+                    </field>
+                    <field id="calculate_zero_weight" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Calculate Zero Weight</label>
+                        <comment>Enable this to force caluclation in case of zero weight.</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="label_type" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Label type</label>
+                        <source_model>Pcxpress\Unifaun\Model\Config\Source\LabelType</source_model>
+                    </field>
+                    <field id="use_proforma" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Use Proforma Invoice</label>
+                        <comment>Enable this to append a Proforma invoice (3 copies) when printing shipping labels of
+                            the orders
+                            for which billing address is out EU.
+                        </comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="send_goods_value" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Send Goods Value</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="delivery_terms" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Delivery Terms</label>
+                    </field>
+                    <field id="batch_email" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Batch Processing Email</label>
+                        <comment>Send shipping email when batch processing</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sort_order" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Sort Order</label>
+                    </field>
+                </group>
+                <group id="sectionheading_development" translate="label" type="text" sortOrder="5" showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Development</label>
+                    <field id="development" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Use development server</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="debug" translate="label" type="select" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Debug</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="sectionheading_label" translate="label" type="text" sortOrder="5" showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Label Settings</label>
+                    <field id="label_width" translate="label" type="text" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Width (cm)</label>
+                    </field>
+                    <field id="label_height" translate="label" type="text" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Height (cm)</label>
+                    </field>
+                    <field id="label_font_size" translate="label" type="text" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Font Size</label>
+                    </field>
+                    <field id="label_line_height" translate="label" type="text" sortOrder="50"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Line Height</label>
+                    </field>
                 </group>
             </group>
         </section>

@@ -4,7 +4,7 @@ namespace Pcxpress\Unifaun\Model\Config\Source;
 
 use Pcxpress\Unifaun\Helper\Data;
 
-class Width implements \Magento\Framework\Option\ArrayInterface
+class Height implements \Magento\Framework\Option\ArrayInterface
 {
     protected $helper;
 

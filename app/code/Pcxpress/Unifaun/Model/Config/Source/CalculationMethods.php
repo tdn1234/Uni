@@ -4,7 +4,7 @@ namespace Pcxpress\Unifaun\Model\Config\Source;
 
 use Pcxpress\Unifaun\Helper\Data;
 
-class Width implements \Magento\Framework\Option\ArrayInterface
+class CalculationMethods implements \Magento\Framework\Option\ArrayInterface
 {
     protected $helper;
 
@@ -15,6 +15,6 @@ class Width implements \Magento\Framework\Option\ArrayInterface
 
     public function toOptionArray()
     {
-        return $this->helper->getProductShippingArray();
+        return $this->helper->getCalculationMethodsArray();
     }
 }
