@@ -19,7 +19,7 @@
             </item>
         </item>
     </argument>
-    <dataSource name="nameOfDataSource">
+    <dataSource name="pcxpress_unifaun_shippingmethod_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">
                 Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider

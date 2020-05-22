@@ -10,7 +10,6 @@ class ShippingMethod extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Pcxpress\Unifaun\Model\ResourceModel\Post');
+        $this->_init('Pcxpress\Unifaun\Model\ResourceModel\ShippingMethod');
     }
 }
-?>
