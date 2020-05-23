@@ -1,7 +1,7 @@
 <?php
 namespace Pcxpress\Unifaun\Model;
 
-class Label extends \Magento\Framework\Model\AbstractModel
+class Shippingrate extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Initialize resource model
@@ -10,7 +10,7 @@ class Label extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Pcxpress\Unifaun\Model\ResourceModel\Label');
+        $this->_init('Pcxpress\Unifaun\Model\ResourceModel\Shippingrate');
     }
 }
 ?>

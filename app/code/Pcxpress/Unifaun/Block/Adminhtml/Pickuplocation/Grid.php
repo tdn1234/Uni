@@ -1,5 +1,5 @@
 <?php
-namespace Pcxpress\Unifaun\Block\Adminhtml\Label;
+namespace Pcxpress\Unifaun\Block\Adminhtml\Pickuplocation;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -9,9 +9,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $moduleManager;
 
     /**
-     * @var \Pcxpress\Unifaun\Model\labelFactory
+     * @var \Pcxpress\Unifaun\Model\pickuplocationFactory
      */
-    protected $_labelFactory;
+    protected $_pickuplocationFactory;
 
     /**
      * @var \Pcxpress\Unifaun\Model\Status
@@ -21,7 +21,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Pcxpress\Unifaun\Model\labelFactory $labelFactory
+     * @param \Pcxpress\Unifaun\Model\pickuplocationFactory $pickuplocationFactory
      * @param \Pcxpress\Unifaun\Model\Status $status
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
@@ -31,12 +31,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Pcxpress\Unifaun\Model\LabelFactory $LabelFactory,
+        \Pcxpress\Unifaun\Model\PickuplocationFactory $PickuplocationFactory,
         \Pcxpress\Unifaun\Model\Status $status,
         \Magento\Framework\Module\Manager $moduleManager,
         array $data = []
     ) {
-        $this->_labelFactory = $LabelFactory;
+        $this->_pickuplocationFactory = $PickuplocationFactory;
         $this->_status = $status;
         $this->moduleManager = $moduleManager;
         parent::__construct($context, $backendHelper, $data);
@@ -49,7 +49,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         parent::_construct();
         $this->setId('postGrid');
-        $this->setDefaultSort('label_id');
+        $this->setDefaultSort('pickuplocation_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(false);
@@ -61,7 +61,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_labelFactory->create()->getCollection();
+        $collection = $this->_pickuplocationFactory->create()->getCollection();
         $this->setCollection($collection);
 
         parent::_prepareCollection();
@@ -76,11 +76,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareColumns()
     {
         $this->addColumn(
-            'label_id',
+            'pickuplocation_id',
             [
                 'header' => __('ID'),
                 'type' => 'number',
-                'index' => 'label_id',
+                'index' => 'pickuplocation_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
             ]
@@ -89,45 +89,93 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
 		
 				$this->addColumn(
-					'shipment_id',
+					'name',
 					[
-						'header' => __('Shipment'),
-						'index' => 'shipment_id',
+						'header' => __('Name'),
+						'index' => 'name',
 					]
 				);
 				
-
-						$this->addColumn(
-							'status',
-							[
-								'header' => __('Status'),
-								'index' => 'status',
-								'type' => 'options',
-								'options' => \Pcxpress\Unifaun\Block\Adminhtml\Label\Grid::getOptionArray23()
-							]
-						);
-
-						
 				$this->addColumn(
-					'printed_at',
+					'address',
 					[
-						'header' => __('Printed at'),
-						'index' => 'printed_at',
-						'type'      => 'datetime',
+						'header' => __('Address'),
+						'index' => 'address',
 					]
 				);
-
-					
+				
 				$this->addColumn(
-					'created_at',
+					'postcode',
 					[
-						'header' => __('Created at'),
-						'index' => 'created_at',
-						'type'      => 'datetime',
+						'header' => __('Postcode'),
+						'index' => 'postcode',
 					]
 				);
-
-					
+				
+				$this->addColumn(
+					'city',
+					[
+						'header' => __('City'),
+						'index' => 'city',
+					]
+				);
+				
+				$this->addColumn(
+					'state',
+					[
+						'header' => __('State'),
+						'index' => 'state',
+					]
+				);
+				
+				$this->addColumn(
+					'countrycode',
+					[
+						'header' => __('Countrycode'),
+						'index' => 'countrycode',
+					]
+				);
+				
+				$this->addColumn(
+					'contact_person',
+					[
+						'header' => __('contact person'),
+						'index' => 'contact_person',
+					]
+				);
+				
+				$this->addColumn(
+					'phone',
+					[
+						'header' => __('phone'),
+						'index' => 'phone',
+					]
+				);
+				
+				$this->addColumn(
+					'mobile',
+					[
+						'header' => __('mobile'),
+						'index' => 'mobile',
+					]
+				);
+				
+				$this->addColumn(
+					'fax',
+					[
+						'header' => __('fax'),
+						'index' => 'fax',
+					]
+				);
+				
+				$this->addColumn(
+					'email',
+					[
+						'header' => __('email'),
+						'index' => 'email',
+					]
+				);
+				
 
 
 		
@@ -143,7 +191,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                         //'url' => [
                             //'base' => '*/*/edit'
                         //],
-                        //'field' => 'label_id'
+                        //'field' => 'pickuplocation_id'
                     //]
                 //],
                 //'filter' => false,
@@ -174,9 +222,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareMassaction()
     {
 
-        $this->setMassactionIdField('label_id');
-        //$this->getMassactionBlock()->setTemplate('Pcxpress_Unifaun::label/grid/massaction_extended.phtml');
-        $this->getMassactionBlock()->setFormFieldName('label');
+        $this->setMassactionIdField('pickuplocation_id');
+        //$this->getMassactionBlock()->setTemplate('Pcxpress_Unifaun::pickuplocation/grid/massaction_extended.phtml');
+        $this->getMassactionBlock()->setFormFieldName('pickuplocation');
 
         $this->getMassactionBlock()->addItem(
             'delete',
@@ -220,7 +268,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Pcxpress\Unifaun\Model\label|\Magento\Framework\Object $row
+     * @param \Pcxpress\Unifaun\Model\pickuplocation|\Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)
@@ -228,27 +276,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 		
         return $this->getUrl(
             'unifaun/*/edit',
-            ['label_id' => $row->getId()]
+            ['pickuplocation_id' => $row->getId()]
         );
 		
     }
 
 	
-		static public function getOptionArray23()
-		{
-            $data_array=array(); 
-			$data_array[0]='Yes';
-            return($data_array);
-		}
-		static public function getValueArray23()
-		{
-            $data_array=array();
-			foreach(\Pcxpress\Unifaun\Block\Adminhtml\Label\Grid::getOptionArray23() as $k=>$v){
-               $data_array[]=array('value'=>$k,'label'=>$v);
-			}
-            return($data_array);
-
-		}
-		
 
 }

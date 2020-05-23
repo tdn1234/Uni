@@ -1,5 +1,5 @@
 <?php
-namespace Pcxpress\Unifaun\Block\Adminhtml\Label;
+namespace Pcxpress\Unifaun\Block\Adminhtml\Shippingrate;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -9,9 +9,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $moduleManager;
 
     /**
-     * @var \Pcxpress\Unifaun\Model\labelFactory
+     * @var \Pcxpress\Unifaun\Model\shippingrateFactory
      */
-    protected $_labelFactory;
+    protected $_shippingrateFactory;
 
     /**
      * @var \Pcxpress\Unifaun\Model\Status
@@ -21,7 +21,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Pcxpress\Unifaun\Model\labelFactory $labelFactory
+     * @param \Pcxpress\Unifaun\Model\shippingrateFactory $shippingrateFactory
      * @param \Pcxpress\Unifaun\Model\Status $status
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
@@ -31,12 +31,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Pcxpress\Unifaun\Model\LabelFactory $LabelFactory,
+        \Pcxpress\Unifaun\Model\ShippingrateFactory $ShippingrateFactory,
         \Pcxpress\Unifaun\Model\Status $status,
         \Magento\Framework\Module\Manager $moduleManager,
         array $data = []
     ) {
-        $this->_labelFactory = $LabelFactory;
+        $this->_shippingrateFactory = $ShippingrateFactory;
         $this->_status = $status;
         $this->moduleManager = $moduleManager;
         parent::__construct($context, $backendHelper, $data);
@@ -49,7 +49,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         parent::_construct();
         $this->setId('postGrid');
-        $this->setDefaultSort('label_id');
+        $this->setDefaultSort('shippingrate_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(false);
@@ -61,7 +61,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_labelFactory->create()->getCollection();
+        $collection = $this->_shippingrateFactory->create()->getCollection();
         $this->setCollection($collection);
 
         parent::_prepareCollection();
@@ -76,11 +76,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareColumns()
     {
         $this->addColumn(
-            'label_id',
+            'shippingrate_id',
             [
                 'header' => __('ID'),
                 'type' => 'number',
-                'index' => 'label_id',
+                'index' => 'shippingrate_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
             ]
@@ -88,46 +88,82 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
 
 		
-				$this->addColumn(
-					'shipment_id',
-					[
-						'header' => __('Shipment'),
-						'index' => 'shipment_id',
-					]
-				);
-				
 
 						$this->addColumn(
-							'status',
+							'shippingmethod_id',
 							[
-								'header' => __('Status'),
-								'index' => 'status',
+								'header' => __('shippingmethod'),
+								'index' => 'shippingmethod_id',
 								'type' => 'options',
-								'options' => \Pcxpress\Unifaun\Block\Adminhtml\Label\Grid::getOptionArray23()
+								'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray37()
 							]
 						);
 
 						
 				$this->addColumn(
-					'printed_at',
+					'max_weight',
 					[
-						'header' => __('Printed at'),
-						'index' => 'printed_at',
-						'type'      => 'datetime',
+						'header' => __('max weight'),
+						'index' => 'max_weight',
 					]
 				);
-
-					
+				
 				$this->addColumn(
-					'created_at',
+					'max_width',
 					[
-						'header' => __('Created at'),
-						'index' => 'created_at',
-						'type'      => 'datetime',
+						'header' => __('max width'),
+						'index' => 'max_width',
 					]
 				);
-
-					
+				
+				$this->addColumn(
+					'max_height',
+					[
+						'header' => __('max height'),
+						'index' => 'max_height',
+					]
+				);
+				
+				$this->addColumn(
+					'max_depth',
+					[
+						'header' => __('max depth'),
+						'index' => 'max_depth',
+					]
+				);
+				
+				$this->addColumn(
+					'shipping_fee',
+					[
+						'header' => __('shipping fee'),
+						'index' => 'shipping_fee',
+					]
+				);
+				
+				$this->addColumn(
+					'zipcode_range',
+					[
+						'header' => __('zipcode range'),
+						'index' => 'zipcode_range',
+					]
+				);
+				
+				$this->addColumn(
+					'countries',
+					[
+						'header' => __('countries'),
+						'index' => 'countries',
+					]
+				);
+				
+				$this->addColumn(
+					'website_id',
+					[
+						'header' => __('website_id'),
+						'index' => 'website_id',
+					]
+				);
+				
 
 
 		
@@ -143,7 +179,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                         //'url' => [
                             //'base' => '*/*/edit'
                         //],
-                        //'field' => 'label_id'
+                        //'field' => 'shippingrate_id'
                     //]
                 //],
                 //'filter' => false,
@@ -174,9 +210,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareMassaction()
     {
 
-        $this->setMassactionIdField('label_id');
-        //$this->getMassactionBlock()->setTemplate('Pcxpress_Unifaun::label/grid/massaction_extended.phtml');
-        $this->getMassactionBlock()->setFormFieldName('label');
+        $this->setMassactionIdField('shippingrate_id');
+        //$this->getMassactionBlock()->setTemplate('Pcxpress_Unifaun::shippingrate/grid/massaction_extended.phtml');
+        $this->getMassactionBlock()->setFormFieldName('shippingrate');
 
         $this->getMassactionBlock()->addItem(
             'delete',
@@ -220,7 +256,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Pcxpress\Unifaun\Model\label|\Magento\Framework\Object $row
+     * @param \Pcxpress\Unifaun\Model\shippingrate|\Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)
@@ -228,22 +264,22 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 		
         return $this->getUrl(
             'unifaun/*/edit',
-            ['label_id' => $row->getId()]
+            ['shippingrate_id' => $row->getId()]
         );
 		
     }
 
 	
-		static public function getOptionArray23()
+		static public function getOptionArray37()
 		{
             $data_array=array(); 
 			$data_array[0]='Yes';
             return($data_array);
 		}
-		static public function getValueArray23()
+		static public function getValueArray37()
 		{
             $data_array=array();
-			foreach(\Pcxpress\Unifaun\Block\Adminhtml\Label\Grid::getOptionArray23() as $k=>$v){
+			foreach(\Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray37() as $k=>$v){
                $data_array[]=array('value'=>$k,'label'=>$v);
 			}
             return($data_array);

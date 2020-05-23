@@ -2,12 +2,12 @@
 
 namespace Pcxpress\Unifaun\Block\Adminhtml;
 
-class Label extends \Magento\Backend\Block\Widget\Container
+class Pickuplocation extends \Magento\Backend\Block\Widget\Container
 {
     /**
      * @var string
      */
-    protected $_template = 'label/label.phtml';
+    protected $_template = 'pickuplocation/pickuplocation.phtml';
 
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
@@ -40,7 +40,7 @@ class Label extends \Magento\Backend\Block\Widget\Container
 
         $this->setChild(
             'grid',
-            $this->getLayout()->createBlock('Pcxpress\Unifaun\Block\Adminhtml\Label\Grid', 'pcxpress.label.grid')
+            $this->getLayout()->createBlock('Pcxpress\Unifaun\Block\Adminhtml\Pickuplocation\Grid', 'pcxpress.pickuplocation.grid')
         );
         return parent::_prepareLayout();
     }

@@ -2,8 +2,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Pcxpress\Unifaun\Block\Adminhtml\Label" name="unifaun_label_listing"/>
+            <block class="Pcxpress\Unifaun\Block\Adminhtml\Pickuplocation" name="unifaun_pickuplocation_listing"/>
         </referenceContainer>
-        <referenceContainer name="admin.unifaun.label.grid"></referenceContainer>
+        <referenceContainer name="admin.unifaun.pickuplocation.grid"></referenceContainer>
     </body>
 </page>
