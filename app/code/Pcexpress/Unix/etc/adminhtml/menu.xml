@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Pcexpress_Unix::parent" title="Unix" module="Pcexpress_Unix" sortOrder="100" resource="Pcexpress_Unix::parent"/>
+        <add id="Pcexpress_Unix::index" title="Unix Index" module="Pcexpress_Unix" sortOrder="10" action="unix/index" resource="Pcexpress_Unix::index" parent="Pcexpress_Unix::parent"/>
+		<add id="Pcexpress_Unix::unifaunlabels" title="Unix Unifaunlabels" module="Pcexpress_Unix" sortOrder="20" parent="Pcexpress_Unix::parent" action="unix/unifaunlabels" resource="Pcexpress_Unix::unifaunlabels"/>
+
+    </menu>
+</config>

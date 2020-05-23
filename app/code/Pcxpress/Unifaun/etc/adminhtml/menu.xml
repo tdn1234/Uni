@@ -1,14 +1,8 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
     <menu>
-        <add id="Pcxpress_Unifaun::parent" title="Unifaun" translate="title" module="Pcxpress_Unifaun" sortOrder="30" resource="Pcxpress_Unifaun::parent"/>
-        <add id="Pcxpress_Unifaun::labels" title="Labels" module="Pcxpress_Unifaun" sortOrder="10" action="unifaun/label" resource="Pcxpress_Unifaun::label" parent="Pcxpress_Unifaun::parent"/>
-        <add id="Pcxpress_Unifaun::shippingmethod" title="Shipping Methods" module="Pcxpress_Unifaun" sortOrder="10" action="unifaun/shippingmethod" resource="Pcxpress_Unifaun::shippingmethod" parent="Pcxpress_Unifaun::parent"/>
+        <add id="Pcxpress_Unifaun::parent" title="Unifaun" module="Pcxpress_Unifaun" sortOrder="100" resource="Pcxpress_Unifaun::parent"/>
+		<add id="Pcxpress_Unifaun::shippingmethod" title="Unifaun Shippingmethod" module="Pcxpress_Unifaun" sortOrder="20" parent="Pcxpress_Unifaun::parent" action="unifaun/shippingmethod" resource="Pcxpress_Unifaun::shippingmethod"/>
+
     </menu>
 </config>

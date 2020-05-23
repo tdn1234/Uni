@@ -1,6 +1,6 @@
 <?php
 
-namespace Pcxpress\Unifaun\Model;
+namespace Pcexpress\Unix\Model;
 
 class Status
 {
