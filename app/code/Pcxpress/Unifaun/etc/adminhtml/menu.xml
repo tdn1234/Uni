@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
     <menu>
-        <add id="Pcxpress_Unifaun::parent" title="Unifaun" module="Pcxpress_Unifaun" sortOrder="100" resource="Pcxpress_Unifaun::parent"/>
+        <add id="Pcxpress_Unifaun::parent" title="Unifaun" module="Pcxpress_Unifaun" sortOrder="2" resource="Pcxpress_Unifaun::parent"/>
 		<add id="Pcxpress_Unifaun::shippingmethod" title="Unifaun Shippingmethod" module="Pcxpress_Unifaun" sortOrder="20" parent="Pcxpress_Unifaun::parent" action="unifaun/shippingmethod" resource="Pcxpress_Unifaun::shippingmethod"/>
 <add id="Pcxpress_Unifaun::label" title="Unifaun Label" module="Pcxpress_Unifaun" sortOrder="30" parent="Pcxpress_Unifaun::parent" action="unifaun/label" resource="Pcxpress_Unifaun::label"/>
 <add id="Pcxpress_Unifaun::pickuplocation" title="Unifaun Pickuplocation" module="Pcxpress_Unifaun" sortOrder="40" parent="Pcxpress_Unifaun::parent" action="unifaun/pickuplocation" resource="Pcxpress_Unifaun::pickuplocation"/>

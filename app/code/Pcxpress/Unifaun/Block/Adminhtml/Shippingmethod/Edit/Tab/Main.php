@@ -2,6 +2,8 @@
 
 namespace Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Edit\Tab;
 
+use Pcxpress\Unifaun\Helper\Data;
+
 /**
  * Shippingmethod edit form main tab
  */
@@ -18,6 +20,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     protected $_status;
 
     /**
+     * @var \Pcxpress\Unifaun\Helper\Data
+     */
+    protected $helper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -30,10 +37,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
         \Pcxpress\Unifaun\Model\Status $status,
-        array $data = []
-    ) {
+        array $data = [],
+        Data $helper
+    )
+    {
         $this->_systemStore = $systemStore;
         $this->_status = $status;
+        $this->helper = $helper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -61,7 +71,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             $fieldset->addField('shippingmethod_id', 'hidden', ['name' => 'shippingmethod_id']);
         }
 
-		
+
         $fieldset->addField(
             'title',
             'text',
@@ -69,11 +79,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'title',
                 'label' => __('Title'),
                 'title' => __('Title'),
-				'required' => true,
+                'required' => true,
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
         $fieldset->addField(
             'template_name',
             'text',
@@ -81,11 +91,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'template_name',
                 'label' => __('Template name'),
                 'title' => __('Template name'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
         $fieldset->addField(
             'shipping_service',
             'text',
@@ -93,11 +103,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'shipping_service',
                 'label' => __('Shipping service'),
                 'title' => __('Shipping service'),
-				'required' => true,
+                'required' => true,
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
         $fieldset->addField(
             'description',
             'textarea',
@@ -105,11 +115,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'description',
                 'label' => __('Description'),
                 'title' => __('Description'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
         $fieldset->addField(
             'store_ids',
             'multiselect',
@@ -117,12 +127,12 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Store view'),
                 'title' => __('Store view'),
                 'name' => 'store_ids',
-				
+
                 'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getValueArray4(),
                 'disabled' => $isElementDisabled
             ]
         );
-						
+
         $fieldset->addField(
             'min_consignment_weight',
             'text',
@@ -130,11 +140,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'min_consignment_weight',
                 'label' => __('Consignment weight min'),
                 'title' => __('Consignment weight min'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
         $fieldset->addField(
             'max_consignment_weight',
             'text',
@@ -142,11 +152,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'max_consignment_weight',
                 'label' => __('Consignment weight max'),
                 'title' => __('Consignment weight max'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
 
         $fieldset->addField(
             'label_only',
@@ -155,13 +165,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Label only'),
                 'title' => __('Label only'),
                 'name' => 'label_only',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray7(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
 
         $fieldset->addField(
             'frontend_visibility',
@@ -170,13 +178,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Visible at Frontend'),
                 'title' => __('Visible at Frontend'),
                 'name' => 'frontend_visibility',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray8(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
 
         $fieldset->addField(
             'no_booking',
@@ -185,13 +191,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('No booking'),
                 'title' => __('No booking'),
                 'name' => 'no_booking',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray9(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
 
         $fieldset->addField(
             'active',
@@ -200,13 +204,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Active'),
                 'title' => __('Active'),
                 'name' => 'active',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray10(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
 
         $fieldset->addField(
             'free_shipping_enable',
@@ -215,13 +217,12 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Free Shipping Enabled'),
                 'title' => __('Free Shipping Enabled'),
                 'name' => 'free_shipping_enable',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray11(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
+
         $fieldset->addField(
             'free_shipping_subtotal',
             'text',
@@ -229,11 +230,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'free_shipping_subtotal',
                 'label' => __('Free Shipping Subtotal'),
                 'title' => __('Free Shipping Subtotal'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
         $fieldset->addField(
             'handling_fee',
             'text',
@@ -241,11 +242,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'handling_fee',
                 'label' => __('Handling Fee'),
                 'title' => __('Handling Fee'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
 
         $dateFormat = $this->_localeDate->getDateFormat(
             \IntlDateFormatter::MEDIUM
@@ -261,15 +262,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'last_booking_time',
                 'label' => __('Last Booking Time (hh:mm)'),
                 'title' => __('Last Booking Time (hh:mm)'),
-                    'date_format' => $dateFormat,
-                    //'time_format' => $timeFormat,
-				
+                'date_format' => $dateFormat,
+                //'time_format' => $timeFormat,
+
                 'disabled' => $isElementDisabled
             ]
         );
 
 
-						
         $fieldset->addField(
             'shipping_group',
             'text',
@@ -277,11 +277,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'shipping_group',
                 'label' => __('Shipping group'),
                 'title' => __('Shipping group'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
 
         $fieldset->addField(
             'multiple_parcels',
@@ -290,13 +290,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Multiple Parcels Allowed'),
                 'title' => __('Multiple Parcels Allowed'),
                 'name' => 'multiple_parcels',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray16(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
 
         $fieldset->addField(
             'insurance_enable',
@@ -305,13 +303,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Insurance'),
                 'title' => __('Insurance'),
                 'name' => 'insurance_enable',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray17(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
 
         $fieldset->addField(
             'unification_enable',
@@ -320,13 +316,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Unification'),
                 'title' => __('Unification'),
                 'name' => 'unification_enable',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray18(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
 
         $fieldset->addField(
             'advice_default',
@@ -335,13 +329,12 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Default advice'),
                 'title' => __('Default advice'),
                 'name' => 'advice_default',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray19(),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
+//        \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getValueArray20();
 
         $fieldset->addField(
             'unification_product_id',
@@ -350,13 +343,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Unification Product'),
                 'title' => __('Unification Product'),
                 'name' => 'unification_product_id',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getOptionArray20(),
+
+                'options' => $this->helper->getShippingMethods(),
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
+
         $fieldset->addField(
             'unification_priority',
             'text',
@@ -364,11 +357,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'unification_priority',
                 'label' => __('Unification Priority'),
                 'title' => __('Unification Priority'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
 
         if (!$model->getId()) {
             $model->setData('is_active', $isElementDisabled ? '0' : '1');
@@ -427,10 +420,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         return $this->_authorization->isAllowed($resourceId);
     }
 
-    public function getTargetOptionArray(){
-    	return array(
-    				'_self' => "Self",
-					'_blank' => "New Page",
-    				);
+    public function getTargetOptionArray()
+    {
+        return array(
+            '_self' => "Self",
+            '_blank' => "New Page",
+        );
     }
 }
