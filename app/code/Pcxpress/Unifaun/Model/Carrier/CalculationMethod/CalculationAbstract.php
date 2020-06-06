@@ -1,13 +1,19 @@
 <?php
+
 namespace Pcxpress\Unifaun\Model\Carrier\CalculationMethod;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Shipping\Model\Rate\Result;
 
 abstract class CalculationAbstract
 {
+    /**
+     * @var string
+     */
+    protected $_code = 'unifaun';
 
     protected $_request;
     protected $_shippingMethods;
-    protected $_code;
 
     /**
      * @var \Pcxpress\Unifaun\Model\Mysql4\ShippingMethod\CollectionFactory
@@ -22,10 +28,12 @@ abstract class CalculationAbstract
     public function __construct(
         \Pcxpress\Unifaun\Model\Mysql4\ShippingMethod\CollectionFactory $unifaunMysql4ShippingMethodCollectionFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
+    )
+    {
         $this->unifaunMysql4ShippingMethodCollectionFactory = $unifaunMysql4ShippingMethodCollectionFactory;
         $this->scopeConfig = $scopeConfig;
     }
+
     /**
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return \Pcxpress\Unifaun\Model\Carrier\CalculationMethod\Weight
@@ -41,6 +49,9 @@ abstract class CalculationAbstract
      */
     public function getRequest()
     {
+        if (is_null($this->_request)) {
+            throw new \Exception('Quote rate requiest is null');
+        }
         return $this->_request;
     }
 
@@ -142,8 +153,12 @@ abstract class CalculationAbstract
     /**
      * Get the different rate results
      * @abstract
+     *
+     * @param RateRequest $request
+     * @param Result $result
+     *
      * @return \Magento\Shipping\Model\Tracking\Result
      */
-    abstract function getRateResult();
+    abstract function getRateResult(RateRequest $request, Result $result);
 
 }

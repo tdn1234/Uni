@@ -13,7 +13,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init('Pcxpress\Unifaun\Model\Shippingmethod', 'Pcxpress\Unifaun\Model\ResourceModel\Shippingmethod');
-        $this->_map['fields']['page_id'] = 'main_table.page_id';
+//        $this->_map['fields']['page_id'] = 'main_table.page_id';
     }
 
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <tdncustom>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>Pcxpress\Carr\Model\Carrier\Tdncustom</model>
+                <name>Tdncustom</name>
+                <price>00.00</price>
+                <title>Tdn</title>
+                <type>I</type>
+                <sort_order>0</sort_order>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.
+                </specificerrmsg>
+            </tdncustom>
+            <tdncustom1>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>Pcxpress\Carr\Model\Carrier\Tdncustom1</model>
+                <name>Tdncustom1</name>
+                <price>00.00</price>
+                <title>Tdnsdfsdf</title>
+                <type>I</type>
+                <sort_order>0</sort_order>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.
+                </specificerrmsg>
+            </tdncustom1>
+        </carriers>
+    </default>
+</config>

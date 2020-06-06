@@ -64,6 +64,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         $collection = $this->_shippingmethodFactory->create()->getCollection();
+//        var_dump(get_class($collection));
+//        var_dump(count($collection));die;
         $this->setCollection($collection);
 
         parent::_prepareCollection();
@@ -423,7 +425,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     static public function getOptionArray8()
     {
         $data_array = array();
-        $data_array[0] = 'Yes';
+        $data_array[0] = 'No';
+        $data_array[1] = 'Yes';
         return ($data_array);
     }
 
@@ -440,7 +443,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     static public function getOptionArray9()
     {
         $data_array = array();
-        $data_array[0] = 'Yes';
+        $data_array[0] = 'No';
+        $data_array[1] = 'Yes';
         return ($data_array);
     }
 

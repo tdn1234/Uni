@@ -15,6 +15,9 @@ class Shipping extends \Magento\Framework\App\Helper\AbstractHelper
 		'unit' => 'unifaun/carrier_calculationMethod_unit'
 	];
 
+	const WEIGHT_CALCULATION_METHOD = 'weight';
+	const UNIT_CALCULATION_METHOD = 'unit';
+
 	public static $schenkerTemplateName = "schenker";
 	public static $mypackTemplateName = "mypack";
 

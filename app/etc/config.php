@@ -226,6 +226,7 @@ return [
         'MSP_TwoFactorAuth' => 1,
         'Pcexpress_Uni' => 1,
         'Pcexpress_Unix' => 1,
+        'Pcxpress_Carr' => 1,
         'Pcxpress_Unifaun' => 1,
         'Temando_Shipping' => 1,
         'Vertex_Tax' => 1,

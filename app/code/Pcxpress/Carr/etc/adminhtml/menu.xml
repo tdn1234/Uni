@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Pcxpress_Carr::parent" title="Carr" module="Pcxpress_Carr" sortOrder="100" resource="Pcxpress_Carr::parent"/>
+        <add id="Pcxpress_Carr::index" title="Carr Index" module="Pcxpress_Carr" sortOrder="10" action="carr/index" resource="Pcxpress_Carr::index" parent="Pcxpress_Carr::parent"/>
+		
+    </menu>
+</config>

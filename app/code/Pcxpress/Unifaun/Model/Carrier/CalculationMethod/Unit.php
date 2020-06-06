@@ -2,11 +2,14 @@
 
 namespace Pcxpress\Unifaun\Model\Carrier\CalculationMethod;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Shipping\Model\Rate\Result;
+
 class Unit extends \Pcxpress\Unifaun\Model\Carrier\CalculationMethod\CalculationAbstract
 {
     const ORDER = "title";
     const COUNTRY_SWEDEN = 'SE';
-
+    
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -33,7 +36,18 @@ class Unit extends \Pcxpress\Unifaun\Model\Carrier\CalculationMethod\Calculation
         $this->catalogProductFactory = $catalogProductFactory;
     }
 
-    public function getRateResult()
+    /**
+     * Calculate the price based on unit
+     *
+     * @param RateRequest $request
+     * @param Result $result
+     *
+     * @return \Magento\Shipping\Model\Rate\Result
+     */
+    public function getRateResult(
+        RateRequest $request,
+        Result $result
+    )
     {
 
         $methods = $this->getShippingMethods();
@@ -44,7 +58,7 @@ class Unit extends \Pcxpress\Unifaun\Model\Carrier\CalculationMethod\Calculation
         $storeId = $this->getRequest()->getStoreId();
         $shippingPriceMax = (int)$this->scopeConfig->getValue("carriers/unifaun/shipping_max_unit_price", \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
 
-        $result = $this->shippingRateResultFactory->create();
+//        $result = $this->shippingRateResultFactory->create();
 
         $destCountryId = $this->getRequest()->getDestCountryId();
         $destZipCode = intval($this->getRequest()->getDestPostcode());
