@@ -1,5 +1,10 @@
 <?php
+
 namespace Pcxpress\Unifaun\Block\Adminhtml\Shippingrate;
+
+use Magento\Directory\Model\CountryFactory;
+use Magento\Directory\Model\RegionFactory;
+use Pcxpress\Unifaun\Model\ShippingmethodFactory;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -18,6 +23,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected $_status;
 
+    /** @var ShippingmethodFactory $shippingMethodFactory */
+    protected $shippingMethodFactory;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
@@ -34,8 +42,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Pcxpress\Unifaun\Model\ShippingrateFactory $ShippingrateFactory,
         \Pcxpress\Unifaun\Model\Status $status,
         \Magento\Framework\Module\Manager $moduleManager,
-        array $data = []
-    ) {
+        array $data = [],
+        ShippingmethodFactory $shippingmethodFactory
+    )
+    {
+        $this->shippingMethodFactory = $shippingmethodFactory;
         $this->_shippingrateFactory = $ShippingrateFactory;
         $this->_status = $status;
         $this->moduleManager = $moduleManager;
@@ -87,113 +98,107 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         );
 
 
-		
-
-						$this->addColumn(
-							'shippingmethod_id',
-							[
-								'header' => __('shippingmethod'),
-								'index' => 'shippingmethod_id',
-								'type' => 'options',
-								'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray37()
-							]
-						);
-
-						
-				$this->addColumn(
-					'max_weight',
-					[
-						'header' => __('max weight'),
-						'index' => 'max_weight',
-					]
-				);
-				
-				$this->addColumn(
-					'max_width',
-					[
-						'header' => __('max width'),
-						'index' => 'max_width',
-					]
-				);
-				
-				$this->addColumn(
-					'max_height',
-					[
-						'header' => __('max height'),
-						'index' => 'max_height',
-					]
-				);
-				
-				$this->addColumn(
-					'max_depth',
-					[
-						'header' => __('max depth'),
-						'index' => 'max_depth',
-					]
-				);
-				
-				$this->addColumn(
-					'shipping_fee',
-					[
-						'header' => __('shipping fee'),
-						'index' => 'shipping_fee',
-					]
-				);
-				
-				$this->addColumn(
-					'zipcode_range',
-					[
-						'header' => __('zipcode range'),
-						'index' => 'zipcode_range',
-					]
-				);
-				
-				$this->addColumn(
-					'countries',
-					[
-						'header' => __('countries'),
-						'index' => 'countries',
-					]
-				);
-				
-				$this->addColumn(
-					'website_id',
-					[
-						'header' => __('website_id'),
-						'index' => 'website_id',
-					]
-				);
-				
+        $this->addColumn(
+            'shippingmethod_id',
+            [
+                'header' => __('shippingmethod'),
+                'index' => 'shippingmethod_id',
+                'renderer' => 'Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid\Renderer\ShippingmethodName'
+            ]
+        );
 
 
-		
+        $this->addColumn(
+            'max_weight',
+            [
+                'header' => __('max weight'),
+                'index' => 'max_weight',
+            ]
+        );
+
+        $this->addColumn(
+            'max_width',
+            [
+                'header' => __('max width'),
+                'index' => 'max_width',
+            ]
+        );
+
+        $this->addColumn(
+            'max_height',
+            [
+                'header' => __('max height'),
+                'index' => 'max_height',
+            ]
+        );
+
+        $this->addColumn(
+            'max_depth',
+            [
+                'header' => __('max depth'),
+                'index' => 'max_depth',
+            ]
+        );
+
+        $this->addColumn(
+            'shipping_fee',
+            [
+                'header' => __('shipping fee'),
+                'index' => 'shipping_fee',
+            ]
+        );
+
+        $this->addColumn(
+            'zipcode_range',
+            [
+                'header' => __('zipcode range'),
+                'index' => 'zipcode_range',
+            ]
+        );
+
+        $this->addColumn(
+            'countries',
+            [
+                'header' => __('countries'),
+                'index' => 'countries',
+            ]
+        );
+
+        $this->addColumn(
+            'website_id',
+            [
+                'header' => __('website_id'),
+                'index' => 'website_id',
+            ]
+        );
+
+
         //$this->addColumn(
-            //'edit',
-            //[
-                //'header' => __('Edit'),
-                //'type' => 'action',
-                //'getter' => 'getId',
-                //'actions' => [
-                    //[
-                        //'caption' => __('Edit'),
-                        //'url' => [
-                            //'base' => '*/*/edit'
-                        //],
-                        //'field' => 'shippingrate_id'
-                    //]
-                //],
-                //'filter' => false,
-                //'sortable' => false,
-                //'index' => 'stores',
-                //'header_css_class' => 'col-action',
-                //'column_css_class' => 'col-action'
-            //]
+        //'edit',
+        //[
+        //'header' => __('Edit'),
+        //'type' => 'action',
+        //'getter' => 'getId',
+        //'actions' => [
+        //[
+        //'caption' => __('Edit'),
+        //'url' => [
+        //'base' => '*/*/edit'
+        //],
+        //'field' => 'shippingrate_id'
+        //]
+        //],
+        //'filter' => false,
+        //'sortable' => false,
+        //'index' => 'stores',
+        //'header_css_class' => 'col-action',
+        //'column_css_class' => 'col-action'
+        //]
         //);
-		
 
-		
-		   $this->addExportType($this->getUrl('unifaun/*/exportCsv', ['_current' => true]),__('CSV'));
-		   $this->addExportType($this->getUrl('unifaun/*/exportExcel', ['_current' => true]),__('Excel XML'));
+
+        $this->addExportType($this->getUrl('unifaun/*/exportCsv', ['_current' => true]), __('CSV'));
+        $this->addExportType($this->getUrl('unifaun/*/exportExcel', ['_current' => true]), __('Excel XML'));
 
         $block = $this->getLayout()->getBlock('grid.bottom.links');
         if ($block) {
@@ -203,7 +208,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
-	
+
     /**
      * @return $this
      */
@@ -245,7 +250,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         return $this;
     }
-		
+
 
     /**
      * @return string
@@ -261,30 +266,44 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowUrl($row)
     {
-		
+
         return $this->getUrl(
             'unifaun/*/edit',
             ['shippingrate_id' => $row->getId()]
         );
-		
+
     }
 
-	
-		static public function getOptionArray37()
-		{
-            $data_array=array(); 
-			$data_array[0]='Yes';
-            return($data_array);
-		}
-		static public function getValueArray37()
-		{
-            $data_array=array();
-			foreach(\Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray37() as $k=>$v){
-               $data_array[]=array('value'=>$k,'label'=>$v);
-			}
-            return($data_array);
 
-		}
-		
+    static public function getOptionArray37(ShippingmethodFactory $shippingmethodFactory)
+    {
+        $shippingMethods = $shippingmethodFactory->create()->getCollection();
+        $data_array = array();
+        foreach ($shippingMethods as $shippingMethod) {
+            $data_array[$shippingMethod->getId()] = $shippingMethod->getTitle();
+        }
+        return ($data_array);
+    }
 
+    static public function getOptionArray38(CountryFactory $countryFactory)
+    {
+        $countries = $countryFactory->create()->getCollection();
+
+        $data_array = array('0' => '---Please Select---');
+        foreach ($countries as $country) {
+            $data_array[$country->getId()] = $country->getName();
+        }
+
+        return ($data_array);
+    }
+
+    static public function getOptionArray39(array $array)
+    {
+        $data_array = array('0' => '---All---');
+        foreach ($array as $data) {
+            $data_array[$data['value']] = $data['label'];
+        }
+
+        return ($data_array);
+    }
 }

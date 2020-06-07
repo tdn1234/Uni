@@ -3,7 +3,7 @@
 namespace Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Edit\Tab;
 
 use Pcxpress\Unifaun\Helper\Data;
-
+use Magento\Store\Model\System\Store;
 /**
  * Shippingmethod edit form main tab
  */
@@ -24,6 +24,8 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected $helper;
 
+    protected $store;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -38,9 +40,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Store\Model\System\Store $systemStore,
         \Pcxpress\Unifaun\Model\Status $status,
         array $data = [],
-        Data $helper
+        Data $helper,
+        Store $store
     )
     {
+        $this->store = $store;
         $this->_systemStore = $systemStore;
         $this->_status = $status;
         $this->helper = $helper;
@@ -126,9 +130,8 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             [
                 'label' => __('Store view'),
                 'title' => __('Store view'),
-                'name' => 'store_ids',
-
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid::getValueArray4(),
+                'name' => 'store_ids[]',
+                'values' => $this->store->getStoreValuesForForm(false, true),
                 'disabled' => $isElementDisabled
             ]
         );

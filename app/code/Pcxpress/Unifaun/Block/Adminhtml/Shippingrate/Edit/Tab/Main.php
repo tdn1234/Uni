@@ -2,6 +2,11 @@
 
 namespace Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Edit\Tab;
 
+use Pcxpress\Unifaun\Model\ShippingmethodFactory;
+use Magento\Directory\Model\RegionFactory;
+use Magento\Directory\Model\CountryFactory;
+use Magento\Config\Model\Config\Source\WebsiteFactory;
+
 /**
  * Shippingrate edit form main tab
  */
@@ -17,6 +22,17 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected $_status;
 
+    /** @var ShippingmethodFactory $shippingMethodFactory */
+    protected $shippingMethodFactory;
+
+    /**
+     * @var CountryFactory $countryFactory
+     */
+    protected $countryFactory;
+
+    /** @var WebsiteFactory $websiteFactory */
+    protected $websiteFactory;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -30,8 +46,18 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
         \Pcxpress\Unifaun\Model\Status $status,
-        array $data = []
-    ) {
+        array $data = [],
+        ShippingmethodFactory $shippingmethodFactory,
+        CountryFactory $countryFactory,
+        WebsiteFactory $websiteFactory
+    )
+    {
+//        var_dump($websiteFactory->create()->toOptionArray());
+//        var_dump(get_class_methods($websiteFactory->create()));
+//        var_dump(get_class($websiteFactory));die;
+        $this->websiteFactory = $websiteFactory;
+        $this->countryFactory = $countryFactory;
+        $this->shippingMethodFactory = $shippingmethodFactory;
         $this->_systemStore = $systemStore;
         $this->_status = $status;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -61,70 +87,18 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             $fieldset->addField('shippingrate_id', 'hidden', ['name' => 'shippingrate_id']);
         }
 
-		
-
         $fieldset->addField(
-            'shippingmethod_id',
+            'website_id',
             'select',
             [
-                'label' => __('shippingmethod'),
-                'title' => __('shippingmethod'),
-                'name' => 'shippingmethod_id',
-				
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray37(),
+                'name' => 'website_id',
+                'label' => __('website_id'),
+                'title' => __('website_id'),
+                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray39($this->websiteFactory->create()->toOptionArray()),
                 'disabled' => $isElementDisabled
             ]
         );
 
-						
-        $fieldset->addField(
-            'max_weight',
-            'text',
-            [
-                'name' => 'max_weight',
-                'label' => __('max weight'),
-                'title' => __('max weight'),
-				
-                'disabled' => $isElementDisabled
-            ]
-        );
-					
-        $fieldset->addField(
-            'max_width',
-            'text',
-            [
-                'name' => 'max_width',
-                'label' => __('max width'),
-                'title' => __('max width'),
-				
-                'disabled' => $isElementDisabled
-            ]
-        );
-					
-        $fieldset->addField(
-            'max_height',
-            'text',
-            [
-                'name' => 'max_height',
-                'label' => __('max height'),
-                'title' => __('max height'),
-				
-                'disabled' => $isElementDisabled
-            ]
-        );
-					
-        $fieldset->addField(
-            'max_depth',
-            'text',
-            [
-                'name' => 'max_depth',
-                'label' => __('max depth'),
-                'title' => __('max depth'),
-				
-                'disabled' => $isElementDisabled
-            ]
-        );
-					
         $fieldset->addField(
             'shipping_fee',
             'text',
@@ -132,11 +106,74 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'shipping_fee',
                 'label' => __('shipping fee'),
                 'title' => __('shipping fee'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
+
+        $fieldset->addField(
+            'shippingmethod_id',
+            'select',
+            [
+                'label' => __('Shipping method'),
+                'title' => __('Shipping method'),
+                'name' => 'shippingmethod_id',
+                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray37($this->shippingMethodFactory),
+                'disabled' => $isElementDisabled
+            ]
+        );
+
+
+        $fieldset->addField(
+            'max_weight',
+            'text',
+            [
+                'name' => 'max_weight',
+                'label' => __('max weight'),
+                'title' => __('max weight'),
+
+                'disabled' => $isElementDisabled
+            ]
+        );
+
+        $fieldset->addField(
+            'max_width',
+            'text',
+            [
+                'name' => 'max_width',
+                'label' => __('max width'),
+                'title' => __('max width'),
+
+                'disabled' => $isElementDisabled
+            ]
+        );
+
+        $fieldset->addField(
+            'max_height',
+            'text',
+            [
+                'name' => 'max_height',
+                'label' => __('max height'),
+                'title' => __('max height'),
+
+                'disabled' => $isElementDisabled
+            ]
+        );
+
+        $fieldset->addField(
+            'max_depth',
+            'text',
+            [
+                'name' => 'max_depth',
+                'label' => __('max depth'),
+                'title' => __('max depth'),
+
+                'disabled' => $isElementDisabled
+            ]
+        );
+
+
         $fieldset->addField(
             'zipcode_range',
             'text',
@@ -144,35 +181,23 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'zipcode_range',
                 'label' => __('zipcode range'),
                 'title' => __('zipcode range'),
-				
+
                 'disabled' => $isElementDisabled
             ]
         );
-					
+
         $fieldset->addField(
             'countries',
-            'text',
+            'select',
             [
                 'name' => 'countries',
                 'label' => __('countries'),
                 'title' => __('countries'),
-				
+                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray38($this->countryFactory),
                 'disabled' => $isElementDisabled
             ]
         );
-					
-        $fieldset->addField(
-            'website_id',
-            'text',
-            [
-                'name' => 'website_id',
-                'label' => __('website_id'),
-                'title' => __('website_id'),
-				
-                'disabled' => $isElementDisabled
-            ]
-        );
-					
+
 
         if (!$model->getId()) {
             $model->setData('is_active', $isElementDisabled ? '0' : '1');
@@ -231,10 +256,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         return $this->_authorization->isAllowed($resourceId);
     }
 
-    public function getTargetOptionArray(){
-    	return array(
-    				'_self' => "Self",
-					'_blank' => "New Page",
-    				);
+    public function getTargetOptionArray()
+    {
+        return array(
+            '_self' => "Self",
+            '_blank' => "New Page",
+        );
     }
 }

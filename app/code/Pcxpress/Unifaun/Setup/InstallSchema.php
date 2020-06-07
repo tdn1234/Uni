@@ -189,17 +189,6 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     'shipping_service')
                 ->setComment('Shipping Table');
             $installer->getConnection()->createTable($table);
-
-//            $installer->getConnection()->addIndex(
-//                $installer->getTable('mageplaza_helloworld_post'),
-//                $setup->getIdxName(
-//                    $installer->getTable('mageplaza_helloworld_post'),
-//                    ['name', 'url_key', 'post_content', 'tags', 'featured_image'],
-//                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
-//                ),
-//                ['name', 'url_key', 'post_content', 'tags', 'featured_image'],
-//                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
-//            );
         }
         $installer->endSetup();
     }

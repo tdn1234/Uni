@@ -9,7 +9,7 @@ class Unit extends \Pcxpress\Unifaun\Model\Carrier\CalculationMethod\Calculation
 {
     const ORDER = "title";
     const COUNTRY_SWEDEN = 'SE';
-    
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
