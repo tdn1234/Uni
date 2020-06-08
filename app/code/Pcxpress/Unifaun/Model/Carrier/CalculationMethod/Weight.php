@@ -139,49 +139,50 @@ class Weight extends CalculationAbstract
             }
 
             $totalPrice = 0;
-//            $rates = $this->getShippingRates($shippingMethod, $destinationCountryId, $websiteId);
-//
-//
-//            if (!count($rates)) {
-//                continue;
-//            }
-//
-//
-//            $weightLeft = $weight;
-//            $packages = array();
-//
-//            while ($weightLeft > 0) {
-//                $foundPrice = false;
-//
-//                foreach ($rates as $rate) {
-//
-//                    if ($weightLeft > $rate->getMaxWeight()) {
-//                        // The weight left is bigger than the maximum allowed weight.
-//                        // If this is the last package size, we need to split into several packages.
-//                        continue;
-//                    }
-//
-//                    $weightLeft = 0;
-//                    $packages[] = $rate;
-//
-//                    $foundPrice = true;
-//                    break;
-//                }
-//
-//                if ($foundPrice === false) {
-//                    // If we didn't find a rate that could fit the remaining weight,
-//                    // we need to take the last rate.
-//                    $lastPrice = reset($rates);
-//                    $weightLeft -= $lastPrice->getMaxWeight();
-//                    $packages[] = $lastPrice;
-//                }
-//            }
-//
-//            // We have all packages that we need
-//
-//            foreach ($packages as $package) {
-//                $totalPrice += $package->getShippingFee();
-//            }
+
+            $rates = $this->getShippingRates($shippingMethod, $destinationCountryId, $websiteId);
+//            var_dump($rates);die;
+
+            if (!count($rates)) {
+                continue;
+            }
+
+
+            $weightLeft = $weight;
+            $packages = array();
+
+            while ($weightLeft > 0) {
+                $foundPrice = false;
+
+                foreach ($rates as $rate) {
+
+                    if ($weightLeft > $rate->getMaxWeight()) {
+                        // The weight left is bigger than the maximum allowed weight.
+                        // If this is the last package size, we need to split into several packages.
+                        continue;
+                    }
+
+                    $weightLeft = 0;
+                    $packages[] = $rate;
+
+                    $foundPrice = true;
+                    break;
+                }
+
+                if ($foundPrice === false) {
+                    // If we didn't find a rate that could fit the remaining weight,
+                    // we need to take the last rate.
+                    $lastPrice = reset($rates);
+                    $weightLeft -= $lastPrice->getMaxWeight();
+                    $packages[] = $lastPrice;
+                }
+            }
+
+            // We have all packages that we need
+
+            foreach ($packages as $package) {
+                $totalPrice += $package->getShippingFee();
+            }
 
             // Set that we are using Pcxpress Unifaun
             $method->setCarrier($this->_code);
@@ -350,23 +351,22 @@ class Weight extends CalculationAbstract
     }
 
 
-
-    public
-    function getShippingRates($shippingMethod, $destinationCountryId, $websiteId)
+    public function getShippingRates($shippingMethod, $destinationCountryId, $websiteId)
     {
 
         $priceListDefault = array();
         $priceListZipCodes = array();
 
-        var_dump(get_class($shippingMethod));
-        var_dump($shippingMethod->getData());
-        die;
+//        var_dump(get_class($shippingMethod));
+//        var_dump($shippingMethod->getData());
+//        die;
         $rates = $shippingMethod->getRates();
 
+//    var_dump($rates->count());
         foreach ($rates as $priceConfiguration) {
-
+//            var_dump($priceConfiguration->getData());die;
             $countryCodes = $priceConfiguration->getCountries();
-            if (count($countryCodes) > 0 && !in_array($destinationCountryId, $countryCodes)) {
+            if ($countryCodes &&  count($countryCodes) > 0 && !in_array($destinationCountryId, $countryCodes)) {
 
                 continue;
             }
@@ -422,8 +422,7 @@ class Weight extends CalculationAbstract
         return $rates;
     }
 
-    protected
-    function shippingMethodEnabledForStore($shippingStoreIds, $storeId)
+    protected function shippingMethodEnabledForStore($shippingStoreIds, $storeId)
     {
         if (!(in_array(0, $shippingStoreIds) || in_array($storeId, $shippingStoreIds))) {
             return false;
@@ -431,8 +430,7 @@ class Weight extends CalculationAbstract
         return true;
     }
 
-    protected
-    function isShippingMethodMatched($shippingGroup, $shippingMethodGroupArray)
+    protected function isShippingMethodMatched($shippingGroup, $shippingMethodGroupArray)
     {
         if (!in_array($shippingGroup, $shippingMethodGroupArray)) {
             return false;
@@ -446,8 +444,7 @@ class Weight extends CalculationAbstract
      * @param array $items
      * @return mixed
      */
-    protected
-    function getShippingGroup(array $items)
+    protected function getShippingGroup(array $items)
     {
         $shippingGroups = array();
         foreach ($items as $item) {
