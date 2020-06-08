@@ -142,6 +142,15 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
+        $this->addColumn(
+            'shipping_rate',
+            [
+                'header' => __('Manage Rates'),
+                'index' => 'shipping_rate',
+                'type' => 'text',
+                'renderer' => 'Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Grid\Renderer\ShippingRatesManage'
+            ]
+        );
 
         $this->addColumn(
             'frontend_visibility',

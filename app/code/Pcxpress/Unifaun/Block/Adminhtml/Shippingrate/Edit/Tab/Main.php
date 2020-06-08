@@ -114,13 +114,15 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         $fieldset->addField(
             'shippingmethod_id',
-            'select',
+            'hidden',
             [
                 'label' => __('Shipping method'),
                 'title' => __('Shipping method'),
-                'name' => 'shippingmethod_id',
-                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray37($this->shippingMethodFactory),
-                'disabled' => $isElementDisabled
+                'name' => 'shippingmethod_id'
+//                'value' => 8
+//                'visible' => false,
+//                'options' => \Pcxpress\Unifaun\Block\Adminhtml\Shippingrate\Grid::getOptionArray37($this->shippingMethodFactory),
+//                'disabled' => true
             ]
         );
 

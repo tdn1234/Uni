@@ -4,7 +4,9 @@ namespace Pcxpress\Unifaun\Block\Adminhtml\Shippingrate;
 
 use Magento\Directory\Model\CountryFactory;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Setup\Exception;
 use Pcxpress\Unifaun\Model\ShippingmethodFactory;
+use Magento\Framework\Session\SessionManagerInterface;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -26,6 +28,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /** @var ShippingmethodFactory $shippingMethodFactory */
     protected $shippingMethodFactory;
 
+    /** @var SessionManagerInterface */
+    protected $sessionManager;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
@@ -43,9 +48,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Pcxpress\Unifaun\Model\Status $status,
         \Magento\Framework\Module\Manager $moduleManager,
         array $data = [],
-        ShippingmethodFactory $shippingmethodFactory
+        ShippingmethodFactory $shippingmethodFactory,
+        SessionManagerInterface $sessionManager
     )
     {
+        $this->sessionManager = $sessionManager;
+
         $this->shippingMethodFactory = $shippingmethodFactory;
         $this->_shippingrateFactory = $ShippingrateFactory;
         $this->_status = $status;
@@ -59,12 +67,36 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _construct()
     {
         parent::_construct();
+//        var_dump($this->_removeButton('add'));die;
+//        $this->
+//        var_dump($this->getUrl());
+//        foreach(get_class_methods($this) as $a) {
+//            var_dump($a);
+//        }
+//        die;
         $this->setId('postGrid');
         $this->setDefaultSort('shippingrate_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(false);
         $this->setVarNameFilter('post_filter');
+
+//        $this->buttonList->remove('add');
+//        parent::_construct();
+//        $this->removeButton('add');
+        //Remove original add button
+//        $this->_removeButton('add');
+
+//        $this->buttonList->add(
+//            '<your name>',
+//            [
+//                'label' => __('<your label>'),
+//                'class' => 'save',
+//                'onclick' => 'setLocation(\'' . $this->getUrl('*/*/<youraction>') . '\')',
+//                'style' => '    background-color: #ba4000; border-color: #b84002; box-shadow: 0 0 0 1px #007bdb;color: #fff;text-decoration: none;'
+//            ]
+//        );
+
     }
 
     /**
@@ -72,7 +104,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
+//        var_dump($this->sessionManager->getShippingmethodId());die;
+        $shippingmethod_id = $this->getRequest()->getParam('shippingmethod_id');
+        if (!$shippingmethod_id) {
+            throw new Exception('Shipping method not found');
+        }
+        $this->sessionManager->setShippingmethodId($shippingmethod_id);
         $collection = $this->_shippingrateFactory->create()->getCollection();
+        $collection->addFieldToFilter('shippingmethod_id', $shippingmethod_id);
         $this->setCollection($collection);
 
         parent::_prepareCollection();

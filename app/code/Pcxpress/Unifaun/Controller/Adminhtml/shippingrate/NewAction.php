@@ -1,6 +1,6 @@
 <?php
 
-namespace Pcxpress\Unifaun\Controller\Adminhtml\shippingrate;
+namespace Pcxpress\Unifaun\Controller\Adminhtml\Shippingrate;
 
 class NewAction extends \Magento\Backend\App\Action
 {
