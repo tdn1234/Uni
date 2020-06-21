@@ -50,7 +50,7 @@ class Tdncustom1 extends \Magento\Shipping\Model\Carrier\AbstractCarrier impleme
     {
 //        return false;
         if (!$this->getConfigFlag('active')) {
-//            return false;
+            return false;
         }
 
         /** @var \Magento\Shipping\Model\Rate\Result $result */

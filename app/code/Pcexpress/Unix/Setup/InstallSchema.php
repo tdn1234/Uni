@@ -18,20 +18,20 @@ class InstallSchema implements InstallSchemaInterface
 
         if (version_compare($context->getVersion(), '1.0.0') < 0){
 
-		$installer->run('SET NAMES utf8');
-$installer->run('SET time_zone = \'+00:00\'');
-$installer->run('SET foreign_key_checks = 0');
-$installer->run('SET sql_mode = \'NO_AUTO_VALUE_ON_ZERO\'');
-$installer->run('CREATE TABLE `unifaun_labels` (
-  `label_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `shipment_id` int(10) unsigned NOT NULL,
-  `status` int(1) NOT NULL,
-  `printed_at` datetime DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`label_id`),
-  KEY `UNLBLSHPMTFK` (`shipment_id`) USING BTREE,
-  CONSTRAINT `UNLBLSHPMTFK` FOREIGN KEY (`shipment_id`) REFERENCES `sales_flat_shipment` (`entity_id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8');
+//		$installer->run('SET NAMES utf8');
+//$installer->run('SET time_zone = \'+00:00\'');
+//$installer->run('SET foreign_key_checks = 0');
+//$installer->run('SET sql_mode = \'NO_AUTO_VALUE_ON_ZERO\'');
+//$installer->run('CREATE TABLE `unifaun_labels` (
+//  `label_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+//  `shipment_id` int(10) unsigned NOT NULL,
+//  `status` int(1) NOT NULL,
+//  `printed_at` datetime DEFAULT NULL,
+//  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+//  PRIMARY KEY (`label_id`),
+//  KEY `UNLBLSHPMTFK` (`shipment_id`) USING BTREE,
+//  CONSTRAINT `UNLBLSHPMTFK` FOREIGN KEY (`shipment_id`) REFERENCES `sales_flat_shipment` (`entity_id`) ON DELETE CASCADE ON UPDATE NO ACTION
+//) ENGINE=InnoDB DEFAULT CHARSET=utf8');
 
 
 		//demo

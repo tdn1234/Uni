@@ -336,7 +336,7 @@ class Observer
 
         $this->writeConnection = $resource->getConnection('core_write');
 
-        $this->shipment_track_table = $resource->getTableName('sales_flat_shipment_track');
+//        $this->shipment_track_table = $resource->getTableName('sales_flat_shipment_track');
             
     }
 
