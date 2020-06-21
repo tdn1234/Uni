@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <!--<js class="Pcxpress_Unifaun::unifaun/unifaun-admin.js"/>-->
-        <!--<css src="Pcxpress_Unifaun::unifaun/unifaun.css"/>-->
-        <!--<css src="Pcxpress_Unifaun::unifaun/font-awesome.min.css"/>-->
+    
+    
+   <link src="Xanka_Slider::js/slider/jquery.default.plugins.min.js"/>               
+
+      
     </head>
 </page>

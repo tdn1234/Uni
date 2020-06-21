@@ -9,7 +9,7 @@
 namespace Pcxpress\Unifaun\Block\Adminhtml\Order\Shipment\Create;
 
 class Tracking
-    extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
+extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
 
     /**
@@ -37,19 +37,46 @@ class Tracking
      */
     protected $unifaunMysql4ShippingMethodCollectionFactory;
 
+    // public function __construct(
+    //     \Pcxpress\Unifaun\Model\ParcelFactory $unifaunParcelFactory,
+    //     \Pcxpress\Unifaun\Model\SourceModel\AdviceTypesFactory $unifaunSourceModelAdviceTypesFactory,
+    //     \Pcxpress\Unifaun\Model\ShippingMethodFactory $unifaunShippingMethodFactory,
+    //     \Pcxpress\Unifaun\Model\Mysql4\PickupLocation\CollectionFactory $unifaunMysql4PickupLocationCollectionFactory,
+    //     \Pcxpress\Unifaun\Model\Mysql4\ShippingMethod\CollectionFactory $unifaunMysql4ShippingMethodCollectionFactory
+    // ) {
+    //     $this->unifaunParcelFactory = $unifaunParcelFactory;
+    //     $this->unifaunSourceModelAdviceTypesFactory = $unifaunSourceModelAdviceTypesFactory;
+    //     $this->unifaunShippingMethodFactory = $unifaunShippingMethodFactory;
+    //     $this->unifaunMysql4PickupLocationCollectionFactory = $unifaunMysql4PickupLocationCollectionFactory;
+    //     $this->unifaunMysql4ShippingMethodCollectionFactory = $unifaunMysql4ShippingMethodCollectionFactory;
+    // }
+
+    protected $unifaunHelper;
+
+    protected $_shippingMethod;
+
     public function __construct(
-        \Pcxpress\Unifaun\Model\ParcelFactory $unifaunParcelFactory,
-        \Pcxpress\Unifaun\Model\SourceModel\AdviceTypesFactory $unifaunSourceModelAdviceTypesFactory,
-        \Pcxpress\Unifaun\Model\ShippingMethodFactory $unifaunShippingMethodFactory,
-        \Pcxpress\Unifaun\Model\Mysql4\PickupLocation\CollectionFactory $unifaunMysql4PickupLocationCollectionFactory,
-        \Pcxpress\Unifaun\Model\Mysql4\ShippingMethod\CollectionFactory $unifaunMysql4ShippingMethodCollectionFactory
-    ) {
-        $this->unifaunParcelFactory = $unifaunParcelFactory;
-        $this->unifaunSourceModelAdviceTypesFactory = $unifaunSourceModelAdviceTypesFactory;
-        $this->unifaunShippingMethodFactory = $unifaunShippingMethodFactory;
-        $this->unifaunMysql4PickupLocationCollectionFactory = $unifaunMysql4PickupLocationCollectionFactory;
-        $this->unifaunMysql4ShippingMethodCollectionFactory = $unifaunMysql4ShippingMethodCollectionFactory;
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Shipping\Model\Config $shippingConfig,
+        \Magento\Framework\Registry $registry,
+        array $data = [],
+        \Pcxpress\Unifaun\Helper\Data $unifaunHelper
+    ){
+
+        parent::__construct($context, $shippingConfig, $registry, $data);
+        // $this->customerSession = $customerSession;
+        // $this->_objectManager = $objectManager;
+        $this->unifaunHelper = $unifaunHelper;
     }
+
+
+    /**  **/
+    public function getUnifaunHelper()
+    {
+        return $this->unifaunHelper;
+    }
+
+
     /**
      * @return \Magento\Sales\Model\Order
      */
@@ -72,14 +99,28 @@ class Tracking
     public function _toHtml()
     {
         $currentShipment = $this->getShipment();
+
         $order = $this->getShipment()->getOrder();
 
-        $carrier = $order->getShippingCarrier();
+        // $carrier = $order->getShippingCarrier();
+        $carrier = $order->getShippingMethod();
 
-        if ($carrier->getCarrierCode() != \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE) {
-            // We shall only do something with our own carrier, so return default view for everything else.
+        if (strpos($carrier, \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE) !== false ) {
+             // We shall only do something with our own carrier, so return default view for everything else.
             return parent::_toHtml();
         }
+        // var_dump(strpbrk('sss', 'gg'));
+        // var_dump(\Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE);
+        // var_dump($carrier);
+        // var_dump(strpos($carrier, \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE));die;
+        // var_dump(get_class_methods($order));die;
+        // var_dump(get_class($carrier));die;
+
+        // if ($carrier->getCarrierCode() != \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE) {
+        //     // We shall only do something with our own carrier, so return default view for everything else.
+        //     return parent::_toHtml();
+        // }
+
 
         $totalWeight = 0;
 
@@ -95,181 +136,184 @@ class Tracking
 
         return parent::_toHtml();
     }
-		
-		public function getAdviceTypes()
+
+    public function getAdviceTypes()
     {
       return $this->unifaunSourceModelAdviceTypesFactory->create()->toOptionArray();  
-    }
-		
-		public function getShippingMethod()
-    {
-        if (!$this->_shippingMethod) {
-            $order = $this->getOrder();
-            $shippingMethodParts = explode("_", $order->getShippingMethod());
-            $shippingMethodId = $shippingMethodParts[1];
-            $this->_shippingMethod = $this->unifaunShippingMethodFactory->create()->load($shippingMethodId);
-        }
+  }
 
-        return $this->_shippingMethod;
-    }
-		public function getShippingAddress()
-    {
+  public function getShippingMethod()
+  {
+    if (!$this->_shippingMethod) {
         $order = $this->getOrder();
+        $shippingMethodParts = explode("_", $order->getShippingMethod());
+        $shippingMethodId = $shippingMethodParts[1];
 
-        return $order->getShippingAddress();
+        
+        $this->_shippingMethod = $this->unifaunShippingMethodFactory->create()->load($shippingMethodId);
     }
-		public function getPickupLocations()
-    {
-        /** @var \Pcxpress\Unifaun\Model\Mysql4\PickupAddress\Collection $collection */
-        $collection = $this->unifaunMysql4PickupLocationCollectionFactory->create();
-        $collection->setOrder('city', 'ASC');
 
-        $addresses = array();
-        foreach ($collection as $address) {
-            /** @var \Pcxpress\Unifaun\Model\PickupAddress $address */
-            $addresses[] = array(
-                'key'   => $address->getId(),
-                'value' => $address->getName() . ' ' . $address->getAddress(),
-            );
-        }
-        return $addresses;
+    return $this->_shippingMethod;
+}
+
+public function getShippingAddress()
+{
+    $order = $this->getOrder();
+
+    return $order->getShippingAddress();
+}
+public function getPickupLocations()
+{
+    /** @var \Pcxpress\Unifaun\Model\Mysql4\PickupAddress\Collection $collection */
+    $collection = $this->unifaunMysql4PickupLocationCollectionFactory->create();
+    $collection->setOrder('city', 'ASC');
+
+    $addresses = array();
+    foreach ($collection as $address) {
+        /** @var \Pcxpress\Unifaun\Model\PickupAddress $address */
+        $addresses[] = array(
+            'key'   => $address->getId(),
+            'value' => $address->getName() . ' ' . $address->getAddress(),
+        );
     }
-		public function getPickUpDates()
-    {
-        $dates = array();
-        for ($i = 0; $i < 5; $i++) {
-            $key = date('Y-m-d', strtotime("+$i day"));
-            $weekDay = $this->__(date('l', strtotime("+$i day")));
-            $today = ($i == 0) ? '(' . $this->__('Today') . ')' : '';
-            $dates[] = array(
-                'key'   => $key,
-                'value' => "$key $weekDay $today",
-            );
-        }
-
-        return $dates;
+    return $addresses;
+}
+public function getPickUpDates()
+{
+    $dates = array();
+    for ($i = 0; $i < 5; $i++) {
+        $key = date('Y-m-d', strtotime("+$i day"));
+        $weekDay = $this->__(date('l', strtotime("+$i day")));
+        $today = ($i == 0) ? '(' . $this->__('Today') . ')' : '';
+        $dates[] = array(
+            'key'   => $key,
+            'value' => "$key $weekDay $today",
+        );
     }
-		
-		public function getConfig()
-    {
-        $data = new \stdClass();
-        $data->lastBookingData = $this->getLastBookingData();
-        $data->parcels = $this->getParcelsData();
-        $data->shippingMethods = $this->getShippingMethodSelectOptions();
 
-        return $data;
-    }
-		
-		protected function getLastBookingData()
-    {
-        $lastBookingData = array();
-        /** @var \Pcxpress\Unifaun\Model\ShippingMethod $method */
-        foreach ($this->getShippingMethodsWithTemplate() as $method) {
-            $lastBookingTime = explode(":", $method->getLastBookingTime());
+    return $dates;
+}
 
-            if (count($lastBookingTime) >= 2) {
-                $lastBookingHour = intval(ltrim($lastBookingTime[0], "0"));
-                $lastBookingMinute = intval(ltrim($lastBookingTime[1], "0"));
-            } else {
-                $lastBookingHour = 23;
-                $lastBookingMinute = 59;
-            }
+public function getConfig()
+{
+    $data = new \stdClass();
+    $data->lastBookingData = $this->getLastBookingData();
+    $data->parcels = $this->getParcelsData();
+    $data->shippingMethods = $this->getShippingMethodSelectOptions();
 
-            $lastBookingData[$method->getShippingmethodId()] = array(
-                'hour'   => (int) $lastBookingHour,
-                'minute' => (int) $lastBookingMinute,
-            );
-        }
+    return $data;
+}
 
-        return $lastBookingData;
-    }
-		
-		protected function getParcelsData()
-    {
-        $parcels = array();
-				
-        foreach ($this->getParcels() as $parcel) {
-            $parcels[] = array(
-                'width'          => $parcel['width'],
-                'height'         => $parcel['height'],
-                'depth'          => $parcel['depth'],
-                'weight'         => $parcel['weight'],
-                'note'           => $parcel['note'],
-                'goodsType'      => $parcel['goodsType'],
-                'shippingMethod' => $parcel['shippingMethod'],
-                'advice'         => $parcel['advice'],
-            );
+protected function getLastBookingData()
+{
+    $lastBookingData = array();
+    /** @var \Pcxpress\Unifaun\Model\ShippingMethod $method */
+    foreach ($this->getShippingMethodsWithTemplate() as $method) {
+        $lastBookingTime = explode(":", $method->getLastBookingTime());
+
+        if (count($lastBookingTime) >= 2) {
+            $lastBookingHour = intval(ltrim($lastBookingTime[0], "0"));
+            $lastBookingMinute = intval(ltrim($lastBookingTime[1], "0"));
+        } else {
+            $lastBookingHour = 23;
+            $lastBookingMinute = 59;
         }
 
-        return $parcels;
+        $lastBookingData[$method->getShippingmethodId()] = array(
+            'hour'   => (int) $lastBookingHour,
+            'minute' => (int) $lastBookingMinute,
+        );
     }
-		
-		private function getShippingMethodSelectOptions()
-    {
-        /** @var \Pcxpress\Unifaun\Model\ShippingMethod $method */
 
-        $methodGroups = array();
-        $selectedId = $this->getShippingMethod()->getId();
+    return $lastBookingData;
+}
 
-        $group = array('groupName' => $this->__("Pcxpress Unifaun"), 'methods' => array());
-        foreach ($this->getShippingMethodsWithTemplate() as $method) {
-            $group['methods'][] = array(
-                'id'       => $method->getShippingmethodId(),
-                'title'    => $method->getTitle(),
-                'selected' => $selectedId == $method->getShippingmethodId()
-            );;
-        }
-        $methodGroups[] = $group;
+protected function getParcelsData()
+{
+    $parcels = array();
 
-        $group = array('groupName' => $this->__("Label Queue"), 'methods' => array());
-        foreach ($this->getShippingMethodsWithLabel() as $method) {
-            $group['methods'][] = array(
-                'id'       => $method->getShippingmethodId(),
-                'title'    => $method->getTitle(),
-                'selected' => $selectedId == $method->getShippingmethodId()
-            );;
-        }
-        $methodGroups[] = $group;
-
-        $group = array('groupName' => $this->__("No booking"), 'methods' => array());
-        foreach ($this->getShippingMethodsWithNoBooking() as $method) {
-            $group['methods'][] = array(
-                'id'       => $method->getShippingmethodId(),
-                'title'    => $method->getTitle(),
-                'selected' => $selectedId == $method->getShippingmethodId()
-            );;
-        }
-        $methodGroups[] = $group;
-
-        return $methodGroups;
+    foreach ($this->getParcels() as $parcel) {
+        $parcels[] = array(
+            'width'          => $parcel['width'],
+            'height'         => $parcel['height'],
+            'depth'          => $parcel['depth'],
+            'weight'         => $parcel['weight'],
+            'note'           => $parcel['note'],
+            'goodsType'      => $parcel['goodsType'],
+            'shippingMethod' => $parcel['shippingMethod'],
+            'advice'         => $parcel['advice'],
+        );
     }
-		
-		public function getShippingMethodsWithTemplate()
-    {
-        $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
-        $collection->addFieldToFilter("no_booking", 0);
-        $collection->addFieldToFilter("template_name", array("neq" => ""));
-        $collection->addFieldToFilter("label_only", 0);
 
-        return $collection;
-    }
-		
-		public function getShippingMethodsWithLabel()
-    {
-        $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
-        /* @var $collection Pcxpress_Unifaun_Model_Mysql4_ShippingMethod_Collection */
-        $collection->addFieldToFilter("label_only", 1);
+    return $parcels;
+}
 
-        return $collection;
-    }
-		
-		public function getShippingMethodsWithNoBooking()
-    {
-        $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
-        /* @var $collection Pcxpress_Unifaun_Model_Mysql4_ShippingMethod_Collection */
-        $collection->addFieldToFilter("label_only", 0);
-        $collection->addFieldToFilter("no_booking", 1);
+private function getShippingMethodSelectOptions()
+{
+    /** @var \Pcxpress\Unifaun\Model\ShippingMethod $method */
 
-        return $collection;
+    $methodGroups = array();
+    $selectedId = $this->getShippingMethod()->getId();
+
+    $group = array('groupName' => $this->__("Pcxpress Unifaun"), 'methods' => array());
+    foreach ($this->getShippingMethodsWithTemplate() as $method) {
+        $group['methods'][] = array(
+            'id'       => $method->getShippingmethodId(),
+            'title'    => $method->getTitle(),
+            'selected' => $selectedId == $method->getShippingmethodId()
+        );;
     }
+    $methodGroups[] = $group;
+
+    $group = array('groupName' => $this->__("Label Queue"), 'methods' => array());
+    foreach ($this->getShippingMethodsWithLabel() as $method) {
+        $group['methods'][] = array(
+            'id'       => $method->getShippingmethodId(),
+            'title'    => $method->getTitle(),
+            'selected' => $selectedId == $method->getShippingmethodId()
+        );;
+    }
+    $methodGroups[] = $group;
+
+    $group = array('groupName' => $this->__("No booking"), 'methods' => array());
+    foreach ($this->getShippingMethodsWithNoBooking() as $method) {
+        $group['methods'][] = array(
+            'id'       => $method->getShippingmethodId(),
+            'title'    => $method->getTitle(),
+            'selected' => $selectedId == $method->getShippingmethodId()
+        );;
+    }
+    $methodGroups[] = $group;
+
+    return $methodGroups;
+}
+
+public function getShippingMethodsWithTemplate()
+{
+    $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
+    $collection->addFieldToFilter("no_booking", 0);
+    $collection->addFieldToFilter("template_name", array("neq" => ""));
+    $collection->addFieldToFilter("label_only", 0);
+
+    return $collection;
+}
+
+public function getShippingMethodsWithLabel()
+{
+    $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
+    /* @var $collection Pcxpress_Unifaun_Model_Mysql4_ShippingMethod_Collection */
+    $collection->addFieldToFilter("label_only", 1);
+
+    return $collection;
+}
+
+public function getShippingMethodsWithNoBooking()
+{
+    $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
+    /* @var $collection Pcxpress_Unifaun_Model_Mysql4_ShippingMethod_Collection */
+    $collection->addFieldToFilter("label_only", 0);
+    $collection->addFieldToFilter("no_booking", 1);
+
+    return $collection;
+}
 }

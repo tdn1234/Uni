@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+		<link src="Xanka_Slider::js/slider/jquery.headdd.plugins.min.js"/>
+	</head>
+	<body>
+		<referenceBlock name="shipment_tracking">
+			<action method="setTemplate">
+				<argument name="template" xsi:type="string">Pcxpress_Unifaun::unifaun/shipment/trackingWrapper.phtml</argument>
+			</action>
+			<block class="Magento\Framework\View\Element\Text\ListText" name="shipment_tracking_content">
+				<block template="Pcxpress_Unifaun::sales/order/shipment/view/tracking.phtml" class="Magento\Shipping\Block\Adminhtml\Order\Tracking\View" name="shipment_tracking_default"/>
+				<block template="Pcxpress_Unifaun::unifaun/shipment/form.phtml" class="Magento\Framework\View\Element\Template" name="shipment_tracking_unifaun_form">
+					<block template="Pcxpress_Unifaun::unifaun/shipment/tracking.phtml" class="Pcxpress\Unifaun\Block\Adminhtml\Order\Shipment\Create\Tracking" name="shipment_tracking_unifaun_content"/>
+				</block>
+			</block>
+		</referenceBlock>
+	</body>
+</page>

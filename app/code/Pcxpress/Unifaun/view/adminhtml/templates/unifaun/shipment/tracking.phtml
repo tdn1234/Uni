@@ -5,6 +5,18 @@ $shipment                   = $this->getShipment();
 $order                      = $this->getOrder();
 $shippingMethod             = $this->getShippingMethod();
 $address                    = $this->getShippingAddress();
+
+
+// var_dump($order->getData());
+$unifaunHelper = $block->getUnifaunHelper();
+
+// var_dump($unifaunHelper->getStoreLengthUnit());
+// var_dump($unifaunHelper->getEnableCost());
+// var_dump($unifaunHelper->getAdviceType());
+var_dump($unifaunHelper->getAutoBooking());die;
+
+
+// var_dump(get_class_methods($unifaunHelper));die;
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -49,7 +61,7 @@ $address                    = $this->getShippingAddress();
         labelTd.style.width = "70px";
         var labelLabel = document.createElement("label");
         labelLabel.style.width = "50px";
-        labelLabel.appendChild(document.createTextNode("<?php echo(Mage::helper('core')->__('Package')); ?>"));
+        labelLabel.appendChild(document.createTextNode("<?php echo(__('Package')); ?>"));
         labelTd.appendChild(labelLabel);
         labelTd.addClassName("label");
         tr.appendChild(labelTd);
@@ -63,7 +75,7 @@ $address                    = $this->getShippingAddress();
         this.weightElement.name = "parcel[" + this.id + "][weight]";
         this.weightElement.setAttribute("autocomplete", "off");
         weightTd.appendChild(this.weightElement);
-        weightTd.appendChild( document.createTextNode(" <?php echo(Mage::helper("unifaun")->getStoreWeightUnit()); ?>"));
+        weightTd.appendChild( document.createTextNode(" <?php echo($unifaunHelper->getStoreWeightUnit()); ?>"));
         tr.appendChild(weightTd);
 
         // Dimensions
@@ -96,14 +108,14 @@ $address                    = $this->getShippingAddress();
         this.depthElement.setAttribute("autocomplete", "off");
         dimensionsTd.appendChild(this.depthElement);
 
-        dimensionsTd.appendChild( document.createTextNode(" <?php echo(Mage::helper("unifaun")->getStoreLengthUnit()); ?>"));
+        dimensionsTd.appendChild( document.createTextNode(" <?php echo($unifaunHelper->getStoreLengthUnit()); ?>"));
 
         dimensionsTd.appendChild(document.createTextNode(" "));
         dimensionsTd.addClassName("value");
         tr.appendChild(dimensionsTd);
 
         // Enable cost
-        <?php if (Mage::helper("unifaun")->getEnableCost()): ?>
+        <?php if ($unifaunHelper->getEnableCost()): ?>
             var costTd = $(document.createElement("td"));
             this.costContainer = $(document.createElement("span"));
             this.costContainer.appendChild(document.createTextNode("-"));
@@ -155,7 +167,7 @@ $address                    = $this->getShippingAddress();
                 
         <?php foreach ($this->getAdviceTypes() as $key => $advice): /** @var $method Pcxpress_Unifaun_Model_ShippingMethod */ ?>
             optionElement = new Element('option', {value: '<?php echo $advice['value']; ?>'}).update('<?php echo $advice['label']; ?>');
-            <?php if (Mage::helper("unifaun")->getAdviceType() == $advice['value']) : ?>
+            <?php if ($unifaunHelper->getAdviceType() == $advice['value']) : ?>
                 optionElement.setAttribute('selected', 'selected');
             <?php endif; ?>
             this.adviceElement.insert(optionElement);
@@ -403,14 +415,14 @@ $address                    = $this->getShippingAddress();
         <thead>
             <tr>
                 <th style="width: 90px;">&nbsp;</th>
-                <th style="width: 80px;"><?php echo(Mage::helper("unifaun/data")->__("Weight")); ?> (<?php echo(Mage::helper("unifaun")->getStoreWeightUnit()); ?>)</th>
-                <th style="width: 180px; white-space: nowrap;"><?php echo(Mage::helper("unifaun/data")->__("Dimensions")); ?> (<?php echo(Mage::helper("unifaun/data")->__("WxHxD")); ?>, <?php echo(Mage::helper("unifaun")->getStoreLengthUnit()); ?>)</th>
-                <?php if (Mage::helper("unifaun/data")->getEnableCost()): ?>
-                    <th style="width: 60px;"><?php echo(Mage::helper("unifaun/data")->__("Cost")); ?></th>
+                <th style="width: 80px;"><?php echo(__("Weight")); ?> (<?php echo($unifaunHelper->getStoreWeightUnit()); ?>)</th>
+                <th style="width: 180px; white-space: nowrap;"><?php echo(__("Dimensions")); ?> (<?php echo(__("WxHxD")); ?>, <?php echo($unifaunHelper->getStoreLengthUnit()); ?>)</th>
+                <?php if ($unifaunHelper->getEnableCost()): ?>
+                    <th style="width: 60px;"><?php echo(__("Cost")); ?></th>
                 <?php endif; ?>
-                <th style="width: 180px;"><?php echo(Mage::helper("unifaun/data")->__("Goods type")); ?></th>
-                <th style="width: 180px;"><?php echo(Mage::helper("unifaun/data")->__("Shipping method")); ?></th>
-                <th style="width: 180px;"><?php echo(Mage::helper("unifaun/data")->__("Advice")); ?></th>
+                <th style="width: 180px;"><?php echo(__("Goods type")); ?></th>
+                <th style="width: 180px;"><?php echo(__("Shipping method")); ?></th>
+                <th style="width: 180px;"><?php echo(__("Advice")); ?></th>
                 <th style="width: 40px;">&nbsp;</th>
             </tr>
         </thead>
@@ -419,8 +431,8 @@ $address                    = $this->getShippingAddress();
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="<?php if (Mage::helper("unifaun/data")->getEnableCost()): ?>4<?php else: ?>3<?php endif; ?>" style="padding-top: 10px;">
-                    <button type="button" class="scalable add" onclick="unifaun.addParcel(); return false;"><span><?php echo(Mage::helper("unifaun/data")->__("Add Package")); ?></span></button>
+                <td colspan="<?php if ($unifaunHelper->getEnableCost()): ?>4<?php else: ?>3<?php endif; ?>" style="padding-top: 10px;">
+                    <button type="button" class="scalable add" onclick="unifaun.addParcel(); return false;"><span><?php echo(__("Add Package")); ?></span></button>
                 </td>
             </tr>
         </tfoot>
@@ -435,7 +447,7 @@ $address                    = $this->getShippingAddress();
                         <td>
                             <select id="unifaun_automatic_booking" name="unifaun_automatic_booking" class="input-text" autocomplete="off">
                                 <option value="Y"><?php echo($this->__("Yes")); ?></option>
-                                <option value="N"<?php if (!Mage::helper("unifaun/data")->getAutoBooking()) echo(" selected=\"selected\""); ?>><?php echo($this->__("No")); ?></option>
+                                <option value="N"<?php if (!$unifaunHelper->getAutoBooking()) echo(" selected=\"selected\""); ?>><?php echo($this->__("No")); ?></option>
                             </select>
                         </td>
                     </tr>

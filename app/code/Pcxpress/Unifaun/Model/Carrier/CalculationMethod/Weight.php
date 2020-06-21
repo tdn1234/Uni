@@ -125,17 +125,23 @@ class Weight extends CalculationAbstract
                 continue;
             }
 
+// var_dump($shippingGroup);
+// var_dump($shippingMethodGroupArray);
             if (!$this->isShippingMethodMatched($shippingGroup, $shippingMethodGroupArray)) {
 
-                //continue;
+                // continue;
             }
 
             // Check if this shipping method is enabled for this store view
-            $shippingStoreIds = is_array($shippingMethod->getStoreIds()) ? $shippingMethod->getStoreIds() : array();
+            $shippingStoreIds = $shippingMethod->getStoreIds() ? $shippingMethod->getStoreIds() : array();
+
+            if ( !is_array($shippingStoreIds)) {
+                $shippingStoreIds = explode(',', $shippingStoreIds);
+            }
 
             if (!$this->shippingMethodEnabledForStore($shippingStoreIds, $storeId)) {
 
-//                continue;
+               continue;
             }
 
             $totalPrice = 0;
@@ -268,7 +274,7 @@ class Weight extends CalculationAbstract
 
             if (!$this->isShippingMethodMatched($shippingGroup, $shippingMethodGroupArray)) {
 
-//                continue;
+               continue;
             }
 
             // Check if this shipping method is enabled for this store view
@@ -357,14 +363,10 @@ class Weight extends CalculationAbstract
         $priceListDefault = array();
         $priceListZipCodes = array();
 
-//        var_dump(get_class($shippingMethod));
-//        var_dump($shippingMethod->getData());
-//        die;
         $rates = $shippingMethod->getRates();
 
-//    var_dump($rates->count());
+
         foreach ($rates as $priceConfiguration) {
-//            var_dump($priceConfiguration->getData());die;
             $countryCodes = $priceConfiguration->getCountries();
             if ($countryCodes &&  count($countryCodes) > 0 && !in_array($destinationCountryId, $countryCodes)) {
 
@@ -422,8 +424,9 @@ class Weight extends CalculationAbstract
         return $rates;
     }
 
-    protected function shippingMethodEnabledForStore($shippingStoreIds, $storeId)
+    protected function shippingMethodEnabledForStore(array $shippingStoreIds, $storeId)
     {
+        
         if (!(in_array(0, $shippingStoreIds) || in_array($storeId, $shippingStoreIds))) {
             return false;
         }

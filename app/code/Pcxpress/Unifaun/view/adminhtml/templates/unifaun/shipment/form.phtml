@@ -1,12 +1,10 @@
-<form action="<?php echo Mage::helper("adminhtml")->getUrl("unifaun/adminhtml_unifaunConsignment/create"); ?>">
-	<button style="float: right;" name="submit" class="scalable save submit-button" title="<?php echo Mage::helper('unifaun')->__('Return consignment'); ?>" value="return_consignment" onClick="returnConsignment()">
-		<?php echo Mage::helper('unifaun')->__('Return consignment'); ?>		
+<form action="<?php echo $this->getUrl("unifaun/adminhtml_unifaunConsignment/create"); ?>">
+	<button style="float: right;" name="submit" class="scalable save submit-button" title="<?php echo __('Return consignment'); ?>" value="return_consignment" onClick="returnConsignment()">
+		<?php echo __('Return consignment'); ?>		
 	</button>
 	<br>
 	<br>
-    <?php echo $this->getChildHtml('shipment_tracking_unifaun_content') ?>
-    
+    <?php echo $this->getChildHtml('shipment_tracking_unifaun_content') ?>   
 
-
-    <button style="float: right;" name="submit" class="scalable save submit-button" title="<?php echo Mage::helper('unifaun')->__('Create consignment'); ?>" value="<?php echo Mage::helper('unifaun')->__('Create consignment'); ?>"><?php echo Mage::helper('unifaun')->__('Create consignment'); ?></button>
+    <button style="float: right;" name="submit" class="scalable save submit-button" title="<?php echo __('Create consignment'); ?>" value="<?php echo __('Create consignment'); ?>"><?php echo __('Create consignment'); ?></button>
 </form>

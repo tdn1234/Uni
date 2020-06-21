@@ -82,32 +82,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getStoreWeightUnit()
     {
-        $field = "weight";
+        $field = "sectionheading_units/weight";
+        var_dump($this->confPath . $field);
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getStoreLengthUnit()
     {
-        $field = "length";
+        $field = "sectionheading_units/length";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getEnableCost()
     {
-        $field = "length";
+        $field = "sectionheading_units/length";
         $value = $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         return $value == 1 ? true : false;
     }
 
     public function getAdviceType()
     {
-        $field = "advice_type";
+        $field = "sectionheading_admin/advice_type";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getAutoBooking()
     {
-        $field = "auto_booking";
+        $field = "sectionheading_admin/auto_booking";
         $value = $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         return $value == 1 ? true : false;
     }
@@ -119,58 +120,58 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getCodAccountNumber()
     {
-        $field = "cod_account_no";
+        $field = "sectionheading_admin/cod_account_no";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getUseProforma()
     {
-        $field = "use_proforma";
+        $field = "sectionheading_admin/use_proforma";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
 
     public function isDebug()
     {
-        $field = "use_proforma";
+        $field = "sectionheading_admin/use_proforma";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getUsername()
     {
-        $field = "username";
+        $field = "general/username";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getPassword()
     {
-        $field = "password";
+        $field = "general/password";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getGroupName()
     {
-        $field = "groupname";
+        $field = "general/groupname";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getPackageConfiguration($store)
     {
-        $field = "package_config";
+        $field = "sectionheading_attributes/package_config";
         $store = !$store ? $this->defaultStoreId : $store;
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     public function getDefaultAdviceType($store)
     {
-        $field = "advice_type";
+        $field = "sectionheading_admin/advice_type";
         $store = !$store ? $this->defaultStoreId : $store;
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     public function isTemplateChangeEnabled()
     {
-        $field = "enable_template_change";
+        $field = "sectionheading_attributes/enable_template_change";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
@@ -493,13 +494,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getLabelType()
     {
-        $field = "label_type";
+        $field = "sectionheading_admin/label_type";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getSendGoodsValue()
     {
-        $field = "send_goods_value";
+        $field = "sectionheading_admin/send_goods_value";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
@@ -523,13 +524,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getDefaultGoodsType()
     {
-        $field = "default_goods_type";
+        $field = "sectionheading_attributes/default_goods_type";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getCalculateZeroWeight()
     {
-        $field = "calculate_zero_weight";
+        $field = "sectionheading_admin/calculate_zero_weight";
         $value = $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         return $value == 1 ? true : false;
     }

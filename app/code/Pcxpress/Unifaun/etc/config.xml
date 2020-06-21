@@ -37,7 +37,7 @@
                 </specificerrmsg>
             </unifaun>
             <tdncustom2>
-                <active>1</active>
+                <active>0</active>
                 <sallowspecific>0</sallowspecific>
                 <model>Pcxpress\Unifaun\Model\Carrier\Tdncustom2</model>
                 <name>Tdncustom222</name>
