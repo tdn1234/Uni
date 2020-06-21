@@ -9,6 +9,8 @@
 
 namespace Pcxpress\Unifaun\Helper;
 
+use Pcxpress\Unifaun\Model\Pcxpress\Unifaun\Cod;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const WEBTA_SHIPPING_ID = 1;
@@ -83,7 +85,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getStoreWeightUnit()
     {
         $field = "sectionheading_units/weight";
-        var_dump($this->confPath . $field);
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
@@ -115,7 +116,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getPaymentMethodForCod()
     {
-        return $this->scopeConfig->getValue($this->confPath . 'cod_choices', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $field = 'sectionheading_admin/cod_choices';
+        return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getCodAccountNumber()
@@ -685,4 +687,34 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     }
 
+    /**
+     * @return array
+     */
+    public function getCodPaymentMethods()
+    {
+        $options = array(
+            array(
+                'title' => __("Cash"),
+                'value' => Cod::PAYMENTMETHOD_CASH,
+                'selected' => $this->getPaymentMethodForCod() == Cod::PAYMENTMETHOD_CASH
+            ),
+            array(
+                'title' => __("Cheque"),
+                'value' => Cod::PAYMENTMETHOD_CHEQUE,
+                'selected' => $this->getPaymentMethodForCod() == Cod::PAYMENTMETHOD_CHEQUE
+            ),
+            array(
+                'title' => __("Post"),
+                'value' => Cod::PAYMENTMETHOD_POST,
+                'selected' => $this->getPaymentMethodForCod() == Cod::PAYMENTMETHOD_POST
+            ),
+            array(
+                'title' => __("Bank"),
+                'value' => Cod::PAYMENTMETHOD_BANK,
+                'selected' => $this->getPaymentMethodForCod() == Cod::PAYMENTMETHOD_BANK
+            )
+        );
+
+        return $options;
+    }
 }

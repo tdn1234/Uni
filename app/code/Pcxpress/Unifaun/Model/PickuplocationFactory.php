@@ -25,6 +25,6 @@ class PickuplocationFactory
      */
     public function create(array $arguments = [])
     {
-        return $this->_objectManager->create('Pcxpress\Unifaun\Model\Pickuplocation', $arguments, false);
+        return $this->_objectManager->create('Pcxpress\Unifaun\Model\PickupLocation', $arguments, false);
     }
 }

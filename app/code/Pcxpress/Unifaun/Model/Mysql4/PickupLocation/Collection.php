@@ -33,4 +33,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 		parent::_construct();
 		$this->_init("unifaun/pickupLocation");
 	}
+
+    public function _afterLoad()
+    {
+        parent::_afterLoad();
+        foreach ($this->_items as $item) {
+            $item->getResource()->load($item, $item->getId());
+        }
+    }
 }

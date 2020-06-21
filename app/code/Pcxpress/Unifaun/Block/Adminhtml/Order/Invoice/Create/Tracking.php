@@ -45,7 +45,7 @@ class Tracking extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
         \Pcxpress\Unifaun\Model\ParcelFactory $unifaunParcelFactory,
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
         \Pcxpress\Unifaun\Model\SourceModel\AdviceTypesFactory $unifaunSourceModelAdviceTypesFactory,
-        \Pcxpress\Unifaun\Model\ShippingMethodFactory $unifaunShippingMethodFactory,
+        \Pcxpress\Unifaun\Model\ShippingmethodFactory $unifaunShippingMethodFactory,
         \Pcxpress\Unifaun\Model\Mysql4\PickupLocation\CollectionFactory $unifaunMysql4PickupLocationCollectionFactory,
         \Pcxpress\Unifaun\Model\Mysql4\ShippingMethod\CollectionFactory $unifaunMysql4ShippingMethodCollectionFactory
     ) {

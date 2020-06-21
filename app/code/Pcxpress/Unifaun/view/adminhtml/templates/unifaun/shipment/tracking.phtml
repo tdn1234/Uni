@@ -1,19 +1,20 @@
 <?php
 /* @var $this Pcxpress_Unifaun_Block_Adminhtml_Order_Shipment_Create_Tracking */
 
-$shipment                   = $this->getShipment();
-$order                      = $this->getOrder();
-$shippingMethod             = $this->getShippingMethod();
-$address                    = $this->getShippingAddress();
+$shipment = $this->getShipment();
+$order = $this->getOrder();
+$shippingMethod = $this->getShippingMethod();
+$address = $this->getShippingAddress();
 
 
-// var_dump($order->getData());
+/** @var Pcxpress\Unifaun\Helper\Data $unifaunHelper */
 $unifaunHelper = $block->getUnifaunHelper();
-
+//var_dump($unifaunHelper->getPaymentMethodForCod());die;
+//
 // var_dump($unifaunHelper->getStoreLengthUnit());
 // var_dump($unifaunHelper->getEnableCost());
 // var_dump($unifaunHelper->getAdviceType());
-var_dump($unifaunHelper->getAutoBooking());die;
+//var_dump($unifaunHelper->getAutoBooking());die;
 
 
 // var_dump(get_class_methods($unifaunHelper));die;
@@ -33,7 +34,7 @@ var_dump($unifaunHelper->getAutoBooking());die;
     unifaun.parcels = [];
 
     // Object
-    unifaun.parcel = function() {
+    unifaun.parcel = function () {
         this.id = unifaun.tempId++;
         this.cost = null;
         this.note = null;
@@ -53,7 +54,7 @@ var_dump($unifaunHelper->getAutoBooking());die;
     }
 
     // Methods on object
-    unifaun.parcel.prototype.render = function() {
+    unifaun.parcel.prototype.render = function () {
         var tr = document.createElement("tr");
 
         // Create Label
@@ -75,7 +76,7 @@ var_dump($unifaunHelper->getAutoBooking());die;
         this.weightElement.name = "parcel[" + this.id + "][weight]";
         this.weightElement.setAttribute("autocomplete", "off");
         weightTd.appendChild(this.weightElement);
-        weightTd.appendChild( document.createTextNode(" <?php echo($unifaunHelper->getStoreWeightUnit()); ?>"));
+        weightTd.appendChild(document.createTextNode(" <?php echo($unifaunHelper->getStoreWeightUnit()); ?>"));
         tr.appendChild(weightTd);
 
         // Dimensions
@@ -108,7 +109,7 @@ var_dump($unifaunHelper->getAutoBooking());die;
         this.depthElement.setAttribute("autocomplete", "off");
         dimensionsTd.appendChild(this.depthElement);
 
-        dimensionsTd.appendChild( document.createTextNode(" <?php echo($unifaunHelper->getStoreLengthUnit()); ?>"));
+        dimensionsTd.appendChild(document.createTextNode(" <?php echo($unifaunHelper->getStoreLengthUnit()); ?>"));
 
         dimensionsTd.appendChild(document.createTextNode(" "));
         dimensionsTd.addClassName("value");
@@ -116,12 +117,12 @@ var_dump($unifaunHelper->getAutoBooking());die;
 
         // Enable cost
         <?php if ($unifaunHelper->getEnableCost()): ?>
-            var costTd = $(document.createElement("td"));
-            this.costContainer = $(document.createElement("span"));
-            this.costContainer.appendChild(document.createTextNode("-"));
-            costTd.appendChild(this.costContainer);
-            costTd.appendChild(document.createTextNode(" kr"));
-            tr.appendChild(costTd);
+        var costTd = $(document.createElement("td"));
+        this.costContainer = $(document.createElement("span"));
+        this.costContainer.appendChild(document.createTextNode("-"));
+        costTd.appendChild(this.costContainer);
+        costTd.appendChild(document.createTextNode(" kr"));
+        tr.appendChild(costTd);
         <?php endif; ?>
 
         // Goods type
@@ -143,9 +144,9 @@ var_dump($unifaunHelper->getAutoBooking());die;
 
         // Unifaun methods
         var self = this;
-        trackingConfig.shippingMethods.each(function(group) {
+        trackingConfig.shippingMethods.each(function (group) {
             self.shippingMethodElement.insert(new Element('optgroup', {label: group.groupName}));
-            group.methods.each(function(method) {
+            group.methods.each(function (method) {
                 var attributes = {value: method.id};
                 if (method.selected) {
                     attributes.selected = 'selected';
@@ -164,13 +165,13 @@ var_dump($unifaunHelper->getAutoBooking());die;
         var adviceTd = document.createElement("td");
         this.adviceElement = $(document.createElement("select"));
         this.adviceElement.id = 'unifaun_advice_type';
-                
+
         <?php foreach ($this->getAdviceTypes() as $key => $advice): /** @var $method Pcxpress_Unifaun_Model_ShippingMethod */ ?>
-            optionElement = new Element('option', {value: '<?php echo $advice['value']; ?>'}).update('<?php echo $advice['label']; ?>');
-            <?php if ($unifaunHelper->getAdviceType() == $advice['value']) : ?>
-                optionElement.setAttribute('selected', 'selected');
-            <?php endif; ?>
-            this.adviceElement.insert(optionElement);
+        optionElement = new Element('option', {value: '<?php echo $advice['value']; ?>'}).update('<?php echo $advice['label']; ?>');
+        <?php if ($unifaunHelper->getAdviceType() == $advice['value']) : ?>
+        optionElement.setAttribute('selected', 'selected');
+        <?php endif; ?>
+        this.adviceElement.insert(optionElement);
         <?php endforeach; ?>
         this.adviceElement.name = "parcel[" + this.id + "][advice]";
         adviceTd.appendChild(this.adviceElement);
@@ -202,79 +203,79 @@ var_dump($unifaunHelper->getAutoBooking());die;
         this.container = tr;
     }
 
-    unifaun.parcel.prototype.remove = function() {
+    unifaun.parcel.prototype.remove = function () {
         this.container.remove();
-        for (var i=0; i<unifaun.parcels.length; i++) {
-            if(unifaun.parcels[i].id == this.id) {
+        for (var i = 0; i < unifaun.parcels.length; i++) {
+            if (unifaun.parcels[i].id == this.id) {
                 unifaun.parcels.splice(i, 1);
                 break;
             }
         }
     }
 
-    unifaun.parcel.prototype.setWeight = function(weight) {
+    unifaun.parcel.prototype.setWeight = function (weight) {
         if (!weight) {
             weight = 0;
         }
         this.weightElement.value = weight;
     }
 
-    unifaun.parcel.prototype.setWidth = function(value) {
+    unifaun.parcel.prototype.setWidth = function (value) {
         this.widthElement.value = value;
     }
 
-    unifaun.parcel.prototype.setHeight = function(value) {
+    unifaun.parcel.prototype.setHeight = function (value) {
         this.heightElement.value = value;
     }
 
-    unifaun.parcel.prototype.setDepth = function(value) {
+    unifaun.parcel.prototype.setDepth = function (value) {
         this.depthElement.value = value;
     }
 
-    unifaun.parcel.prototype.setNote = function(note) {
+    unifaun.parcel.prototype.setNote = function (note) {
         this.noteTd.innerHTML = note;
     }
 
-    unifaun.parcel.prototype.setGoodsType = function(value) {
+    unifaun.parcel.prototype.setGoodsType = function (value) {
         this.goodsTypeElement.value = value;
     }
 
-    unifaun.parcel.prototype.getWeight = function() {
+    unifaun.parcel.prototype.getWeight = function () {
         return this.parseInt(this.weightElement.value);
     }
 
-    unifaun.parcel.prototype.getWidth = function() {
+    unifaun.parcel.prototype.getWidth = function () {
         return this.parseInt(this.widthElement.value);
     }
 
-    unifaun.parcel.prototype.getHeight = function() {
+    unifaun.parcel.prototype.getHeight = function () {
         return this.parseInt(this.heightElement.value);
     }
 
-    unifaun.parcel.prototype.getDepth = function() {
+    unifaun.parcel.prototype.getDepth = function () {
         return this.parseInt(this.depthElement.value);
     }
 
-    unifaun.parcel.prototype.setCost = function(cost) {
+    unifaun.parcel.prototype.setCost = function (cost) {
         while (this.costContainer.hasChildNodes()) {
             this.costContainer.removeChild(this.costContainer.firstChild);
         }
         this.costContainer.appendChild(document.createTextNode(cost));
     }
 
-    unifaun.parcel.prototype.setShippingMethod = function(value) {
+    unifaun.parcel.prototype.setShippingMethod = function (value) {
         this.shippingMethodElement.value = value;
     }
 
-    unifaun.parcel.prototype.setAdvice = function(value) {
+    unifaun.parcel.prototype.setAdvice = function (value) {
         this.adviceElement.value = value;
     }
 
-    unifaun.parcel.prototype.getCost = function() {
+    unifaun.parcel.prototype.getCost = function () {
         return this.cost;
     }
 
-    unifaun.parcel.prototype.parseInt = function(val) {
+    unifaun.parcel.prototype.parseInt = function (val) {
         var v = parseInt(val);
         if (!v) {
             v = 0;
@@ -284,7 +285,7 @@ var_dump($unifaunHelper->getAutoBooking());die;
 
 
     // Helper functionality
-    unifaun.addParcel = function(options) {
+    unifaun.addParcel = function (options) {
         var parcel = new unifaun.parcel();
         if (options) {
             if (options.width) {
@@ -316,10 +317,10 @@ var_dump($unifaunHelper->getAutoBooking());die;
 
     // Add validation
     Validation.addAllThese([
-        ['validate-maxtime', '<?php echo($this->__("Must be sent before a specific time")); ?>', function(v) {
+        ['validate-maxtime', '<?php echo(__("Must be sent before a specific time")); ?>', function (v) {
             var id = unifaunGetValueById("unifaun_method_id");
             if (id.length == 0) {
-                alert("<?php echo($this->__('You have not selected a shipping method')); ?>");
+                alert("<?php echo(__('You have not selected a shipping method')); ?>");
                 return false;
             }
             var lastBooking = trackingConfig.lastBookingData[id];
@@ -328,9 +329,9 @@ var_dump($unifaunHelper->getAutoBooking());die;
                 var now = new Date();
                 var selectedDayLastBooking;
 
-                if (unifaunGetValueById("unifaun_automatic_booking") == 'Y' && unifaunGetValueById("unifaun_pickup") == 'Y'){
+                if (unifaunGetValueById("unifaun_automatic_booking") == 'Y' && unifaunGetValueById("unifaun_pickup") == 'Y') {
                     var pud = unifaunGetValueById("unifaun_pickup_date");
-                    selectedDayLastBooking = new Date(pud.substr(0, 4), pud.substr(5, 2) -1, pud.substr(8, 2));
+                    selectedDayLastBooking = new Date(pud.substr(0, 4), pud.substr(5, 2) - 1, pud.substr(8, 2));
                 } else {
                     selectedDayLastBooking = new Date();
                 }
@@ -339,26 +340,26 @@ var_dump($unifaunHelper->getAutoBooking());die;
                 selectedDayLastBooking.setMinutes(lastBooking.minute);
 
                 if (selectedDayLastBooking < now) { // Is last pick up
-                    return window.confirm("<?php echo($this->__('Packages with this carrier must be sent before %s. Do you want to send this package anyway?', $shippingMethod->getLastBookingTime())); ?>");
+                    return window.confirm("<?php echo(__('Packages with this carrier must be sent before %s. Do you want to send this package anyway?', $shippingMethod->getLastBookingTime())); ?>");
                 }
             }
             return true;
         }],
-        ['validate-advice-cellphone', '<?php echo($this->__("You must add a cellphone number.")); ?>', function(v) {
+        ['validate-advice-cellphone', '<?php echo(__("You must add a cellphone number.")); ?>', function (v) {
             var value = unifaunGetValueById("unifaun_advice_type");
             if (value == "mobile" && v.length == 0) {
                 return false;
             }
             return true;
         }],
-        ['validate-advice-email', '<?php echo($this->__("You must add an e-mail address.")); ?>', function(v) {
+        ['validate-advice-email', '<?php echo(__("You must add an e-mail address.")); ?>', function (v) {
             var value = unifaunGetValueById("unifaun_advice_type");
             if (value == "email" && v.length == 0) {
                 return false;
             }
             return true;
         }],
-        ['validate-advice-fax', '<?php echo($this->__("You must add a fax number.")); ?>', function(v) {
+        ['validate-advice-fax', '<?php echo(__("You must add a fax number.")); ?>', function (v) {
             var value = unifaunGetValueById("unifaun_advice_type");
             if (value == "fax" && v.length == 0) {
                 return false;
@@ -368,24 +369,28 @@ var_dump($unifaunHelper->getAutoBooking());die;
     ]);
 
     // Autoload one parcel
-    document.observe("dom:loaded", function() {
-        trackingConfig.parcels.each(function(e){
+    document.observe("dom:loaded", function () {
+        trackingConfig.parcels.each(function (e) {
             unifaun.addParcel(e);
         });
         unifaunAddEventListeners();
     });
 
-    function unifaunAddEventListeners(){
+    function unifaunAddEventListeners() {
 
-        var createDependency = function (parentName, dependencyTarget){
-            var updateChildrenVisibility = function() {
+        var createDependency = function (parentName, dependencyTarget) {
+            var updateChildrenVisibility = function () {
                 if (unifaunGetValueByName(parentName) == 'Y') {
-                    $$(dependencyTarget).each(function(e){e.show()});
+                    $$(dependencyTarget).each(function (e) {
+                        e.show()
+                    });
                 } else {
-                    $$(dependencyTarget).each(function(e){e.hide()});
+                    $$(dependencyTarget).each(function (e) {
+                        e.hide()
+                    });
                 }
             };
-            $$('[name="'+parentName+'"]').invoke('observe', 'change', updateChildrenVisibility);
+            $$('[name="' + parentName + '"]').invoke('observe', 'change', updateChildrenVisibility);
             updateChildrenVisibility();
         };
 
@@ -406,104 +411,117 @@ var_dump($unifaunHelper->getAutoBooking());die;
 </script>
 
 <?php if ($this->getShipment() && $this->getShipment()->getId()) : ?>
-    <input type="hidden" name="shipment_id" value="<?php echo $this->getShipment()->getId(); ?>" />
+    <input type="hidden" name="shipment_id" value="<?php echo $this->getShipment()->getId(); ?>"/>
 <?php endif; ?>
 <fieldset style="margin-top: 3px; background-color: #FCFAC9; border-color: #D7C699">
     <legend>Packages</legend>
-    <div style="display:none"><input type="hidden" class="validate-maxtime"  /></div>
+    <div style="display:none"><input type="hidden" class="validate-maxtime"/></div>
     <table style="table-layout: fixed; white-space: nowrap;">
         <thead>
-            <tr>
-                <th style="width: 90px;">&nbsp;</th>
-                <th style="width: 80px;"><?php echo(__("Weight")); ?> (<?php echo($unifaunHelper->getStoreWeightUnit()); ?>)</th>
-                <th style="width: 180px; white-space: nowrap;"><?php echo(__("Dimensions")); ?> (<?php echo(__("WxHxD")); ?>, <?php echo($unifaunHelper->getStoreLengthUnit()); ?>)</th>
-                <?php if ($unifaunHelper->getEnableCost()): ?>
-                    <th style="width: 60px;"><?php echo(__("Cost")); ?></th>
-                <?php endif; ?>
-                <th style="width: 180px;"><?php echo(__("Goods type")); ?></th>
-                <th style="width: 180px;"><?php echo(__("Shipping method")); ?></th>
-                <th style="width: 180px;"><?php echo(__("Advice")); ?></th>
-                <th style="width: 40px;">&nbsp;</th>
-            </tr>
+        <tr>
+            <th style="width: 90px;">&nbsp;</th>
+            <th style="width: 80px;"><?php echo(__("Weight")); ?> (<?php echo($unifaunHelper->getStoreWeightUnit()); ?>
+                )
+            </th>
+            <th style="width: 180px; white-space: nowrap;"><?php echo(__("Dimensions")); ?> (<?php echo(__("WxHxD")); ?>
+                , <?php echo($unifaunHelper->getStoreLengthUnit()); ?>)
+            </th>
+            <?php if ($unifaunHelper->getEnableCost()): ?>
+                <th style="width: 60px;"><?php echo(__("Cost")); ?></th>
+            <?php endif; ?>
+            <th style="width: 180px;"><?php echo(__("Goods type")); ?></th>
+            <th style="width: 180px;"><?php echo(__("Shipping method")); ?></th>
+            <th style="width: 180px;"><?php echo(__("Advice")); ?></th>
+            <th style="width: 40px;">&nbsp;</th>
+        </tr>
         </thead>
         <tbody id="parcelList">
 
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="<?php if ($unifaunHelper->getEnableCost()): ?>4<?php else: ?>3<?php endif; ?>" style="padding-top: 10px;">
-                    <button type="button" class="scalable add" onclick="unifaun.addParcel(); return false;"><span><?php echo(__("Add Package")); ?></span></button>
-                </td>
-            </tr>
+        <tr>
+            <td colspan="<?php if ($unifaunHelper->getEnableCost()): ?>4<?php else: ?>3<?php endif; ?>"
+                style="padding-top: 10px;">
+                <button type="button" class="scalable add" onclick="unifaun.addParcel(); return false;">
+                    <span><?php echo(__("Add Package")); ?></span></button>
+            </td>
+        </tr>
         </tfoot>
     </table>
-    <div style="margin-top: 5px; font-size: 90%; color: #666"><?php echo($this->__("Only packages with a specfied weight will be sent to Unifaun.")); ?></div>
+    <div style="margin-top: 5px; font-size: 90%; color: #666"><?php echo(__("Only packages with a specfied weight will be sent to Unifaun.")); ?></div>
     <div style="border-top: 1px solid #D7C699; padding-top: 10px; margin-top: 10px; font-size: 90%; color: #666">
         <div class="unifaun-cols">
             <div class="col-1">
                 <table cellspacing="0" cellpadding="0" border="0" class="unifaun-settings">
                     <tr>
-                        <td><?php echo($this->__("Automatic Booking")); ?></td>
+                        <td><?php echo(__("Automatic Booking")); ?></td>
                         <td>
-                            <select id="unifaun_automatic_booking" name="unifaun_automatic_booking" class="input-text" autocomplete="off">
-                                <option value="Y"><?php echo($this->__("Yes")); ?></option>
-                                <option value="N"<?php if (!$unifaunHelper->getAutoBooking()) echo(" selected=\"selected\""); ?>><?php echo($this->__("No")); ?></option>
+                            <select id="unifaun_automatic_booking" name="unifaun_automatic_booking" class="input-text"
+                                    autocomplete="off">
+                                <option value="Y"><?php echo(__("Yes")); ?></option>
+                                <option value="N"<?php if (!$unifaunHelper->getAutoBooking()) echo(" selected=\"selected\""); ?>><?php echo(__("No")); ?></option>
                             </select>
                         </td>
                     </tr>
                     <tr class="new-section">
-                        <td><b><?php echo($this->__("Reference")); ?></b></td>
+                        <td><b><?php echo(__("Reference")); ?></b></td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Order number")); ?>:</td>
+                        <td><?php echo(__("Order number")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text" name="unifaun_order_number" value="<?php echo($order->getRealOrderId()); ?>" />
+                            <input type="text" class="input-text" name="unifaun_order_number"
+                                   value="<?php echo($order->getRealOrderId()); ?>"/>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Consignee reference")); ?>:</td>
+                        <td><?php echo(__("Consignee reference")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text" name="unifaun_consignee_reference" value="" />
+                            <input type="text" class="input-text" name="unifaun_consignee_reference" value=""/>
                         </td>
                     </tr>
                     <tr class="new-section">
-                        <td><b><?php echo($this->__("Advice")); ?></b></td>
+                        <td><b><?php echo(__("Advice")); ?></b></td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Contact Person")); ?>:</td>
+                        <td><?php echo(__("Contact Person")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text" name="unifaun_advice_contact" value="<?php if ($address) echo(htmlentities($address->getName(), ENT_COMPAT, "UTF-8"));?>" />
+                            <input type="text" class="input-text" name="unifaun_advice_contact"
+                                   value="<?php if ($address) echo(htmlentities($address->getName(), ENT_COMPAT, "UTF-8")); ?>"/>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Cellphone Number")); ?>:</td>
+                        <td><?php echo(__("Cellphone Number")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text validate-advice-cellphone" name="unifaun_advice_mobile"  value="<?php 
+                            <input type="text" class="input-text validate-advice-cellphone" name="unifaun_advice_mobile"
+                                   value="<?php
 
-                            //var_dump($address->getData());die;
-                            if ($address) echo(htmlentities($address->getTelephone(), ENT_COMPAT, "UTF-8"));?>" />
+                                   //var_dump($address->getData());die;
+                                   if ($address) echo(htmlentities($address->getTelephone(), ENT_COMPAT, "UTF-8")); ?>"/>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("E-mail")); ?>:</td>
+                        <td><?php echo(__("E-mail")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text validate-advice-email" name="unifaun_advice_email" value="<?php if ($address) echo(htmlentities($address->getEmail(), ENT_COMPAT, "UTF-8"));?>" />
+                            <input type="text" class="input-text validate-advice-email" name="unifaun_advice_email"
+                                   value="<?php if ($address) echo(htmlentities($address->getEmail(), ENT_COMPAT, "UTF-8")); ?>"/>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Fax")); ?>:</td>
+                        <td><?php echo(__("Fax")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text validate-advice-fax" name="unifaun_advice_fax" value="<?php if ($address) echo(htmlentities($address->getFax(), ENT_COMPAT, "UTF-8"));?>" />
+                            <input type="text" class="input-text validate-advice-fax" name="unifaun_advice_fax"
+                                   value="<?php if ($address) echo(htmlentities($address->getFax(), ENT_COMPAT, "UTF-8")); ?>"/>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Phone")); ?>:</td>
+                        <td><?php echo(__("Phone")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text" name="unifaun_advice_phone" value="<?php if ($address) echo(htmlentities($address->getTelephone(), ENT_COMPAT, "UTF-8"));?>" />
+                            <input type="text" class="input-text" name="unifaun_advice_phone"
+                                   value="<?php if ($address) echo(htmlentities($address->getTelephone(), ENT_COMPAT, "UTF-8")); ?>"/>
                         </td>
-                    </tr>                  
+                    </tr>
                 </table>
             </div>
             <div class="col-2">
@@ -512,26 +530,27 @@ var_dump($unifaunHelper->getAutoBooking());die;
                     <!-- COD -->
                     <tr>
                         <td colspan="2">
-                            <b><?php echo($this->__("Cash on delivery")); ?></b>
+                            <b><?php echo(__("Cash on delivery")); ?></b>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Use cash on delivery")); ?>:</td>
+                        <td><?php echo(__("Use cash on delivery")); ?>:</td>
                         <td colspan="3">
                             <select name="unifaun_cod" class="input-text">
-                                <option value="N"><?php echo($this->__("No")); ?></option>
-                                <option value="Y"><?php echo($this->__("Yes")); ?></option>
+                                <option value="N"><?php echo(__("No")); ?></option>
+                                <option value="Y"><?php echo(__("Yes")); ?></option>
                             </select>
                         </td>
                     </tr>
                     <tr class="unifaun-depends-on-cod">
-                        <td><?php echo($this->__("Amount")); ?>:</td>
+                        <td><?php echo(__("Amount")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text" name="unifaun_cod_amount" value="<?php echo($order->getBaseTotalDue()); ?>" />
+                            <input type="text" class="input-text" name="unifaun_cod_amount"
+                                   value="<?php echo($order->getBaseTotalDue()); ?>"/>
                         </td>
                     </tr>
                     <tr class="unifaun-depends-on-cod">
-                        <td><?php echo($this->__("Currency")); ?>:</td>
+                        <td><?php echo(__("Currency")); ?>:</td>
                         <td>
                             <select class="input-text" name="unifaun_cod_currency">
                                 <option value="SEK">SEK</option>
@@ -539,26 +558,27 @@ var_dump($unifaunHelper->getAutoBooking());die;
                         </td>
                     </tr>
                     <tr class="unifaun-depends-on-cod">
-                        <td><?php echo($this->__("Reference")); ?>:</td>
+                        <td><?php echo(__("Reference")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text" name="unifaun_cod_reference" value="<?php echo($order->getRealOrderId()); ?>" />
+                            <input type="text" class="input-text" name="unifaun_cod_reference"
+                                   value="<?php echo($order->getRealOrderId()); ?>"/>
                         </td>
                     </tr>
                     <tr class="unifaun-depends-on-cod">
-                        <td><?php echo($this->__("Payment Method")); ?>:</td>
+                        <td><?php echo(__("Payment Method")); ?>:</td>
                         <td>
                             <select class="input-text" name="unifaun_cod_paymentmethod">
-                                <option value="<?php echo(Pcxpress_Unifaun_Model_Pcxpress_Unifaun_Cod::PAYMENTMETHOD_CASH); ?>"<?php if (Mage::helper('unifaun/data')->getPaymentMethodForCod()==Pcxpress_Unifaun_Model_Pcxpress_Unifaun_Cod::PAYMENTMETHOD_CASH) echo(" selected=\"selected\""); ?>><?php echo($this->__("Cash")); ?></option>
-                                <option value="<?php echo(Pcxpress_Unifaun_Model_Pcxpress_Unifaun_Cod::PAYMENTMETHOD_CHEQUE); ?>"<?php if (Mage::helper('unifaun/data')->getPaymentMethodForCod()==Pcxpress_Unifaun_Model_Pcxpress_Unifaun_Cod::PAYMENTMETHOD_CHEQUE) echo(" selected=\"selected\""); ?>><?php echo($this->__("Cheque")); ?></option>
-                                <option value="<?php echo(Pcxpress_Unifaun_Model_Pcxpress_Unifaun_Cod::PAYMENTMETHOD_POST); ?>"<?php if (Mage::helper('unifaun/data')->getPaymentMethodForCod()==Pcxpress_Unifaun_Model_Pcxpress_Unifaun_Cod::PAYMENTMETHOD_POST) echo(" selected=\"selected\""); ?>><?php echo($this->__("Post")); ?></option>
-                                <option value="<?php echo(Pcxpress_Unifaun_Model_Pcxpress_Unifaun_Cod::PAYMENTMETHOD_BANK); ?>"<?php if (Mage::helper('unifaun/data')->getPaymentMethodForCod()==Pcxpress_Unifaun_Model_Pcxpress_Unifaun_Cod::PAYMENTMETHOD_BANK) echo(" selected=\"selected\""); ?>><?php echo($this->__("Bank")); ?></option>
+                                <?php foreach ($unifaunHelper->getCodPaymentMethods() as $codPaymentMethod) : ?>
+                                    <option value="<?php echo $codPaymentMethod['value']; ?>"<?php if ($codPaymentMethod['selected']) echo(" selected=\"selected\""); ?>><?php echo(__($codPaymentMethod['title'])); ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </td>
                     </tr>
                     <tr class="unifaun-depends-on-cod">
-                        <td><?php echo($this->__("Account No")); ?>:</td>
+                        <td><?php echo(__("Account No")); ?>:</td>
                         <td>
-                            <input type="text" class="input-text" name="unifaun_cod_accountno" value="<?php echo(Mage::helper("unifaun/data")->getCodAccountNumber()); ?>" />
+                            <input type="text" class="input-text" name="unifaun_cod_accountno"
+                                   value="<?php echo($unifaunHelper->getCodAccountNumber()); ?>"/>
                         </td>
                     </tr>
                 </table>
@@ -568,14 +588,14 @@ var_dump($unifaunHelper->getAutoBooking());die;
                     <!-- Pick Up Location -->
                     <tr class="new-section">
                         <td colspan="2">
-                            <b><?php echo($this->__("Pick up location")); ?></b>
+                            <b><?php echo(__("Pick up location")); ?></b>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Pick up location")); ?>:</td>
+                        <td><?php echo(__("Pick up location")); ?>:</td>
                         <td colspan="3">
                             <select id="unifaun_pickup_location" name="unifaun_pickup_location" class="input-text">
-                                <option value=""><?php echo $this->__('Default') ?></option>
+                                <option value=""><?php echo __('Default') ?></option>
                                 <?php foreach ($this->getPickupLocations() as $loc) : ?>
                                     <option value="<?php echo $loc['key'] ?>"><?php echo $loc['value'] ?></option>
                                 <?php endforeach ?>
@@ -585,25 +605,26 @@ var_dump($unifaunHelper->getAutoBooking());die;
 
                 </table>
 
-                <table cellspacing="0" cellpadding="0" border="0" class="unifaun-settings unifaun-depends-on-automatic-booking">
+                <table cellspacing="0" cellpadding="0" border="0"
+                       class="unifaun-settings unifaun-depends-on-automatic-booking">
 
                     <!-- Pick Up Time -->
                     <tr class="new-section">
                         <td colspan="2">
-                            <b><?php echo($this->__("Pick up time")); ?></b>
+                            <b><?php echo(__("Pick up time")); ?></b>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo($this->__("Set pick up time")); ?>:</td>
+                        <td><?php echo(__("Set pick up time")); ?>:</td>
                         <td colspan="3">
                             <select id="unifaun_pickup" name="unifaun_pickup" class="input-text">
-                                <option value="N"><?php echo($this->__("No")); ?></option>
-                                <option value="Y"><?php echo($this->__("Yes")); ?></option>
+                                <option value="N"><?php echo(__("No")); ?></option>
+                                <option value="Y"><?php echo(__("Yes")); ?></option>
                             </select>
                         </td>
                     </tr>
                     <tr class="unifaun-depends-on-pickup">
-                        <td><?php echo($this->__("Pick up date")); ?>:</td>
+                        <td><?php echo(__("Pick up date")); ?>:</td>
                         <td colspan="3">
                             <select id="unifaun_pickup_date" name="unifaun_pickup_date" class="input-text">
                                 <?php foreach ($this->getPickUpDates() as $date) : ?>
@@ -613,13 +634,13 @@ var_dump($unifaunHelper->getAutoBooking());die;
                         </td>
                     </tr>
                     <tr class="unifaun-depends-on-pickup">
-                        <td><?php echo($this->__("Earliest pickup time")); ?>:</td>
+                        <td><?php echo(__("Earliest pickup time")); ?>:</td>
                         <td colspan="3">
                             <input name="unifaun_pickup_earliest" class="input-text" value="9:00">
                         </td>
                     </tr>
                     <tr class="unifaun-depends-on-pickup">
-                        <td><?php echo($this->__("Latest pickup time")); ?>:</td>
+                        <td><?php echo(__("Latest pickup time")); ?>:</td>
                         <td colspan="3">
                             <input name="unifaun_pickup_latest" class="input-text" value="15:00">
                         </td>
@@ -631,28 +652,30 @@ var_dump($unifaunHelper->getAutoBooking());die;
                 <table cellspacing="0" cellpadding="0" border="0" class="unifaun-settings ">
 
                     <tr>
-                        <td><?php echo($this->__("Insurance")); ?></td>
+                        <td><?php echo(__("Insurance")); ?></td>
                         <td>
                             <select id="insurance" name="insurance" class="input-text" autocomplete="off">
-                                <option value="Y"><?php echo($this->__("Yes")); ?></option>
-                                <option value="N"<?php if (!$shippingMethod->getData('insurance_enable')) echo(" selected=\"selected\""); ?>><?php echo($this->__("No")); ?></option>
+                                <option value="Y"><?php echo(__("Yes")); ?></option>
+                                <option value="N"<?php if (!$shippingMethod->getData('insurance_enable')) echo(" selected=\"selected\""); ?>><?php echo(__("No")); ?></option>
                             </select>
                         </td>
                     </tr>
-                    </table>
+                </table>
 
                 <table cellspacing="0" cellpadding="0" border="0" class="unifaun-settings unifaun-depends-on-insurance">
                     <tr>
-                        <td><?php echo($this->__("Insurance Amount")); ?>:</td>
+                        <td><?php echo(__("Insurance Amount")); ?>:</td>
                         <td colspan="3">
-                            <input type="text" id="insurance_amount" name="insurance_amount" value="<?php echo $order->getGrandTotal(); ?>" class="input-text">
+                            <input type="text" id="insurance_amount" name="insurance_amount"
+                                   value="<?php echo $order->getGrandTotal(); ?>" class="input-text">
                         </td>
                     </tr>
-                    
+
                 </table>
                 <!-- insurance -->
             </div>
         </div>
     </div>
-    <div class="unifaun-version" style="text-align: right; font-size: 90%;"><a href="http://pcxpress.see/" target="_blank">Unifaun</a></div>
+    <div class="unifaun-version" style="text-align: right; font-size: 90%;"><a href="http://pcxpress.see/"
+                                                                               target="_blank">Unifaun</a></div>
 </fieldset>

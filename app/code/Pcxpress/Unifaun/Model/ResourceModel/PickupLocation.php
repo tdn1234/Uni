@@ -1,7 +1,7 @@
 <?php
 namespace Pcxpress\Unifaun\Model\ResourceModel;
 
-class Pickuplocation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class PickupLocation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Initialize resource model

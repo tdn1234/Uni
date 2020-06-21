@@ -8,8 +8,13 @@
  */
 namespace Pcxpress\Unifaun\Block\Adminhtml\Order\Shipment\Create;
 
-class Tracking
-extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
+use Pcxpress\Unifaun\Model\ParcelFactory;
+use Pcxpress\Unifaun\Model\ShippingmethodFactory;
+use Pcxpress\Unifaun\Model\SourceModel\AdviceTypesFactory;
+use Pcxpress\Unifaun\Model\PickupLocationFactory;
+
+
+class Tracking extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
 
     /**
@@ -60,13 +65,21 @@ extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Framework\Registry $registry,
         array $data = [],
-        \Pcxpress\Unifaun\Helper\Data $unifaunHelper
+        \Pcxpress\Unifaun\Helper\Data $unifaunHelper,
+        ShippingmethodFactory $shippingmethodFactory,
+        ParcelFactory $unifaunParcelFactory,
+        AdviceTypesFactory $adviceTypesFactory,
+        PickupLocationFactory $unifaunMysql4PickupLocationCollectionFactory
     ){
 
         parent::__construct($context, $shippingConfig, $registry, $data);
         // $this->customerSession = $customerSession;
         // $this->_objectManager = $objectManager;
+        $this->unifaunShippingMethodFactory = $shippingmethodFactory;
         $this->unifaunHelper = $unifaunHelper;
+        $this->unifaunParcelFactory = $unifaunParcelFactory;
+        $this->unifaunSourceModelAdviceTypesFactory = $adviceTypesFactory;
+        $this->unifaunMysql4PickupLocationCollectionFactory = $unifaunMysql4PickupLocationCollectionFactory;
     }
 
 
@@ -149,7 +162,6 @@ extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
         $shippingMethodParts = explode("_", $order->getShippingMethod());
         $shippingMethodId = $shippingMethodParts[1];
 
-        
         $this->_shippingMethod = $this->unifaunShippingMethodFactory->create()->load($shippingMethodId);
     }
 
@@ -165,11 +177,13 @@ public function getShippingAddress()
 public function getPickupLocations()
 {
     /** @var \Pcxpress\Unifaun\Model\Mysql4\PickupAddress\Collection $collection */
-    $collection = $this->unifaunMysql4PickupLocationCollectionFactory->create();
+    $collection = $this->unifaunMysql4PickupLocationCollectionFactory->create()->getCollection();
     $collection->setOrder('city', 'ASC');
+
 
     $addresses = array();
     foreach ($collection as $address) {
+        var_dump($address);die;
         /** @var \Pcxpress\Unifaun\Model\PickupAddress $address */
         $addresses[] = array(
             'key'   => $address->getId(),
@@ -183,8 +197,8 @@ public function getPickUpDates()
     $dates = array();
     for ($i = 0; $i < 5; $i++) {
         $key = date('Y-m-d', strtotime("+$i day"));
-        $weekDay = $this->__(date('l', strtotime("+$i day")));
-        $today = ($i == 0) ? '(' . $this->__('Today') . ')' : '';
+        $weekDay = __(date('l', strtotime("+$i day")));
+        $today = ($i == 0) ? '(' . __('Today') . ')' : '';
         $dates[] = array(
             'key'   => $key,
             'value' => "$key $weekDay $today",
@@ -255,7 +269,7 @@ private function getShippingMethodSelectOptions()
     $methodGroups = array();
     $selectedId = $this->getShippingMethod()->getId();
 
-    $group = array('groupName' => $this->__("Pcxpress Unifaun"), 'methods' => array());
+    $group = array('groupName' => __("Pcxpress Unifaun"), 'methods' => array());
     foreach ($this->getShippingMethodsWithTemplate() as $method) {
         $group['methods'][] = array(
             'id'       => $method->getShippingmethodId(),
@@ -265,7 +279,7 @@ private function getShippingMethodSelectOptions()
     }
     $methodGroups[] = $group;
 
-    $group = array('groupName' => $this->__("Label Queue"), 'methods' => array());
+    $group = array('groupName' => __("Label Queue"), 'methods' => array());
     foreach ($this->getShippingMethodsWithLabel() as $method) {
         $group['methods'][] = array(
             'id'       => $method->getShippingmethodId(),
@@ -275,7 +289,7 @@ private function getShippingMethodSelectOptions()
     }
     $methodGroups[] = $group;
 
-    $group = array('groupName' => $this->__("No booking"), 'methods' => array());
+    $group = array('groupName' => __("No booking"), 'methods' => array());
     foreach ($this->getShippingMethodsWithNoBooking() as $method) {
         $group['methods'][] = array(
             'id'       => $method->getShippingmethodId(),
@@ -290,7 +304,7 @@ private function getShippingMethodSelectOptions()
 
 public function getShippingMethodsWithTemplate()
 {
-    $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
+    $collection = $this->unifaunShippingMethodFactory->create()->getCollection();
     $collection->addFieldToFilter("no_booking", 0);
     $collection->addFieldToFilter("template_name", array("neq" => ""));
     $collection->addFieldToFilter("label_only", 0);
@@ -300,7 +314,7 @@ public function getShippingMethodsWithTemplate()
 
 public function getShippingMethodsWithLabel()
 {
-    $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
+    $collection = $this->unifaunShippingMethodFactory->create()->getCollection();
     /* @var $collection Pcxpress_Unifaun_Model_Mysql4_ShippingMethod_Collection */
     $collection->addFieldToFilter("label_only", 1);
 
@@ -309,7 +323,7 @@ public function getShippingMethodsWithLabel()
 
 public function getShippingMethodsWithNoBooking()
 {
-    $collection = $this->unifaunMysql4ShippingMethodCollectionFactory->create();
+    $collection = $this->unifaunShippingMethodFactory->create()->getCollection();
     /* @var $collection Pcxpress_Unifaun_Model_Mysql4_ShippingMethod_Collection */
     $collection->addFieldToFilter("label_only", 0);
     $collection->addFieldToFilter("no_booking", 1);
