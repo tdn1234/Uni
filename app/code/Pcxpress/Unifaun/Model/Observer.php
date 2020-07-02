@@ -1,145 +1,27 @@
 <?php
+
 namespace Pcxpress\Unifaun\Model;
 
 
-
-
-
-
-
-
 /**
-
-
-
-
-
-
-
  * @category   PC  xpressPCXpress AB
-
-
-
-
-
-
-
  * @package    Pcxpress_Unifaun
-
-
-
-
-
-
-
  * @copyright  Copyright (c) 2017 PCXpress AB
-
-
-
-
-
-
-
  * @author     PCXpress AB Developer <info@pcxpress.se>
-
-
-
-
-
-
-
  * @license    http://pcxpress.se/magento/license.txt
-
-
-
-
-
-
-
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class Observer
 {
 
 
-
-
-
-
-
     /**
-
-
-
-
-
-
-
-     * On shipment creat add new consignment 
-
-
-
-
-
-
-
+     * On shipment creat add new consignment
      *
-
-
-
-
-
-
-
      * @param \Magento\Framework\Event\Observer $observer
-
-
-
-
-
-
-
      * @param \Magento\Framework\App\Request\Http $request
-
-
-
-
-
-
-
      * @throws \Exception
-
-
-
-
-
-
-
      * @return bool
-
-
-
-
-
-
-
      */
-
-
 
 
     const RETURN_CONSIGNMENT = 'return_consignment';
@@ -337,7 +219,7 @@ class Observer
         $this->writeConnection = $resource->getConnection('core_write');
 
 //        $this->shipment_track_table = $resource->getTableName('sales_flat_shipment_track');
-            
+
     }
 
 
@@ -357,7 +239,7 @@ class Observer
         // var_dump(Mage::app()->getRequest()->getParam('parcel'));die;
 
 
-        $returnedShipment = ($this->request->getParam('submit') === self::RETURN_CONSIGNMENT)? true : false;
+        $returnedShipment = ($this->request->getParam('submit') === self::RETURN_CONSIGNMENT) ? true : false;
 
 
         $shipment = $observer->getShipment();
@@ -366,12 +248,11 @@ class Observer
         $consignmentData = $this->unifaunPcxpressUnifaunConsignmentData;
 
 
-
         // var_dump(get_class_methods($consignmentData));
 
-	        // var_dump(Mage::app()->getRequest()->getParam('parcel'));die;
+        // var_dump(Mage::app()->getRequest()->getParam('parcel'));die;
 
-	        // var_dump($consignmentData->getData());die;
+        // var_dump($consignmentData->getData());die;
 
         // if (!count($consignment->getData())) {
 
@@ -382,26 +263,24 @@ class Observer
 
         $params = false;
 
-        if($consignmentData->getData('custom_booking')){            
+        if ($consignmentData->getData('custom_booking')) {
             // die('cccc');
             $parcels = $consignmentData->getData('parcel');
 
-            $params =  $consignmentData->getData('params');
-        }else if (!$shipment->isObjectNew()) {            
+            $params = $consignmentData->getData('params');
+        } else if (!$shipment->isObjectNew()) {
             $parcels = $this->request->getParam('parcel');
             // return false;
-        }else{
+        } else {
             $parcels = $this->request->getParam('parcel');
 
 
-            $params =  $this->request->getParams();
+            $params = $this->request->getParams();
         }
 
-        
-        
 
-        if ($params === false){
-            $params =  $this->request->getParams();
+        if ($params === false) {
+            $params = $this->request->getParams();
         }
 
         if ($parcels == null) {
@@ -421,37 +300,20 @@ class Observer
         $this->updateOrderShipment($order);
 
 
-
-
-
         if (!$order->getId()) {
             throw new \Exception('Order not found.');
         }
 
 
-
-
-
-
-
-
-
         $carrierCode = $order->getShippingCarrier()->getCarrierCode();
-
-
-
-
-
 
 
         $failedPackages = array();
 
 
-
-        if(!$carrierCode){
+        if (!$carrierCode) {
             $carrierCode = $order->getShippingMethod();
         }
-
 
 
         if (strpos($carrierCode, \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE) !== false) {
@@ -459,33 +321,17 @@ class Observer
                 $methodId = null;
 
 
-
                 if ($this->unifaunHelper->isTemplateChangeEnabled() && array_key_exists('method', $_package)) {
                     $methodId = $_package['method'];
                 }
-
-
-
-
-
 
 
                 if (!$methodId) {
                     $method = explode("_", $order->getShippingMethod());
 
 
-
-
-
-
-
                     if (!array_key_exists(1, $method)) {
                         $package = null;
-
-
-
-
-
 
 
                         if (isset($_package['packages'][0])) {
@@ -493,68 +339,22 @@ class Observer
                         }
 
 
-
-
-
-
-
                         $this->_logShipmentErrorsMessage('Invalid method', $shipment);
-
-
-
-
-
 
 
                         continue;
                     }
 
 
-
-
-
-
-
                     $methodId = (int)$method[1];
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 $method = $this->unifaunShippingMethodFactory->create()->load($methodId);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                 if ($method->isObjectNew()) {
                     $package = null;
-
-
-
-
-
 
 
                     if (isset($_package['packages'][0])) {
@@ -562,42 +362,14 @@ class Observer
                     }
 
 
-
-
-
-
-
                     $this->_logShipmentErrorsMessage('Shipping Method dose not exists.', $shipment);
-
-
-
-
-
 
 
                     continue;
                 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                 $adviceType = null;
-
-
-
-
-
 
 
                 if (array_key_exists('advice', $_package)) {
@@ -605,129 +377,41 @@ class Observer
                 }
 
 
-
-
-
-
-
-                
-
-
-
-
-
-
-
-                if ($method->getLabelOnly()){
+                if ($method->getLabelOnly()) {
                     continue;
                 } elseif ($method->getNoBooking()) {
                     continue;
                 }
 
 
-
-
-
-
-
                 $settings = array();
 
 
+                $orderNumner = isset($params['unifaun_order_number']) ? $params['unifaun_order_number'] : '';
 
 
+                $consigneeReference = isset($params['unifaun_consignee_reference']) ? $params['unifaun_consignee_reference'] : '';
 
 
+                $consignmentNo =
 
 
-
-
-
-
-
-
-
-                $orderNumner = isset($params['unifaun_order_number'])? $params['unifaun_order_number'] : '';
-
-
-
-
-
-
-
-                $consigneeReference = isset($params['unifaun_consignee_reference'])? $params['unifaun_consignee_reference'] : '';
-
-
-
-
-
-
-
-                $consignmentNo = 
-
-
-
-                (isset($params['unifaun_consignment_number']))? $params['unifaun_consignment_number'] : '';
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    (isset($params['unifaun_consignment_number'])) ? $params['unifaun_consignment_number'] : '';
 
 
                 $settings['reference'] = array(
 
 
+                    'order_number' => $orderNumner,
 
 
+                    'consignee_reference' => $consigneeReference,
 
 
-
-                    'order_number'          => $orderNumner,
-
-
-
-
-
-
-
-                    'consignee_reference'   => $consigneeReference,
-
-
-
-
-
-
-
-                    'consignment_number'   => $consignmentNo
-
-
-
-
-
+                    'consignment_number' => $consignmentNo
 
 
                 );
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 if (isset($params['unifaun_advice_contact'])) {
@@ -737,37 +421,11 @@ class Observer
                 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                 if (isset($params['unifaun_advice_mobile'])) {
                     $adviceTypeMobile = $this->unifaunHelper->sanitizePhoneNumber($params['unifaun_advice_mobile']);
-                }else {
+                } else {
                     $adviceTypeMobile = $this->unifaunHelper->sanitizePhoneNumber($this->_getShipmentConfig($shipment, 'unifaun_advice_mobile'));
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 if (isset($params['unifaun_advice_email'])) {
@@ -776,22 +434,8 @@ class Observer
                     return;
 
 
-
                     $adviceTypeEmail = $this->_getSettingsForShipment($shipment, 'unifaun_advice_email');
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 if (isset($params['unifaun_advice_phone'])) {
@@ -801,37 +445,11 @@ class Observer
                 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                 if (isset($params['unifaun_advice_fax'])) {
                     $adviceTypeFax = $this->unifaunHelper->sanitizePhoneNumber($params['unifaun_advice_fax']);
                 } else {
                     $adviceTypeFax = $this->unifaunHelper->sanitizePhoneNumber($this->_getShipmentConfig($shipment, 'unifaun_advice_fax'));
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 if (isset($params['unifaun_automatic_booking'])) {
@@ -840,345 +458,55 @@ class Observer
                     $automaticBooking = $this->_getShipmentConfig($shipment, 'unifaun_automatic_booking');
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                // $settings = array();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                // $orderNumner = $params['unifaun_order_number'];
-
-
-
-
-
-
-
-                // $consigneeReference = $params['unifaun_consignee_reference'];
-
-
-
-
-
-
-
-                // $consignmentNo = $params['unifaun_consignment_number'];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                // $settings['reference'] = array(
-
-
-
-
-
-
-
-                //     'order_number'          => $orderNumner,
-
-
-
-
-
-
-
-                //     'consignee_reference'   => $consigneeReference,
-
-
-
-
-
-
-
-                //     'consignment_number'   => $consignmentNo
-
-
-
-
-
-
-
-                //     );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 $settings['advice'] = array(
-
-
-
-
-
-
-
-                    "type"      => $adviceType,
-
-
-
-
-
-
-
-                    "mobile"    => $adviceTypeMobile,
-
-
-
-
-
-
-
-                    "contact"   => $adviceTypeContact,
-
-
-
-
-
-
-
-                    "email"     => $adviceTypeEmail,
-
-
-
-
-
-
-
-                    "fax"       => $adviceTypeFax,
-
-
-
-
-
-
-
-                    "phone"     => $adviceTypePhone);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    "type" => $adviceType,
+                    "mobile" => $adviceTypeMobile,
+                    "contact" => $adviceTypeContact,
+                    "email" => $adviceTypeEmail,
+                    "fax" => $adviceTypeFax,
+                    "phone" => $adviceTypePhone);
 
                 $settings['automaticBooking'] = $automaticBooking;
-
-
-
-
-
-
-
-
-
                 if ($automaticBooking && $params['unifaun_pickup'] == "Y") {
                     $settings['pickup'] = array(
-
-
-
-
-
-
-
-                        "date"        => $params['unifaun_pickup_date'],
-
-
-
-
-
-
-
-                        "earliest"    => trim($params['unifaun_pickup_earliest']),
-
-
-
-
-
-
-
-                        "latest"      => trim($params['unifaun_pickup_latest']),
-
-
-
-
-
-
-
+                        "date" => $params['unifaun_pickup_date'],
+                        "earliest" => trim($params['unifaun_pickup_earliest']),
+                        "latest" => trim($params['unifaun_pickup_latest']),
                         "instruction" => null,
-
-
-
-
-
-
-
-                        "location"    => null,
-
-
-
-
-
-
-
+                        "location" => null,
                     );
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 if ($params['unifaun_cod'] == "Y") {
                     $settings['cod'] = array(
-
-
-
-
-
-
-
-                        "amount"        => $params['unifaun_cod_amount'],
-
-
-
-
-
-
-
-                        "currency"      => $params['unifaun_cod_currency'],
-
-
-
-
-
-
-
+                        "amount" => $params['unifaun_cod_amount'],
+                        "currency" => $params['unifaun_cod_currency'],
                         "paymentMethod" => $params['unifaun_cod_paymentmethod'],
-
-
-
-
-
-
-
-                        "accountNo"     => $params['unifaun_cod_accountno'],
-
-
-
-
-
-
-
-                        "reference"     => $params['unifaun_cod_reference'],
-
-
-
-
-
-
-
+                        "accountNo" => $params['unifaun_cod_accountno'],
+                        "reference" => $params['unifaun_cod_reference'],
                     );
                 }
-
-
 
                 if ($params['unifaun_pickup_location']) {
                     $settings['pickup_address'] = $params['unifaun_pickup_location'];
                 }
 
-
-
-
-                if(isset($params['insurance']) && $params['insurance'] == 'Y'){
+                if (isset($params['insurance']) && $params['insurance'] == 'Y') {
                     $settings['insurance'] = array(
-
-
-
                         'amount' => (isset($params['insurance_amount'])) ? $params['insurance_amount'] : 0,
-
-
-
-                        'currency' => (isset($params['unifaun_cod_currency']))? $params['unifaun_cod_currency'] : 'SEK'
-
-
-
+                        'currency' => (isset($params['unifaun_cod_currency'])) ? $params['unifaun_cod_currency'] : 'SEK'
                     );
                 }
 
 
                 $firstParcel = reset($parcels);
 
-                $shippingMethod = (isset($firstParcel['shippingMethod']))? $firstParcel['shippingMethod'] : 0;
+                $shippingMethod = (isset($firstParcel['shippingMethod'])) ? $firstParcel['shippingMethod'] : 0;
 
                 $shippingMethod = $this->unifaunShippingMethodFactory->create()->load($shippingMethod);
 
 
-
                 if ($shippingMethod && $shippingMethod->getData('shipping_service') == \Pcxpress\Unifaun\Helper\Data::WEBTA_SHIPPING_ID) {
 
-                     
 
                     if ($method->getMultipleParcels()) {
                         if (!$this->setShippingBooking($_package['packages'], $shipment, $method, $settings, $returnedShipment)) {
@@ -1189,30 +517,26 @@ class Observer
                         }
                     } else {
                         foreach ($_package['packages'] as $package) {
-                        $packages = array($package); // _createShippingBooking() want package argument as array.
-                            
-                            
+                            $packages = array($package); // _createShippingBooking() want package argument as array.
+
+
                             if (!$this->setShippingBooking($packages, $shipment, $method, $settings, $returnedShipment)) {
-                                    $failedPackages[] = array();
-                                    continue;
+                                $failedPackages[] = array();
+                                continue;
                             }
-                            
+
                         }
                     }
                 }// end WEBTA_SHIPPING_ID condition
 
-
             }
         }
 
-
         $firstParcel = reset($parcels);
 
+        $shippingMethod = (isset($firstParcel['shippingMethod'])) ? $firstParcel['shippingMethod'] : 0;
 
-
-        $shippingMethod = (isset($firstParcel['shippingMethod']))? $firstParcel['shippingMethod'] : 0;
-
-                $shippingMethod = $this->unifaunShippingMethodFactory->create()->load($shippingMethod);
+        $shippingMethod = $this->unifaunShippingMethodFactory->create()->load($shippingMethod);
 
 
         $order->setData('template_method_data', $shippingMethod->getData());
@@ -1225,241 +549,50 @@ class Observer
 
             $pacsoftHelper = $this->unifaunPacsoftDataHelper;
             $pacsoftHelper->createShipment(
-                $params, 
-                $transactionId, 
+                $params,
+                $transactionId,
                 $parcels,
                 $order
             );
 
-     }
- 
+        }
 
 
+        if (count($failedPackages)) {
+            return false;
+        }
 
-    if (count($failedPackages)) {
-        return false;
+        return true;
     }
 
+    protected function _logShipmentErrorsMessage($message, \Magento\Sales\Model\Order\Shipment $shipment = null)
+    {
 
-
-
-
-
-
-    return true;
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-protected function _logShipmentErrorsMessage($message, \Magento\Sales\Model\Order\Shipment $shipment = null)
-{
-
-
-
-
-
-
-
-    if ($shipment instanceof \Magento\Sales\Model\Order\Shipment && $shipment->getIncrementId()) {
-        $message = $shipment->getIncrementId() . ": " . $message;
+        if ($shipment instanceof \Magento\Sales\Model\Order\Shipment && $shipment->getIncrementId()) {
+            $message = $shipment->getIncrementId() . ": " . $message;
+        }
+        $this->backendSession->addError($message);
     }
 
-
-
-
-
-
-
-    $this->backendSession->addError($message);
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipment, $key = null, $settings = array())
-{
-
-
-
-
-
-
-
-    $order                                = $shipment->getOrder();
-
-
-
-
-
-
-
-    $config                               = array();
-
-
-
-
-
-
-
-
-
-    $config['apport_automatic_booking']   = $this->unifaunPcxpressUnifaunConsignmentFactory->create()->getAutomaticBooking() ? 'Y' : null;
-
-
-
-
-
-
-
-    $config['apport_advice_contact']      = $order->getShippingAddress()->getName();
-
-
-
-
-
-
-
-    $config['apport_advice_mobile']       = $order->getShippingAddress()->getTelephone();
-
-
-
-
-
-
-
-    $config['apport_advice_email']        = $order->getShippingAddress()->getEmail();
-
-
-
-
-
-
-
-    $config['apport_advice_fax']          = $order->getShippingAddress()->getFax();
-
-
-
-
-
-
-
-    $config['apport_advice_phone']        = $order->getShippingAddress()->getTelephone();
-
-
-
-
-
-
-
-    $config['apport_order_number']        = $order->getRealOrderId();
-
-
-
-
-
-
-
-    $config['apport_consignee_reference'] = "";
-
-
-
-
-
-
-
-        $config['apport_cod']                 = 'N'; // Set to no
-
-
-
-
-
-
-
-        $config['apport_cod_amount']          = null;
-
-
-
-
-
-
-
-        $config['apport_cod_currency']        = null;
-
-
-
-
-
-
-
-        $config['apport_cod_paymentmethod']   = null;
-
-
-
-
-
-
-
-        $config['apport_cod_accountno']       = null;
-
-
-
-
-
-
-
-        $config['apport_cod_reference']       = null;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipment, $key = null, $settings = array())
+    {
+
+        $order = $shipment->getOrder();
+        $config = array();
+        $config['apport_automatic_booking'] = $this->unifaunPcxpressUnifaunConsignmentFactory->create()->getAutomaticBooking() ? 'Y' : null;
+        $config['apport_advice_contact'] = $order->getShippingAddress()->getName();
+        $config['apport_advice_mobile'] = $order->getShippingAddress()->getTelephone();
+        $config['apport_advice_email'] = $order->getShippingAddress()->getEmail();
+        $config['apport_advice_fax'] = $order->getShippingAddress()->getFax();
+        $config['apport_advice_phone'] = $order->getShippingAddress()->getTelephone();
+        $config['apport_order_number'] = $order->getRealOrderId();
+        $config['apport_consignee_reference'] = "";
+        $config['apport_cod'] = 'N'; // Set to no
+        $config['apport_cod_amount'] = null;
+        $config['apport_cod_currency'] = null;
+        $config['apport_cod_paymentmethod'] = null;
+        $config['apport_cod_accountno'] = null;
+        $config['apport_cod_reference'] = null;
         if ($key) {
             if (array_key_exists($key, $settings)) {
                 return $settings[$key];
@@ -1467,35 +600,8 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
                 return null;
             }
         }
-
-
-
-
-
-
-
         return $settings;
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
     protected function setShippingBooking(
@@ -1504,33 +610,22 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         \Pcxpress\Unifaun\Model\ShippingMethod $shippingMethod,
         $settings = array(),
         $returnedShipment = false
-    ) {        
-
+    )
+    {
 
         $order = $shipment->getOrder();
-
-
-
-
-
-
-
         $this->_scopeId = $order->getStoreId();
-
-
         if ($shippingMethod->getTemplateName() == "") {
             $this->_logShipmentErrorsMessage("No template set for the selected shipping method", $shipment);
 
             return false;
         }
 
-
-
         $unifaun = $this->unifaunPcxpressUnifaunFactory->create();
 
         $consignment = $this->unifaunPcxpressUnifaunConsignmentFactory->create();
 
-        if (isset($settings['reference'])){
+        if (isset($settings['reference'])) {
             if (isset($settings['reference']['order_number'])) {
                 if ($returnedShipment) {
                     $consignment->setOrderNo('');
@@ -1543,19 +638,15 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
 
-
-
         $consignment->setTemplateName($shippingMethod->getTemplateName());
-
 
 
         if ($returnedShipment) {
             $transportProduct = $this->unifaunPcxpressUnifaunTransportProductFactory->create();
             $transportProduct->unsetPaymentInstruction();
-        }else {
+        } else {
             $transportProduct = $this->unifaunShippingHelper->getTransportProduct($settings, $shippingMethod, $order);
         }
-
 
 
         $shipmentItems = $shipment->getAllItems();
@@ -1568,39 +659,21 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             $currencyCode = $shipment->getOrder()->getOrderCurrencyCode();
 
 
-
-
-
-
-
             $customsClearance = $this->unifaunPcxpressUnifaunCustomsClearanceFactory->create();
 
 
-
-
-
-
-
             $goodsValue = 0;
-
 
 
             foreach ($shipmentItems as $item) {
                 $priceWithDiscount = $item->getPrice() - $item->getDiscountAmount();
 
 
-
-
-
-
-
                 $goodsValue += $priceWithDiscount * $item->getQty();
             }
 
 
-
             $goodsValue = number_format((float)$goodsValue, 2, '.', '');
-
 
 
             $customsClearance->setGoodsValue($goodsValue);
@@ -1613,20 +686,14 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
 
-
-
-
-        if(!empty($settings['insurance']['amount'])){
+        if (!empty($settings['insurance']['amount'])) {
             $insurance = $this->unifaunPcxpressUnifaunInsuranceFactory->create();
-
 
 
             $insurance->setAmount($settings['insurance']['amount']);
 
 
-
             $insurance->setCurrency($settings['insurance']['currency']);
-
 
 
             $transportProduct->setInsurance($insurance);
@@ -1635,8 +702,7 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         $consignment->setTransportProduct($transportProduct);
 
 
-        $returnedShipment = ($this->request->getParam('submit') === self::RETURN_CONSIGNMENT)? true : false;
-
+        $returnedShipment = ($this->request->getParam('submit') === self::RETURN_CONSIGNMENT) ? true : false;
 
 
         $addressConsignor = $this->unifaunConsignorHelper->getConsignorPart($order, $returnedShipment);
@@ -1645,7 +711,7 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
 
         $address = $order->getShippingAddress();
 
-        $consignment->addPart($addressConsignor);    
+        $consignment->addPart($addressConsignor);
 
         if (isset($settings['pickup_address'])) {
             $partPickupAddress = $this->_getPickupLocationPart($settings['pickup_address']);
@@ -1658,9 +724,9 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             if (isset($settings['advice']['mobile'])) {
                 $countryCode = $address->getCountry();
 
-                if ($returnedShipment) {                        
+                if ($returnedShipment) {
                     $consigneeMobileNumber = $this->scopeConfig->getValue('carriers/' . \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE . '/phone', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-                }else{
+                } else {
                     $consigneeMobileNumber = $settings['advice']['mobile'];
                 }
 
@@ -1671,7 +737,7 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             if (isset($settings['advice']['contact'])) {
                 if ($returnedShipment) {
                     $consigneeContact = $this->scopeConfig->getValue('carriers/' . \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE . '/contact_person', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-                }else{
+                } else {
                     $consigneeContact = $settings['advice']['contact'];
                 }
 
@@ -1680,18 +746,15 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             }
 
 
-
-
             if (isset($settings['advice']['email'])) {
                 if ($returnedShipment) {
                     $consigneeEmail = $this->scopeConfig->getValue('carriers/' . \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE . '/email', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-                }else{
+                } else {
                     $consigneeEmail = $settings['advice']['email'];
                 }
 
                 $communicationConsignee->setEmail($consigneeEmail);
             }
-
 
 
             if (isset($settings['advice']['phone'])) {
@@ -1700,7 +763,7 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
 
                 if ($returnedShipment) {
                     $consigneePhoneNumber = $this->scopeConfig->getValue('carriers/' . \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE . '/phone', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-                }else{
+                } else {
                     $consigneePhoneNumber = $settings['advice']['phone'];
                 }
 
@@ -1717,7 +780,7 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
 
         $part = $this->unifaunPcxpressUnifaunPartFactory->create();
 
-        $part->setAddress($addressConsignee);    
+        $part->setAddress($addressConsignee);
 
 
         $part->setCommunication($communicationConsignee);
@@ -1739,11 +802,11 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
         foreach ($packages as $package) {
-            if(!isset($package['weight'])){
+            if (!isset($package['weight'])) {
                 $noWeight = true;
-            }elseif($package['weight'] == ""){
+            } elseif ($package['weight'] == "") {
                 $noWeight = true;
-            }else{
+            } else {
                 $noWeight = false;
             }
 
@@ -1762,12 +825,10 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
 
             $goodsItem->setWeightUnit($this->unifaunHelper->getUnifaunWeightUnit());
 
-                // We only set the dimensions if we have them
+            // We only set the dimensions if we have them
 
-            if (isset($package['width']) && isset($package['height']) && isset($package['depth'])) 
-
-            {
-                if(floatval($package['width']) > 0 && floatval($package['height']) > 0 && floatval($package['depth']) > 0){
+            if (isset($package['width']) && isset($package['height']) && isset($package['depth'])) {
+                if (floatval($package['width']) > 0 && floatval($package['height']) > 0 && floatval($package['depth']) > 0) {
                     $goodsItem->setLengthUnit($this->unifaunHelper->getUnifaunLengthUnit());
 
 
@@ -1798,17 +859,11 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             return false;
         }
 
-        
-
 
         if (isset($settings['automaticBooking'])) {
-            if($settings["automaticBooking"] == true){
+            if ($settings["automaticBooking"] == true) {
                 $consignmentResult = $unifaun->bookConsignment($consignment, $transactionId);
-            }
-
-
-
-            else{
+            } else {
                 $consignmentResult = $unifaun->saveConsignment($consignment, $transactionId);
             }
         } else {
@@ -1816,19 +871,14 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
 
-
         if (!$consignmentResult) {
             $this->_logShipmentErrorsMessage(__('Invalid response from Pcxpress Unifaun'), $shipment, $package);
         }
 
 
-
-
-
         if ($consignmentResult instanceof \Pcxpress\Unifaun\Model\Pcxpress\Unifaun\Error) {
             $this->_logShipmentErrorsMessage(__('Order #%s: Error reported from Pcxpress line 1787: %s', $order->getIncrementId(), $consignmentResult->getDescription()), $shipment, $package);
         }
-
 
 
 // var_dump($consignmentResult->getTrace());
@@ -1840,17 +890,8 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         $errors = $consignmentResult->getErrors();
 
 
-
-
-
-
         if (is_array($errors) && count($errors) > 0) {
             $messages = array();
-
-
-
-
-
 
 
             foreach ($errors as $error) {
@@ -1858,17 +899,7 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             }
 
 
-
-
-
-
-
             $this->_logShipmentErrorsMessage(__("Order #%s: Error reported from Pcxpress line 1829 :\n %s", $order->getIncrementId(), join("\n", $messages)), $shipment, $package);
-
-
-
-
-
 
 
             return false;
@@ -1876,50 +907,17 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             // Catch errors
 
 
-
-
-
-
-
             $this->_logShipmentErrorsMessage(__("Order #%s: Error reported from Pcxpress line 1847:\n %s", $order->getIncrementId(), $errors->getDescription()), $shipment, $package);
-
-
-
-
-
 
 
             return false;
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         // Add tracking data to consignments
 
 
-
-
-
-
-
         $consignments = $consignmentResult->getConsignments();
-
-
-
-
-
 
 
         if (!is_array($consignments)) {
@@ -1927,70 +925,33 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         $validated = true;
-
-
-
-
-
 
 
         foreach ($consignments as $consignment) {
             $data = array();
 
 
-
-
-
-
-
             $data['carrier_code'] = \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE;
 
 
+            $data['title'] = $shippingMethod->getTitle();
 
 
-
-
-
-            $data['title']        = $shippingMethod->getTitle();
-
-
-
-
-
-
-
-            $data['method']       = $shippingMethod->getShippingmethodId();
-
-
+            $data['method'] = $shippingMethod->getShippingmethodId();
 
 
             $new_tracking_number = $consignment->getConsignmentNo();
 
 
-            $data['number']       = $new_tracking_number;
-            $data['track_number']       = $new_tracking_number;
+            $data['number'] = $new_tracking_number;
+            $data['track_number'] = $new_tracking_number;
 
             $data['parent_id'] = $shipment->getId();
 
 
-
-
-
-            $track = $this->salesOrderShipmentTrackFactory->create()->addData($data); /* @var $track Mage_Sales_Model_Order_Shipment_Track */
+            $track = $this->salesOrderShipmentTrackFactory->create()->addData($data);
+            /* @var $track Mage_Sales_Model_Order_Shipment_Track */
             // $track = Mage::getModel('sales/order_shipment_track')->load(153); /* @var $track Mage_Sales_Model_Order_Shipment_Track */
 
             // var_dump($data);
@@ -1998,66 +959,22 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             // $track->save();die;
 
 
-
             $shipment->addTrack($track);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             // Add Consignment Id as a invisible comment
 
 
-
-
-
-
-
             $consignmentId = $consignment->getConsignmentId();
-
-
-
-
-
 
 
             $shipment->addComment('Consignment Id: ' . $consignmentId, false, false);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             // Check validation status for consignment
 
 
-
-
-
-
-
             $isComplete = $unifaun->getConsignmentStatusIsComplete($consignmentId);
-
-
 
 
             if ($isComplete instanceof \Pcxpress\Unifaun\Model\Pcxpress\Unifaun\Error || $isComplete === null) {
@@ -2070,17 +987,17 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
         $tracks = $shipment->getTracksCollection();
-        
+
         foreach ($tracks as $shipmentTrack) {
             // $track_number = $shipmentTrack->getData('track_number');
             $tracking_id = $shipmentTrack->getId();
             if (trim($tracking_id) != trim($new_tracking_number)) {
-                $this->updateTrackingCode($tracking_id, $new_tracking_number);    
-            }            
+                $this->updateTrackingCode($tracking_id, $new_tracking_number);
+            }
         }
 
-            // $shipment->save();
-  //       var_dump(get_class_methods($shipment));
+        // $shipment->save();
+        //       var_dump(get_class_methods($shipment));
         // var_dump($shipment->getId());die;
 
 
@@ -2097,7 +1014,6 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         // var_dump($tracking_id);
         // var_dump($track_number);
 
-        
 
         // var_dump($this->shipment_track_table);die;
 
@@ -2169,7 +1085,7 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         $totalQty = 0;
 
         foreach ($shipment->getAllItems() as $item) {
-            $weight = (float) $item->getWeight();
+            $weight = (float)$item->getWeight();
 
             $qty = $item->getOrderItem()->getQtyToShip() * 1; // Will not give the quantity set in invoice configuration
             $totalQty += $qty;
@@ -2186,18 +1102,18 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
 
         $packagesByMethodAndAdvice = array();
 
-        
+
         foreach ($parcels as $package) {
-            $packageKey = $package['shippingMethod']."-".$package['advice'];
+            $packageKey = $package['shippingMethod'] . "-" . $package['advice'];
 
             if (!array_key_exists($packageKey, $packagesByMethodAndAdvice)) {
                 $packagesByMethodAndAdvice[$packageKey] = array(
 
-                    'method'    => $package['shippingMethod'],
+                    'method' => $package['shippingMethod'],
 
-                    'advice'    => $package['advice'],
+                    'advice' => $package['advice'],
 
-                    'packages'  => array()
+                    'packages' => array()
 
                 );
             }
@@ -2216,126 +1132,40 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         $block = $observer->getEvent()->getBlock();
 
 
-
-
-
-
-
         if ($block instanceof Mage_Adminhtml_Block_Widget_Grid_Massaction && $block->getRequest()->getControllerName() == 'sales_order') {
             if ($block->getParentBlock() instanceof \Magento\Backend\Block\Widget\Grid) {
                 $block->addItem(
                     'unifaun_create_consignment', array(
-
-
-
-
-
-
-
-                    'label' => __('Unifaun: Create consignments'),
-
-
-
-
-
-
-
-                    'url' => 'javascript:unifaunModule.batchProcessOrders(' . $block->getJsObjectName() . ', "' . $block->getUrl('unifaun/adminhtml_unifaunConsignment/checkbatch') . '", "' . $block->getUrl('unifaun/adminhtml_unifaunConsignment/batch') . '")',
-
-
-
-
-
-
-
+                        'label' => __('Unifaun: Create consignments'),
+                        'url' => 'javascript:unifaunModule.batchProcessOrders(' . $block->getJsObjectName() . ', "' . $block->getUrl('unifaun/adminhtml_unifaunConsignment/checkbatch') . '", "' . $block->getUrl('unifaun/adminhtml_unifaunConsignment/batch') . '")',
                     )
                 );
 
 
-
-
-
-
-
                 $block->addItem(
                     'unifaun_create_consignment_print', array(
-
-
-
-
-
-
-
-                    'label' => __('Unifaun: Create consignments and labels'),
-
-
-
-
-
-
-
-                    'url' => 'javascript:unifaunModule.batchProcessOrders(' . $block->getJsObjectName() . ', "' . $block->getUrl('unifaun/adminhtml_unifaunConsignment/batchCheck') . '", "' . $block->getUrl('unifaun/adminhtml_unifaunConsignment/createAndPrint') . '")',
-
-
-
-
-
-
-
+                        'label' => __('Unifaun: Create consignments and labels'),
+                        'url' => 'javascript:unifaunModule.batchProcessOrders(' . $block->getJsObjectName() . ', "' . $block->getUrl('unifaun/adminhtml_unifaunConsignment/batchCheck') . '", "' . $block->getUrl('unifaun/adminhtml_unifaunConsignment/createAndPrint') . '")',
                     )
                 );
             }
         }
 
 
-
-
-
-
-
     }
-
-
-
-
-
-
-
-    
-
-
-
-
-
 
 
     public function createConsignmentLabels(\Magento\Framework\Event\Observer $observer)
     {
 
 
-
-
-
-
-
         $shipment = $observer->getShipment();
-
-
-
-
-
 
 
         $request = $this->request;
 
 
-
-
-
-
-
         $order = $shipment->getOrder();
-
 
 
         if (!$order->getId()) {
@@ -2343,38 +1173,16 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
 
-
-
-
         $carrierCode = $order->getShippingCarrier()->getCarrierCode();
 
 
-
-
-
-        if(!$carrierCode){
+        if (!$carrierCode) {
             $carrierCode = $order->getShippingMethod();
         }
 
 
-
-
-
         if (strpos($carrierCode, \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE) !== false) {
             $methodId = null;
-
-
-
-
-
-
-
-            
-
-
-
-
-
 
 
             if ($this->unifaunHelper->isTemplateChangeEnabled()) {
@@ -2382,26 +1190,8 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             if (!$methodId) {
                 $method = explode("_", $order->getShippingMethod());
-
-
-
-
-
 
 
                 if (!array_key_exists(1, $method)) {
@@ -2409,34 +1199,11 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
                 }
 
 
-
-
-
-
-
                 $methodId = (int)$method[1];
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             $method = $this->unifaunShippingMethodFactory->create()->load($methodId);
-
-
-
-
-
 
 
             if ($method->isObjectNew()) {
@@ -2444,18 +1211,8 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
             }
 
 
-
-
-
-
-
-            if ($method->getLabelOnly()){
+            if ($method->getLabelOnly()) {
                 $label = $this->unifaunLabelFactory->create()->load($shipment->getId(), 'shipment_id');
-
-
-
-
-
 
 
                 if ($label->getId()) {
@@ -2463,49 +1220,13 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
                 }
 
 
-
-
-
-
-
                 $labelModel = $this->unifaunLabelFactory->create();
 
 
-
-
-
-
-
                 $labelModel->setStatus(0)
-
-
-
-
-
-
-
-                ->setShipmentId($shipment->getId())
-
-
-
-
-
-
-
-                ->setCreatedAt(time())
-
-
-
-
-
-
-
-                ->save();
-
-
-
-
-
+                    ->setShipmentId($shipment->getId())
+                    ->setCreatedAt(time())
+                    ->save();
 
 
                 return true;
@@ -2513,99 +1234,30 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
 
-
-
-
-
-
         return true;
 
 
-
-
-
-
-
     }
-
-
-
-
-
-
-
-    
-
-
-
-
-
 
 
     public function setPackageConfiguration(\Magento\Framework\Event\Observer $observer)
     {
 
 
-
-
-
-
-
         $product = $observer->getProduct();
-
-
-
-
-
 
 
         $request = $observer->getRequest();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         $productData = $request->getPost('product');
-
-
-
-
-
 
 
         $packageConfigurations = array();
 
 
-
-
-
-
-
         if (array_key_exists('package_configuration', $productData) && is_array($productData['package_configuration'])) {
             $packageConfigurationData = $productData['package_configuration'];
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             foreach ($packageConfigurationData as $packageValue) {
@@ -2613,129 +1265,46 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
                     $packageConfig = $this->unifaunPackageConfigFactory->create();
 
 
+                    $pvWidth = isset($packageValue['width']) ? $packageValue['width'] : null;
 
 
+                    $pvHeight = isset($packageValue['height']) ? $packageValue['height'] : null;
 
 
-
-                    $pvWidth = isset($packageValue['width'])? $packageValue['width']:null;
-
+                    $pvDepth = isset($packageValue['depth']) ? $packageValue['depth'] : null;
 
 
+                    $pvWeight = isset($packageValue['weight']) ? $packageValue['weight'] : null;
 
 
+                    $pvGoodsType = isset($packageValue['goodsType']) ? $packageValue['goodsType'] : null;
 
 
-                    $pvHeight = isset($packageValue['height'])? $packageValue['height']:null;
+                    $pvShippingMethod = isset($packageValue['shippingMethod']) ? $packageValue['shippingMethod'] : null;
 
 
-
-
-
-
-
-                    $pvDepth = isset($packageValue['depth'])? $packageValue['depth']:null;
-
-
-
-
-
-
-
-                    $pvWeight = isset($packageValue['weight'])? $packageValue['weight']:null;
-
-
-
-
-
-
-
-                    $pvGoodsType = isset($packageValue['goodsType'])? $packageValue['goodsType']:null;
-
-
-
-
-
-
-
-                    $pvShippingMethod = isset($packageValue['shippingMethod'])? $packageValue['shippingMethod']:null;
-
-
-
-
-
-
-
-                    $pvAdvice = isset($packageValue['advice'])? $packageValue['advice']:null;
-
-
-
-
-
-
-
-                    
-
-
-
-
-
+                    $pvAdvice = isset($packageValue['advice']) ? $packageValue['advice'] : null;
 
 
                     $packageConfig->setWidth(floatval($pvWidth));
 
 
-
-
-
-
-
                     $packageConfig->setHeight(floatval($pvHeight));
-
-
-
-
-
 
 
                     $packageConfig->setDepth(floatval($pvDepth));
 
 
-
-
-
-
-
                     $packageConfig->setWeight(floatval($pvWeight));
-
-
-
-
-
 
 
                     $packageConfig->setGoodsType($pvGoodsType);
 
 
-
-
-
-
-
                     $packageConfig->setShippingMethod($pvShippingMethod);
 
 
-
-
-
-
-
                     $packageConfig->setAdvice($pvAdvice);
-
-
-
-
-
 
 
                     $packageConfigurations[] = $packageConfig;
@@ -2746,105 +1315,50 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
 
-
-
-
-
-
         $product->setPackageConfiguration($packageConfigurations);
-
-
-
-
-
 
 
         return $this;
 
 
-
-
-
-
-
-    }    
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    }
 
 
     protected function _getConfigValue($field)
     {
 
 
-
-
-
-
-
         $value = $this->scopeConfig->getValue('carriers/' . \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE . '/' . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_scopeId);
-
-
-
-
-
 
 
         return $value;
 
 
-
-
-
-
-
     }
-
 
 
     public function updateOrderShipment($order)
     {
 
 
-
-        
-
         $parcels = $this->request->getParam('parcel');
 
-        
 
-        if(!count($parcels)){
+        if (!count($parcels)) {
             return;
         }
 
-        
 
         $method = explode("_", $order->getShippingMethod());
 
-        
 
         $methodId = (int)$method[1];
 
 
-
-
-
         $method = $this->unifaunShippingMethodFactory->create()->load($methodId);
 
-        
 
         $unifaunCode = \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE;
-
 
 
         $newMethodId = false;
@@ -2854,13 +1368,12 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         $updated = false;
 
 
-
-        if(count($parcels)){
+        if (count($parcels)) {
             foreach ($parcels as $parcel) {
-                if($parcel['shippingMethod'] &&  $parcel['shippingMethod'] != $method->getId()){
+                if ($parcel['shippingMethod'] && $parcel['shippingMethod'] != $method->getId()) {
                     $newMethodId = $unifaunCode . '_' . $parcel['shippingMethod'];
 
-                    $newMethod = $this->unifaunShippingMethodFactory->create()->load($parcel['shippingMethod']);                    
+                    $newMethod = $this->unifaunShippingMethodFactory->create()->load($parcel['shippingMethod']);
 
                     $newMethodDesc = $newMethod->getData('title');
                 }
@@ -2868,44 +1381,22 @@ protected function _getShipmentConfig(\Magento\Sales\Model\Order\Shipment $shipm
         }
 
 
-
-        if($newMethodId){
-            $order->setShippingMethod($newMethodId);            
+        if ($newMethodId) {
+            $order->setShippingMethod($newMethodId);
 
             $updated = true;
         }
 
-        if($newMethodDesc){
+        if ($newMethodDesc) {
             $order->setShippingDescription($newMethodDesc);
 
             $updated = true;
         }
 
-        
 
-        if($updated){
+        if ($updated) {
             $order->save();
         }
-
-        
-
         return;
-
-
-
     }
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
