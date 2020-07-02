@@ -145,7 +145,7 @@ class Tracking extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 
         $this->setAttribute("weight", $totalWeight);
 
-        $this->setTemplate("unifaun/shipment/tracking12.phtml");
+        $this->setTemplate("unifaun/shipment/tracking.phtml");
 
         return parent::_toHtml();
     }
@@ -176,6 +176,7 @@ public function getShippingAddress()
 }
 public function getPickupLocations()
 {
+    return array();
     /** @var \Pcxpress\Unifaun\Model\Mysql4\PickupAddress\Collection $collection */
     $collection = $this->unifaunMysql4PickupLocationCollectionFactory->create()->getCollection();
     $collection->setOrder('city', 'ASC');
