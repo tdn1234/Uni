@@ -44,7 +44,7 @@
                     <field id="pacsoft_password" translate="label" type="text" sortOrder="50" showInDefault="1"
                            showInWebsite="1"
                            showInStore="0">
-                        <label>Pacsoft Secret1</label>
+                        <label>Pacsoft Secret</label>
                     </field>
                 </group>
                 <group id="sectionheading_consignor" translate="label" type="text" sortOrder="1" showInDefault="1"
@@ -279,7 +279,7 @@
                         <label>Send Goods Value</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
-                    <field id="delivery_terms" translate="label" type="select" sortOrder="50"
+                    <field id="delivery_terms" translate="label" type="text" sortOrder="50"
                            showInDefault="1"
                            showInWebsite="1"
                            showInStore="0">

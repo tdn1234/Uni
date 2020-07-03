@@ -9,6 +9,8 @@ $address = $this->getShippingAddress();
 
 /** @var Pcxpress\Unifaun\Helper\Data $unifaunHelper */
 $unifaunHelper = $block->getUnifaunHelper();
+
+//var_dump($this->getConfig());die;
 //var_dump($unifaunHelper->getPaymentMethodForCod());die;
 //
 // var_dump($unifaunHelper->getStoreLengthUnit());
@@ -58,20 +60,20 @@ $unifaunHelper = $block->getUnifaunHelper();
         var tr = document.createElement("tr");
 
         // Create Label
-        var labelTd = $(document.createElement("td"));
+        var labelTd = document.createElement("td");
         labelTd.style.width = "70px";
         var labelLabel = document.createElement("label");
         labelLabel.style.width = "50px";
         labelLabel.appendChild(document.createTextNode("<?php echo(__('Package')); ?>"));
         labelTd.appendChild(labelLabel);
-        labelTd.addClassName("label");
+        jQuery(labelTd).addClass("label");
         tr.appendChild(labelTd);
 
         // Weight
         var weightTd = document.createElement("td");
-        this.weightElement = $(document.createElement("input"));
+        this.weightElement = document.createElement("input");
         this.weightElement.style.width = "30px";
-        this.weightElement.addClassName("input-text");
+        jQuery(this.weightElement).addClass("input-text");
         this.weightElement.setAttribute("type", "text");
         this.weightElement.name = "parcel[" + this.id + "][weight]";
         this.weightElement.setAttribute("autocomplete", "off");
@@ -80,10 +82,10 @@ $unifaunHelper = $block->getUnifaunHelper();
         tr.appendChild(weightTd);
 
         // Dimensions
-        var dimensionsTd = $(document.createElement("td"));
-        this.widthElement = $(document.createElement("input"));
+        var dimensionsTd = document.createElement("td");
+        this.widthElement = document.createElement("input");
         this.widthElement.style.width = "30px";
-        this.widthElement.addClassName("input-text");
+        jQuery(this.widthElement).addClass("input-text");
         this.widthElement.setAttribute("type", "text");
         this.widthElement.name = "parcel[" + this.id + "][width]";
         this.widthElement.setAttribute("autocomplete", "off");
@@ -91,9 +93,9 @@ $unifaunHelper = $block->getUnifaunHelper();
 
         dimensionsTd.appendChild(document.createTextNode(" x "));
 
-        this.heightElement = $(document.createElement("input"));
+        this.heightElement = document.createElement("input");
         this.heightElement.style.width = "30px";
-        this.heightElement.addClassName("input-text");
+        jQuery(this.heightElement).addClass("input-text");
         this.heightElement.setAttribute("type", "text");
         this.heightElement.name = "parcel[" + this.id + "][height]";
         this.heightElement.setAttribute("autocomplete", "off");
@@ -101,9 +103,9 @@ $unifaunHelper = $block->getUnifaunHelper();
 
         dimensionsTd.appendChild(document.createTextNode(" x "));
 
-        this.depthElement = $(document.createElement("input"));
+        this.depthElement = document.createElement("input");
         this.depthElement.style.width = "30px";
-        this.depthElement.addClassName("input-text");
+        jQuery(this.depthElement).addClass("input-text");
         this.depthElement.setAttribute("type", "text");
         this.depthElement.name = "parcel[" + this.id + "][depth]";
         this.depthElement.setAttribute("autocomplete", "off");
@@ -112,13 +114,13 @@ $unifaunHelper = $block->getUnifaunHelper();
         dimensionsTd.appendChild(document.createTextNode(" <?php echo($unifaunHelper->getStoreLengthUnit()); ?>"));
 
         dimensionsTd.appendChild(document.createTextNode(" "));
-        dimensionsTd.addClassName("value");
+        jQuery(dimensionsTd).addClass("value");
         tr.appendChild(dimensionsTd);
 
         // Enable cost
         <?php if ($unifaunHelper->getEnableCost()): ?>
-        var costTd = $(document.createElement("td"));
-        this.costContainer = $(document.createElement("span"));
+        var costTd = document.createElement("td");
+        this.costContainer = jQuery(document.createElement("span"));
         this.costContainer.appendChild(document.createTextNode("-"));
         costTd.appendChild(this.costContainer);
         costTd.appendChild(document.createTextNode(" kr"));
@@ -128,9 +130,9 @@ $unifaunHelper = $block->getUnifaunHelper();
         // Goods type
         var goodsTypeTd = document.createElement("td");
         goodsTypeTd.style.width = "120px";
-        this.goodsTypeElement = $(document.createElement("input"));
+        this.goodsTypeElement = document.createElement("input");
         this.goodsTypeElement.style.width = "130px";
-        this.goodsTypeElement.addClassName("input-text");
+        jQuery(this.goodsTypeElement).addClass("input-text");
         this.goodsTypeElement.setAttribute("type", "text");
         this.goodsTypeElement.name = "parcel[" + this.id + "][goodsType]";
         this.goodsTypeElement.setAttribute("autocomplete", "off");
@@ -139,19 +141,23 @@ $unifaunHelper = $block->getUnifaunHelper();
 
         // Shipping method
         var shippingMethodTd = document.createElement("td");
-        this.shippingMethodElement = $(document.createElement("select"));
+        this.shippingMethodElement = document.createElement("select");
         this.shippingMethodElement.id = 'unifaun_method_id';
 
         // Unifaun methods
         var self = this;
-        trackingConfig.shippingMethods.each(function (group) {
-            self.shippingMethodElement.insert(new Element('optgroup', {label: group.groupName}));
-            group.methods.each(function (method) {
+        trackingConfig.shippingMethods.forEach(function (group) {
+            var optgroup = jQuery('<optgroup>');
+            optgroup.attr('label', group.groupName);
+            jQuery(self.shippingMethodElement).append(optgroup);
+            // jQuery(self.shippingMethodElement).append(new Op(group.groupName, {value: '11', label: group.groupName}));
+            group.methods.forEach(function (method) {
                 var attributes = {value: method.id};
                 if (method.selected) {
                     attributes.selected = 'selected';
                 }
-                self.shippingMethodElement.insert(new Element('option', attributes).update(method.title));
+                // jQuery(self.shippingMethodElement).append(new Option('option', attributes).update(method.title));
+                jQuery(self.shippingMethodElement).append(new Option(method.title, method.id));
             });
         });
 
@@ -163,42 +169,42 @@ $unifaunHelper = $block->getUnifaunHelper();
         // Advice
         var optionElement;
         var adviceTd = document.createElement("td");
-        this.adviceElement = $(document.createElement("select"));
+        this.adviceElement = document.createElement("select");
         this.adviceElement.id = 'unifaun_advice_type';
 
         <?php foreach ($this->getAdviceTypes() as $key => $advice): /** @var $method Pcxpress_Unifaun_Model_ShippingMethod */ ?>
-        optionElement = new Element('option', {value: '<?php echo $advice['value']; ?>'}).update('<?php echo $advice['label']; ?>');
+        optionElement = new Option('<?php echo $advice['label']; ?>', '<?php echo $advice['value']; ?>');
         <?php if ($unifaunHelper->getAdviceType() == $advice['value']) : ?>
         optionElement.setAttribute('selected', 'selected');
         <?php endif; ?>
-        this.adviceElement.insert(optionElement);
+        jQuery(this.adviceElement).append(optionElement);
         <?php endforeach; ?>
         this.adviceElement.name = "parcel[" + this.id + "][advice]";
         adviceTd.appendChild(this.adviceElement);
         tr.appendChild(adviceTd);
 
-        var removeTd = $(document.createElement("td"));
-        var removeButton = $(document.createElement("button"));
+        var removeTd = document.createElement("td");
+        var removeButton = document.createElement("button");
         var removeSpan = document.createElement("span");
         removeSpan.appendChild(document.createTextNode("-"));
         removeButton.appendChild(removeSpan);
-        removeButton.addClassName("scalable");
-        removeButton.addClassName("remove");
+        jQuery(removeButton).addClass("scalable");
+        jQuery(removeButton).addClass("remove");
         removeButton.setAttribute("type", "button");
-        $(removeButton).observe('click', this.remove.bind(this))
-        removeTd.addClassName("value");
+        jQuery(removeButton).on('click', this.remove.bind(this))
+        jQuery(removeTd).addClass("value");
         removeTd.appendChild(removeButton);
         tr.appendChild(removeTd);
 
         // Note
-        var noteTd = $(document.createElement("td"));
-        noteTd.addClassName('unifaun-note');
+        var noteTd = document.createElement("td");
+        jQuery(noteTd).addClass('unifaun-note');
         this.noteTd = noteTd;
         noteTd.innerHTML = this.note;
         tr.appendChild(noteTd);
 
         // Add to DOM
-        $('parcelList').appendChild(tr);
+        jQuery('#parcelList').append(tr);
 
         this.container = tr;
     }
@@ -315,7 +321,10 @@ $unifaunHelper = $block->getUnifaunHelper();
         }
     }
 
+    <?php /* ?>
+
     // Add validation
+
     Validation.addAllThese([
         ['validate-maxtime', '<?php echo(__("Must be sent before a specific time")); ?>', function (v) {
             var id = unifaunGetValueById("unifaun_method_id");
@@ -368,29 +377,41 @@ $unifaunHelper = $block->getUnifaunHelper();
         }]
     ]);
 
+    <?php */ ?>
+
     // Autoload one parcel
-    document.observe("dom:loaded", function () {
-        trackingConfig.parcels.each(function (e) {
+
+    jQuery(function(){
+        console.log('donddn');
+        trackingConfig.parcels.forEach(function (e) {
+            console.log(e);
             unifaun.addParcel(e);
         });
         unifaunAddEventListeners();
-    });
+    })
+    // document.observe("dom:loaded", function () {
+    //     console.log('donnnee');
+    //     trackingConfig.parcels.each(function (e) {
+    //         unifaun.addParcel(e);
+    //     });
+    //     unifaunAddEventListeners();
+    // });
 
     function unifaunAddEventListeners() {
 
         var createDependency = function (parentName, dependencyTarget) {
             var updateChildrenVisibility = function () {
-                if (unifaunGetValueByName(parentName) == 'Y') {
-                    $$(dependencyTarget).each(function (e) {
-                        e.show()
-                    });
-                } else {
-                    $$(dependencyTarget).each(function (e) {
-                        e.hide()
-                    });
-                }
+                // if (unifaunGetValueByName(parentName) == 'Y') {
+                    //$$(dependencyTarget).each(function (e) {
+                    //     e.show()
+                    // });
+                // } else {
+                    // $$(dependencyTarget).each(function (e) {
+                    //     e.hide()
+                    // });
+                // }
             };
-            $$('[name="' + parentName + '"]').invoke('observe', 'change', updateChildrenVisibility);
+            // $$('[name="' + parentName + '"]').invoke('observe', 'change', updateChildrenVisibility);
             updateChildrenVisibility();
         };
 
