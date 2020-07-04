@@ -10,6 +10,7 @@ use Pcxpress\Unifaun\Helper\Data;
 use Pcxpress\Unifaun\Model\Parcel;
 use Pcxpress\Unifaun\Helper\ErrorMessage;
 use Pcxpress\Unifaun\Helper\AddConsigment;
+use Pcxpress\Unifaun\Helper\Pacsoft\Data as PacsoftHelper;
 
 class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 {
@@ -42,6 +43,11 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
     /** @var ErrorMessage $messageManager */
     protected $messageManager;
 
+    /**
+     * @var PacsoftHelper $unifaunPacsoftDataHelper
+     */
+    protected $unifaunPacsoftDataHelper;
+
     public function __construct(
         \Pcxpress\Unifaun\Model\Pcxpress\Unifaun\Consignment\Data $consignmentData,
         RequestInterface $request,
@@ -49,7 +55,8 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
         Data $unifaunHelper,
         Parcel $parcelModel,
         ErrorMessage $messageManager,
-        AddConsigment $addConsignmentHelper
+        AddConsigment $addConsignmentHelper,
+        PacsoftHelper $unifaunPacsoftDataHelper
     )
     {
         $this->request = $request;
@@ -59,6 +66,7 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
         $this->addConsignmentHelper = $addConsignmentHelper;
         $this->parcelModel = $parcelModel;
         $this->messageManager = $messageManager;
+        $this->unifaunPacsoftDataHelper = $unifaunPacsoftDataHelper;
     }
 
     public function execute(
@@ -320,7 +328,6 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 
                 $shippingMethod = $this->shippingmethodFactory->create()->load($shippingMethod);
 
-
                 if ($shippingMethod && $shippingMethod->getData('shipping_service') == \Pcxpress\Unifaun\Helper\Data::WEBTA_SHIPPING_ID) {
 
 
@@ -354,15 +361,10 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 
         $shippingMethod = $this->shippingmethodFactory->create()->load($shippingMethod);
 
-
         $order->setData('template_method_data', $shippingMethod->getData());
-
-        var_dump($shippingMethod->getData());die;
-
 
         if ($shippingMethod && $shippingMethod->getData('shipping_service') == \Pcxpress\Unifaun\Helper\Data::PACTSOFT_SHIPPING_ID) {
 
-            die('pacc');
             $transactionId = $order->getRealOrderId() . "-" . microtime(true);
 
             $pacsoftHelper = $this->unifaunPacsoftDataHelper;
@@ -385,9 +387,7 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 
     protected function _getPackagesByMethodAndAdvice($parcels)
     {
-
         $packagesByMethodAndAdvice = array();
-
 
         foreach ($parcels as $package) {
             $packageKey = $package['shippingMethod'] . "-" . $package['advice'];

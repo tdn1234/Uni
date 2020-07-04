@@ -152,12 +152,15 @@ $unifaunHelper = $block->getUnifaunHelper();
             jQuery(self.shippingMethodElement).append(optgroup);
             // jQuery(self.shippingMethodElement).append(new Op(group.groupName, {value: '11', label: group.groupName}));
             group.methods.forEach(function (method) {
-                var attributes = {value: method.id};
+                // var attributes = {value: method.id};
                 if (method.selected) {
-                    attributes.selected = 'selected';
+                    // attributes.selected = 'selected';
+                    jQuery(self.shippingMethodElement).append(new Option(method.title, method.id, true, true));
+                } else {
+                    jQuery(self.shippingMethodElement).append(new Option(method.title, method.id));
                 }
                 // jQuery(self.shippingMethodElement).append(new Option('option', attributes).update(method.title));
-                jQuery(self.shippingMethodElement).append(new Option(method.title, method.id));
+
             });
         });
 
