@@ -1,7 +1,15 @@
 <?php
+
 namespace Pcxpress\Unifaun\Model\Observer;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Sales\Model\Order;
+use Pcxpress\Unifaun\Model\Carrier\Unifaun;
+use Pcxpress\Unifaun\Model\ShippingmethodFactory;
+use Pcxpress\Unifaun\Helper\Data;
+use Pcxpress\Unifaun\Model\Parcel;
+use Pcxpress\Unifaun\Helper\ErrorMessage;
+use Pcxpress\Unifaun\Helper\AddConsigment;
 
 class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 {
@@ -17,24 +25,47 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
      */
     protected $consignmentData;
 
+    /** @var ShippingmethodFactory $shippingmethodFactory */
+    protected $shippingmethodFactory;
+
+    /** @var Data $unifaunHelper */
+    protected $unifaunHelper;
+
+    /** @var AddConsigment$addConsignmentHelper
+     */
+    protected $addConsignmentHelper;
+
+
+    /** @var Parcel $parcelModel */
+    protected $parcelModel;
+
+    /** @var ErrorMessage $messageManager */
+    protected $messageManager;
+
     public function __construct(
-//        \Magento\Framework\App\Request\Http $request = null,
         \Pcxpress\Unifaun\Model\Pcxpress\Unifaun\Consignment\Data $consignmentData,
-        RequestInterface $request
-    ) {
+        RequestInterface $request,
+        ShippingmethodFactory $shippingmethodFactory,
+        Data $unifaunHelper,
+        Parcel $parcelModel,
+        ErrorMessage $messageManager,
+        AddConsigment $addConsignmentHelper
+    )
+    {
         $this->request = $request;
         $this->consignmentData = $consignmentData;
+        $this->shippingmethodFactory = $shippingmethodFactory;
+        $this->unifaunHelper = $unifaunHelper;
+        $this->addConsignmentHelper = $addConsignmentHelper;
+        $this->parcelModel = $parcelModel;
+        $this->messageManager = $messageManager;
     }
 
     public function execute(
         \Magento\Framework\Event\Observer $observer
     )
     {
-
-
         // $this->updateTrackingCode('153', '555553464356');
-
-
 
         $returnedShipment = ($this->request->getParam('submit') === self::RETURN_CONSIGNMENT) ? true : false;
 
@@ -92,7 +123,7 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
         }
 
         if ($parcels == null) {
-            $parcels = $this->unifaunParcelFactory->create()->setEntity($shipment)->getParcels();
+            $parcels = $this->parcelModel->setEntity($shipment)->getParcels();
 
             if (!count($parcels)) {
                 $parcels[] = array('weight' => $this->_getShipmentWeight($shipment));
@@ -101,54 +132,42 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
             throw new \Exception("Parcels must be an array collection.");
         }
 
-
         $packages = $this->_getPackagesByMethodAndAdvice($parcels);
 
+        /** @var Order $order */
         $order = $shipment->getOrder();
 
         $this->updateOrderShipment($order);
-
 
         if (!$order->getId()) {
             throw new \Exception('Order not found.');
         }
 
-
-        $carrierCode = $order->getShippingCarrier()->getCarrierCode();
-
-
+        $carrierCode = '';
         $failedPackages = array();
-
 
         if (!$carrierCode) {
             $carrierCode = $order->getShippingMethod();
         }
 
-
         if (strpos($carrierCode, \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE) !== false) {
             foreach ($packages as $key => $_package) {
                 $methodId = null;
-
 
                 if ($this->unifaunHelper->isTemplateChangeEnabled() && array_key_exists('method', $_package)) {
                     $methodId = $_package['method'];
                 }
 
-
                 if (!$methodId) {
                     $method = explode("_", $order->getShippingMethod());
 
-
                     if (!array_key_exists(1, $method)) {
                         $package = null;
-
-
                         if (isset($_package['packages'][0])) {
                             $package = $_package['packages'][0];
                         }
 
-
-                        $this->_logShipmentErrorsMessage('Invalid method', $shipment);
+                        $this->messageManager->_logShipmentErrorsMessage('Invalid method', $shipment);
 
 
                         continue;
@@ -159,19 +178,19 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
                 }
 
 
-                $method = $this->unifaunShippingMethodFactory->create()->load($methodId);
+                $method = $this->shippingmethodFactory->create()->load($methodId);
 
+//                var_dump($method->isObjectNew());
+//                var_dump($method->getData());die;
 
                 if ($method->isObjectNew()) {
                     $package = null;
-
 
                     if (isset($_package['packages'][0])) {
                         $package = $_package['packages'][0];
                     }
 
-
-                    $this->_logShipmentErrorsMessage('Shipping Method dose not exists.', $shipment);
+                    $this->messageManager->_logShipmentErrorsMessage('Shipping Method dose not exists.', $shipment);
 
 
                     continue;
@@ -202,31 +221,19 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
                 $consigneeReference = isset($params['unifaun_consignee_reference']) ? $params['unifaun_consignee_reference'] : '';
 
 
-                $consignmentNo =
-
-
-                    (isset($params['unifaun_consignment_number'])) ? $params['unifaun_consignment_number'] : '';
+                $consignmentNo = (isset($params['unifaun_consignment_number'])) ? $params['unifaun_consignment_number'] : '';
 
 
                 $settings['reference'] = array(
-
-
                     'order_number' => $orderNumner,
-
-
                     'consignee_reference' => $consigneeReference,
-
-
                     'consignment_number' => $consignmentNo
-
-
                 );
-
 
                 if (isset($params['unifaun_advice_contact'])) {
                     $adviceTypeContact = $params['unifaun_advice_contact'];
                 } else {
-                    $adviceTypeContact = $this->_getShipmentConfig($shipment, 'unifaun_advice_contact');
+                    $adviceTypeContact = $this->addConsignmentHelper->_getShipmentConfig($shipment, 'unifaun_advice_contact');
                 }
 
 
@@ -243,7 +250,7 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
                     return;
 
 
-                    $adviceTypeEmail = $this->_getSettingsForShipment($shipment, 'unifaun_advice_email');
+                    $adviceTypeEmail = $this->addConsignmentHelper->_getSettingsForShipment($shipment, 'unifaun_advice_email');
                 }
 
 
@@ -264,7 +271,7 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
                 if (isset($params['unifaun_automatic_booking'])) {
                     $automaticBooking = ($params['unifaun_automatic_booking'] == "Y");
                 } else {
-                    $automaticBooking = $this->_getShipmentConfig($shipment, 'unifaun_automatic_booking');
+                    $automaticBooking = $this->addConsignmentHelper->_getShipmentConfig($shipment, 'unifaun_automatic_booking');
                 }
 
                 $settings['advice'] = array(
@@ -311,14 +318,14 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 
                 $shippingMethod = (isset($firstParcel['shippingMethod'])) ? $firstParcel['shippingMethod'] : 0;
 
-                $shippingMethod = $this->unifaunShippingMethodFactory->create()->load($shippingMethod);
+                $shippingMethod = $this->shippingmethodFactory->create()->load($shippingMethod);
 
 
                 if ($shippingMethod && $shippingMethod->getData('shipping_service') == \Pcxpress\Unifaun\Helper\Data::WEBTA_SHIPPING_ID) {
 
 
                     if ($method->getMultipleParcels()) {
-                        if (!$this->setShippingBooking($_package['packages'], $shipment, $method, $settings, $returnedShipment)) {
+                        if (!$this->addConsignmentHelper->setShippingBooking($_package['packages'], $shipment, $method, $settings, $returnedShipment)) {
                             $failedPackages[] = $_package['packages'];
 
 
@@ -329,7 +336,7 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
                             $packages = array($package); // _createShippingBooking() want package argument as array.
 
 
-                            if (!$this->setShippingBooking($packages, $shipment, $method, $settings, $returnedShipment)) {
+                            if (!$this->addConsignmentHelper->setShippingBooking($packages, $shipment, $method, $settings, $returnedShipment)) {
                                 $failedPackages[] = array();
                                 continue;
                             }
@@ -345,10 +352,12 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 
         $shippingMethod = (isset($firstParcel['shippingMethod'])) ? $firstParcel['shippingMethod'] : 0;
 
-        $shippingMethod = $this->unifaunShippingMethodFactory->create()->load($shippingMethod);
+        $shippingMethod = $this->shippingmethodFactory->create()->load($shippingMethod);
 
 
         $order->setData('template_method_data', $shippingMethod->getData());
+
+        var_dump($shippingMethod->getData());die;
 
 
         if ($shippingMethod && $shippingMethod->getData('shipping_service') == \Pcxpress\Unifaun\Helper\Data::PACTSOFT_SHIPPING_ID) {
@@ -372,5 +381,87 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
         }
 
         return true;
+    }
+
+    protected function _getPackagesByMethodAndAdvice($parcels)
+    {
+
+        $packagesByMethodAndAdvice = array();
+
+
+        foreach ($parcels as $package) {
+            $packageKey = $package['shippingMethod'] . "-" . $package['advice'];
+
+            if (!array_key_exists($packageKey, $packagesByMethodAndAdvice)) {
+                $packagesByMethodAndAdvice[$packageKey] = array(
+
+                    'method' => $package['shippingMethod'],
+
+                    'advice' => $package['advice'],
+
+                    'packages' => array()
+
+                );
+            }
+
+            $packagesByMethodAndAdvice[$packageKey]['packages'][] = $package;
+        }
+
+        return $packagesByMethodAndAdvice;
+
+    }
+
+
+    public function updateOrderShipment(Order $order)
+    {
+        $parcels = $this->request->getParam('parcel');
+
+        if (!count($parcels)) {
+            return;
+        }
+
+        $method = explode("_", $order->getShippingMethod());
+
+        $methodId = (int)$method[1];
+
+        $method = $this->shippingmethodFactory->create()->load($methodId);
+
+        $unifaunCode = \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE;
+
+        $newMethodId = false;
+
+        $newMethodDesc = '';
+
+        $updated = false;
+
+
+        if (count($parcels)) {
+            foreach ($parcels as $parcel) {
+                if ($parcel['shippingMethod'] && $parcel['shippingMethod'] != $method->getId()) {
+                    $newMethodId = $unifaunCode . '_' . $parcel['shippingMethod'];
+
+                    $newMethod = $this->shippingmethodFactory->create()->load($parcel['shippingMethod']);
+
+                    $newMethodDesc = $newMethod->getData('title');
+                }
+            }
+        }
+
+
+        if ($newMethodId) {
+            $order->setShippingMethod($newMethodId);
+
+            $updated = true;
+        }
+
+        if ($newMethodDesc) {
+            $order->setShippingDescription($newMethodDesc);
+            $updated = true;
+        }
+
+        if ($updated) {
+            $order->save();
+        }
+        return;
     }
 }

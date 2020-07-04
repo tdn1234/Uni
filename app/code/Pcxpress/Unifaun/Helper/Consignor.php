@@ -1,32 +1,20 @@
 <?php
+
 namespace Pcxpress\Unifaun\Helper;
 
 
 /**
-
  * @category   PC  xpressPCXpress AB
-
  * @package    Pcxpress_Unifaun
-
  * @copyright  Copyright (c) 2017 PCXpress AB
-
  * @author     PCXpress AB Developer <info@pcxpress.se>
-
  * @license    http://pcxpress.se/magento/license.txt
-
  */
-
 class Consignor extends \Magento\Framework\App\Helper\AbstractHelper
-
 {
+    public static $schenkerTemplateName = "schenker";
 
-
-
-
-
-	public static $schenkerTemplateName = "schenker";
-
-	public static $mypackTemplateName = "mypack";
+    public static $mypackTemplateName = "mypack";
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -54,7 +42,8 @@ class Consignor extends \Magento\Framework\App\Helper\AbstractHelper
         \Pcxpress\Unifaun\Model\Pcxpress\Unifaun\PartFactory $unifaunPcxpressUnifaunPartFactory,
         \Pcxpress\Unifaun\Model\Pcxpress\Unifaun\AddressFactory $unifaunPcxpressUnifaunAddressFactory,
         \Pcxpress\Unifaun\Model\Pcxpress\Unifaun\CommunicationFactory $unifaunPcxpressUnifaunCommunicationFactory
-    ) {
+    )
+    {
         $this->scopeConfig = $scopeConfig;
         $this->unifaunPcxpressUnifaunPartFactory = $unifaunPcxpressUnifaunPartFactory;
         $this->unifaunPcxpressUnifaunAddressFactory = $unifaunPcxpressUnifaunAddressFactory;
@@ -63,184 +52,157 @@ class Consignor extends \Magento\Framework\App\Helper\AbstractHelper
             $context
         );
     }
-	
 
 
+    protected function _getConfigValue($field)
 
-	protected function _getConfigValue($field)
+    {
 
-	{
+        $value = $this->scopeConfig->getValue('carriers/' . \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE . '/' . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
-		$value = $this->scopeConfig->getValue('carriers/' . \Pcxpress\Unifaun\Helper\Data::UNIFAUN_CODE . '/' . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $value;
 
-		return $value;
+    }
 
-	}
 
+    public function getConsignorPart($order, $returnedShipment)
 
+    {
 
+        $orderAddress = $order->getShippingAddress();
 
+        $address = $this->getAddress($orderAddress, $returnedShipment);
 
 
+        $communication = $this->getCommunication($orderAddress, $returnedShipment);
 
-	public function getConsignorPart($order, $returnedShipment)
+        $part = $this->unifaunPcxpressUnifaunPartFactory->create();
 
-	{		
+        $part->setAddress($address);
 
-		$orderAddress = $order->getShippingAddress();
+        $part->setCommunication($communication);
 
-		$address = $this->getAddress($orderAddress, $returnedShipment);
+        $part->setRole("consignor");
 
 
+        return $part;
 
-		$communication = $this->getCommunication($orderAddress, $returnedShipment);
+    }
 
-		$part = $this->unifaunPcxpressUnifaunPartFactory->create();
 
-		$part->setAddress($address);
+    public function getAddress($orderAddress, $returnedShipment)
+    {
 
-		$part->setCommunication($communication);
 
-		$part->setRole("consignor");
+        $address = $this->unifaunPcxpressUnifaunAddressFactory->create();
 
+        $address->setId("-");
 
+        //client wants return products to Pcxpress
 
-		return $part;
+        if ($returnedShipment) {
 
-	}
+            return $this->getAddressFromOrder($orderAddress, $address);
 
+        }
 
+        $address->setName($this->_getConfigValue("consignor_name"));
 
-	public function getAddress($orderAddress, $returnedShipment){
+        $address->setAddress($this->_getConfigValue("consignor_address"));
 
+        $address->setCity($this->_getConfigValue("consignor_city"));
 
+        $address->setPostCode($this->_getConfigValue("consignor_postcode"));
 
+        $address->setState($this->_getConfigValue("consignor_state"));
 
+        $address->setCountryCode($this->_getConfigValue("consignor_countrycode"));
 
-		$address = $this->unifaunPcxpressUnifaunAddressFactory->create();
 
-		$address->setId("-");
+        return $address;
 
-		//client wants return products to Pcxpress
+    }
 
-		if ($returnedShipment){
 
-			return $this->getAddressFromOrder($orderAddress, $address);		
+    private function getAddressFromOrder($orderAddress, $address)
+    {
 
-		}
 
-		$address->setName($this->_getConfigValue("consignor_name"));
+        $consigneeName = $orderAddress->getName();
 
-		$address->setAddress($this->_getConfigValue("consignor_address"));
 
-		$address->setCity($this->_getConfigValue("consignor_city"));
+        if ($orderAddress->getCompany()) {
 
-		$address->setPostCode($this->_getConfigValue("consignor_postcode"));
 
-		$address->setState($this->_getConfigValue("consignor_state"));
+            $consigneeName = $orderAddress->getCompany();
 
-		$address->setCountryCode($this->_getConfigValue("consignor_countrycode"));
 
+        }
 
 
-		return $address;
+        $address = $this->unifaunPcxpressUnifaunAddressFactory->create();
 
-	}
+        $address->setId("-");
 
 
+        $addressLines = array($orderAddress->getStreet1());
 
-	private function getAddressFromOrder($orderAddress, $address){
-	
+        if ($orderAddress->getStreet2() != '') {
 
-		$consigneeName = $orderAddress->getName();
 
+            $addressLines[] = $orderAddress->getStreet2();
 
 
-		if ($orderAddress->getCompany()) {
+        }
 
 
+        if ($orderAddress->getStreet3() != '') {
 
-			$consigneeName = $orderAddress->getCompany();
+            $addressLines[] = $orderAddress->getStreet3();
 
+        }
 
 
-		}
+        $address->setName($consigneeName);
 
+        $address->setAddress($addressLines);
 
+        $address->setCity($orderAddress->getCity());
 
-		$address = $this->unifaunPcxpressUnifaunAddressFactory->create();
+        $address->setPostCode($orderAddress->getPostcode());
 
-		$address->setId("-");
+        $address->setState($orderAddress->getRegionCode()); // getRegionCode() - Return 2 letter state code if available, otherwise full region name
 
-		
+        $address->setCountryCode($orderAddress->getCountryId());
 
-		$addressLines = array($orderAddress->getStreet1());
+        return $address;
 
-		if($orderAddress->getStreet2()!=''){
+    }
 
 
+    public function getCommunication($orderAddress, $returnedShipment)
+    {
 
-			$addressLines[] = $orderAddress->getStreet2();
+        $communication = $this->unifaunPcxpressUnifaunCommunicationFactory->create();
 
+        if ($returnedShipment) {
+            $communication->setContactPerson($orderAddress->getName());
 
+            $communication->setPhone($orderAddress->getTelephone());
 
-		}
+            $communication->setEmail($orderAddress->getEmail());
+        } else {
+            $communication->setContactPerson($this->_getConfigValue("contact_person"));
 
+            $communication->setPhone($this->_getConfigValue("phone"));
 
+            $communication->setEmail($this->_getConfigValue("email"));
+        }
 
-		if($orderAddress->getStreet3()!=''){
 
-			$addressLines[] = $orderAddress->getStreet3();
+        return $communication;
 
-		}
-
-
-
-		$address->setName($consigneeName);
-
-		$address->setAddress($addressLines);
-
-		$address->setCity($orderAddress->getCity());
-
-		$address->setPostCode($orderAddress->getPostcode());
-
-		$address->setState($orderAddress->getRegionCode()); // getRegionCode() - Return 2 letter state code if available, otherwise full region name
-
-		$address->setCountryCode($orderAddress->getCountryId());
-
-		return $address;
-
-	}
-
-
-
-	
-
-
-
-	public function getCommunication($orderAddress, $returnedShipment){
-
-		$communication = $this->unifaunPcxpressUnifaunCommunicationFactory->create();
-
-		if ($returnedShipment) {
-			$communication->setContactPerson($orderAddress->getName());
-
-			$communication->setPhone($orderAddress->getTelephone());
-
-			$communication->setEmail($orderAddress->getEmail());
-		} else {
-			$communication->setContactPerson($this->_getConfigValue("contact_person"));
-
-			$communication->setPhone($this->_getConfigValue("phone"));
-
-			$communication->setEmail($this->_getConfigValue("email"));
-		}
-		
-
-		return $communication;
-
-	}
-
+    }
 
 
 }

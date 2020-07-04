@@ -10,6 +10,7 @@
 namespace Pcxpress\Unifaun\Helper;
 
 use Pcxpress\Unifaun\Model\Pcxpress\Unifaun\Cod;
+//use UnifaunConsigment
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -174,6 +175,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isTemplateChangeEnabled()
     {
         $field = "sectionheading_attributes/enable_template_change";
+        return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
+    public function isSendGoodsValue()
+    {
+        $field = "sectionheading_admin/send_goods_value";
+        return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
+    public function getAutomaticBooking()
+    {
+        $field = "sectionheading_admin/auto_booking";
         return $this->scopeConfig->getValue($this->confPath . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
