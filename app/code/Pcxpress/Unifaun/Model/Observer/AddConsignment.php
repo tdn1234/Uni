@@ -377,7 +377,6 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 
         }
 
-
         if (count($failedPackages)) {
             return false;
         }
@@ -394,13 +393,9 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 
             if (!array_key_exists($packageKey, $packagesByMethodAndAdvice)) {
                 $packagesByMethodAndAdvice[$packageKey] = array(
-
                     'method' => $package['shippingMethod'],
-
                     'advice' => $package['advice'],
-
                     'packages' => array()
-
                 );
             }
 
@@ -450,7 +445,6 @@ class AddConsignment implements \Magento\Framework\Event\ObserverInterface
 
         if ($newMethodId) {
             $order->setShippingMethod($newMethodId);
-
             $updated = true;
         }
 
