@@ -155,7 +155,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $advice = '';
         if ($templateMethod['advice_default'] == 'phone') {
             $advice = 'NOTSMS';
-            $advice = 'NOTSMS';
         } elseif ($templateMethod['advice_default'] == 'email') {
             $advice = 'NOTEMAIL';
         } else {
@@ -187,14 +186,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             "service" => [
                 "id" => $templateMethod['template_name'],
                 'addons' => [
-                    ['id' => $advice],
-                    ['id' => 'RPAY', 'custNo' => '12345674']
+                    ['id' => $advice]
                 ]
             ],
             "parcels" => $parcelsData,
             "orderNo" => $params['unifaun_order_number'],
-            "senderReference" => "ref",
-            "receiverReference" => "ref",
+            "senderReference"=> $params['unifaun_order_number'],
+            "receiverReference"=> $params['unifaun_order_number'],
             // "options"=> [[
             // 	"message"=> "This is order number 123",
             // 	"to"=> "email2@example.com",

@@ -10,7 +10,6 @@ namespace Pcxpress\Unifaun\Block\Adminhtml\ShippingMethod;
 
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
-
     /**
      * @var \Magento\Framework\Registry
      */

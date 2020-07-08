@@ -9,9 +9,9 @@
     <event name="core_block_abstract_to_html_before">
         <observer name="unifaun_create_consignment_massaction" instance="Pcxpress\Unifaun\Model\Observer\addMassActionInSalesOrders"/>
     </event>
-    <event name="sales_order_shipment_save_after">
-        <observer name="unifaun_create_consignment_label" instance="Pcxpress\Unifaun\Model\Observer\CreateConsignmentLabels"/>
-    </event>
+    <!--<event name="sales_order_shipment_save_after">-->
+        <!--<observer name="unifaun_create_consignment_label" instance="Pcxpress\Unifaun\Model\Observer\CreateConsignmentLabels"/>-->
+    <!--</event>-->
     <event name="catalog_product_prepare_save">
         <observer name="unifaun_prepare_package_configuration" instance="Pcxpress\Unifaun\Model\Observer\setPackageConfiguration"/>
     </event>

@@ -133,7 +133,7 @@ class Weight extends CalculationAbstract
             }
 
             // Check if this shipping method is enabled for this store view
-            $shippingStoreIds = $shippingMethod->getStoreIds() ? $shippingMethod->getStoreIds() : array();
+            $shippingStoreIds = $shippingMethod->getStoreIds();
 
             if ( !is_array($shippingStoreIds)) {
                 $shippingStoreIds = explode(',', $shippingStoreIds);
@@ -427,10 +427,10 @@ class Weight extends CalculationAbstract
     protected function shippingMethodEnabledForStore(array $shippingStoreIds, $storeId)
     {
         
-        if (!(in_array(0, $shippingStoreIds) || in_array($storeId, $shippingStoreIds))) {
-            return false;
+        if ((in_array(0, $shippingStoreIds) || in_array($storeId, $shippingStoreIds))) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     protected function isShippingMethodMatched($shippingGroup, $shippingMethodGroupArray)

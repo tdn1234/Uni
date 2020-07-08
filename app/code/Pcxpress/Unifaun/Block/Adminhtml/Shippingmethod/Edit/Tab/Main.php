@@ -4,6 +4,9 @@ namespace Pcxpress\Unifaun\Block\Adminhtml\Shippingmethod\Edit\Tab;
 
 use Pcxpress\Unifaun\Helper\Data;
 use Magento\Store\Model\System\Store;
+use Pcxpress\Unifaun\Helper\Data as UnifaunHelper;
+use Pcxpress\Unifaun\Model\Carrier\Unifaun;
+
 /**
  * Shippingmethod edit form main tab
  */
@@ -102,12 +105,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         $fieldset->addField(
             'shipping_service',
-            'text',
+            'select',
             [
                 'name' => 'shipping_service',
                 'label' => __('Shipping service'),
                 'title' => __('Shipping service'),
                 'required' => true,
+                'options' => [UnifaunHelper::WEBTA_SHIPPING_ID => __('WebTA'), UnifaunHelper::PACTSOFT_SHIPPING_ID => __('Pacsoft')],
                 'disabled' => $isElementDisabled
             ]
         );

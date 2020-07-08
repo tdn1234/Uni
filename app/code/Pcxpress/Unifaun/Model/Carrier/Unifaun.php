@@ -87,7 +87,7 @@ class Unifaun extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
      * @return bool|Result
      */
     public function collectRates(RateRequest $request)
-    {
+   {
         if (!$this->getConfigFlag('active')) {
             return false;
         }
